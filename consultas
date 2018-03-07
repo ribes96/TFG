@@ -1,0 +1,10 @@
+Consultas y temas que hablar con Lluís:
+
+- ¿Cual es exactamente el estado del arte con este tema?
+- ¿Cómo funciona exactamente la extracción de RFF?
+- ¿Qué tienen que ver las funciones kernel con los RF? ¿No sería mejor una aproximación de otro tipo?
+- ¿El tema de reducción de la dimensionalidad de los datos también nos interesa a nosotros, o solo nos interesa un random mapping?
+- ¿Te parece bien que nos centremos únicamente en problemas de clasificación?
+- ¿Cuales serían las características más adecuadas de un dataset para poder testear con este algoritmo? (número de entradas, dimensión de los atributos, tipo de datos, cantidad de missings y unknowns)
+- El artículo de RFF hace mappings con shift invariant kernels, y en las SVM es útil, porque has de operar para cada par de datos. En nuestro caso, el algoritmo no tiene en cuenta los pares de instancias, sino cada una individualmente. Cómo usamos el mismo mapping con nuestro caso?
+- No me ha quedado claro si se puede hacer RFF con cualquier kernel, o solo con algunos, o solo los shift invariant o qué. Tampoco tengo claro si el método para hacer la aproximación es genérico para cualquier kernel, o hay que guisarselo con cada uno.
