@@ -1,0 +1,27 @@
+Posibles datasets:
+
+PenDigits:
+==========
+https://archive.ics.uci.edu/ml/datasets/Pen-Based+Recognition+of+Handwritten+Digits
+
+- Número instancias: 10992
+- Número atributos: 16 (enteros 0..100)
+- Número clases: 10 (cada dígito 0..9)
+
+  Info:
+  ~~~~~
+    El dígito tiene una serie de puntos.
+    Cada punto es una coordenada, es decir, tiene x e y
+    Las coordenadas se normalizan para que el máximo de los dos sea 100
+    De entre todos los puntos se hace algún tipo de normalización para tener
+      unicamente 8 puntos
+    Es decir, que de esos 16 atributos, hay 8 coordenadas, y está ordenado
+      así: {x_1, y_1, x_2, y_2, ..., x_8, y_8}
+
+
+
+
+
+- Número instancias:
+- Número atributos:
+- Número clases:

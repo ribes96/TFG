@@ -1,0 +1,115 @@
+Método 1: hacer una sola extracción de RFF y alimentar todos los árboles con el
+    mismo feature space
+Método 2: hacer una extracción de RFF distinta para cada árbol y luego cada
+    árbol se construye y predice de la forma estándar
+Método 3: para hacer cada split de cada árbol, se hace una nueva extracción de
+    RFF
+
+Pasos:
+======
+Modificar RBFSampler
+~~~~~~~~~~~~~~~~~~~~
+1. Hacer que normalice las filas de datos antes de hacer nada
+2. Hacer nulo el vector de Offsets
+3. Añadir también los senos en la matriz resultado
+
+Para RandomForest en general
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+4. Hacer la votación de manera hard (cada árbol propone una clase, la clase más
+elegida gana)
+    """
+        Está implementado en el método "predict" de la clase "ForestClassifier",
+        del cual es subclase "RandomForestClassifier", en la línea 517 de
+        forest.py
+        Llama a su método "predict_proba", que debe retornar las probabilidades
+        para cada clase, y de ahí coje la clase que tenga más probabilidad
+        Predict proba está en la linea 553
+        Para cada clase, retorna la probabilidad de pertenencia a esa clase, que
+        es una media de las probabilidades de cada uno de los árboles.
+        Este es el método que hay que modificar.
+        Creo que la función que hace el cálculo de las medias se llama en la
+        línea 586, con procesos en paralelo, mediante el método
+        "acumulate_prediction"
+        Los estimadores los tiene guardados en self.estimators_
+        En la función "acumulate_prediction" acumula la probabilidad de
+        pertenencia a cada clase que dice cada uno de los árboles
+        Después divide por la cantidad de estimadores que hay
+    """
+
+Para RFClassifierMethod1
+~~~~~~~~~~~~~~~~~~~~~~~~
+5. En la inicialización, que primero haga la transformación
+    """
+        En la función "fit" de "BaseForest", que es clase padre de
+        "RandomForestClassifier", y que está en la línea 220. Solamente hay que
+        modificar el parámetro X de entrada
+    """
+6. En la predicción, usar un mapeo de las filas de entrada
+    """
+        En el método "predict" de la clase "ForestClassifier" (ojo, que hay un
+        predict de otra clase)
+        Está en la línea 517
+    """
+
+Para RFClassifierMethod2
+~~~~~~~~~~~~~~~~~~~~~~~~
+7. En la inicialización, dar a cada uno de los árboles un mapeo distinto
+    """
+        el método "_parallel_build_trees" es el que crea una lista de árboles
+        con los datos. Es el que tengo que modificar. Se le llama en el método
+        "fit" de "BaseForest", en la línea 324.
+        Está implementado en la línea -94- 97
+
+        Lo de arriba está mal. Hay que modificar el método "fit" de cada árbol,
+        para que modifique la entrada que recibe
+
+    """
+8. En la predicción, usar un mapeo de las filas de entrada
+    """
+        Hay que modificar cada arbol, en su método "predict_proba". Tienen que
+        modificar los datos que les han dado, y después dar su respuesta
+        Este paso tengo que hacelo después del paso 4, que hará un voto hard de
+        cada uno de los árboles
+    """
+
+Para RFClassifierMethod3
+~~~~~~~~~~~~~~~~~~~~~~~~
+9. En la construcción de los árboles, usar un Splitter distinto
+    """
+        Estamos usando la clase "DecisionTreeClassifier", definida en "tree.py"
+        Es subclase de "BaseDecisionTree". El método "fit" hace el de su padre,
+        pero el "predict_proba" ya lo hace él.
+        El "predict_proba" llama al método "predict" de su atributo "tree_"
+        El método "apply" de la clase "Tree" encuentrar el nodo terminal de una
+        entrada. Está definida en la línea 772 de "_tree.py". Realmente llama a
+        "_apply_dense"
+    """
+
+
+
+Consultas2:
+===========
+- Con los valores por defecto cada árbol realmente hace un voto hard. Quizá lo
+podemos dejar como está
+- Por defecto, hace nuevos splits hasta que la impureza ya no mejora. Nos gusta
+esto, o establecemos un mínimo de impureza para hacer split?
+
+
+Consultas:
+==========
+- En la biblioteca, los DecisionTrees retornan una probabilidad de pertenencia a
+cada una de las clases. El RandomForest, para cada una de las clases, hace una
+media de las probabilidades que ha dicho cada árbol, y luego retorna la clase
+que tenga mayor probabilidad
+    - No es esto lo que habíamos visto en clase sobre los DecisionTrees. Es
+    igualmente válido?
+    - Esto de hacer una media de probabilidades no lo había visto hacer nunca.
+    Es un cálculo "reconocido" por la comunidad, o es un método casero?
+- A la hora de sacar una predicción nueva, para cualquiera de los métodos 1, 2 o
+3, el mapeo que hagamos de los features de entrada tiene que ser exactamente el
+mismo (es decir, usando el mismo vector de w), o se trata de hacer otra extracción
+aleatoria cada vez?
+    - Si hay que usar el mismo mapeo, entiendo que hay que almacenar la matriz W
+    para cualquier mapeo que hayamos usado en la construcción de los árboles. En
+    el método 3, habría que guardar una matriz para cada nodo de cada árbol del
+    bosque.
