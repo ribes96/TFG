@@ -1,0 +1,33 @@
+Observaciones
+=============
+- El vector aleatorio es una gausiana centrada en 0 y con varianza = 2*gamma
+- (Sin hacer regularización) Las filas del producto de matrices parecen seguir una normal centrada en 0 on std. dev = 500
+    - La sd depende de la gamma. No veo qué relación sigue, pero más o menos he visto:
+        gamma | 1      | 2       |  3
+        ------------------------------
+        sd    |300~400 | 400~500 | 500~600
+- (Haciendo regularización) Sigue siendo una normal, con:
+        gamma | 1      | 2       |  3
+        ------------------------------
+        varian| 2      | 4       | 6
+        sd    | 1.43   | 2       | 2.5
+    - Por lo tanto, haciendo regularización, la varianza del producto de matrices es el doble de gamma
+- Las columnas del producto de matrices son bastante caóticas, aunque también parecen ser normales. Probablemente sea caótico porque solamente se usan 16 números aleatorios.
+- (Sin hacer regularización, y sin usar offset) Las filas del producto vectorial moduladas a 2PI presentan muchos elementos cercanos a 0 (y a 2PI). Esto parece un comportamiento normal, puesto que si no está modulado, sigue una distribución normal centrada en 0, y hay muchos valores cercanos a 0
+    - Hacer normalización no parece cambiar nada de esto. Me parece normal
+    - Usar el offset aleatorio sí que cambia las cosas. Ahora el producto de matrices modulado a 2PI parece ser uniforme. Parece lo que cabría esperar, pero puede influir bastante
+- No entiendo este comportamiento. Si no usas el offset, el vector de producto escalar modulado a 2PI tiene muchos valores cercanos al cero, como ya se ha indicado anteriormente. Cabría esperar que el seno de esas filas tuviera muchos valores en 0 (puesto que sin(0) = 0) y que el coseno tuviera muchos valores en 1 (puesto que cos(0) = 1)
+
+- Las filas del producto de matrices parecen seguir una normal, pero la media 3, más o menos. Esta media no cambia si cambio la gamma. Tampoco cambia si uso o dejo de usar normalización. Si uso una D más pequeña, parece que esta media oscila más, pero sigue alrededor de 3. No entiendo este comportamiento.
+
+
+
+
+
+
+
+
+
+
+
+
