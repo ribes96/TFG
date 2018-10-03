@@ -141,7 +141,7 @@
     \def\gt{>}
     \def\lt{<}
     % Document parameters
-    \title{Graficas fourier nystroem}
+    \title{Quitando Overfit a DT}
     
     
     
@@ -280,507 +280,564 @@
     
 
     
+    \section{Quitar Overfit a Decision
+Tree}\label{quitar-overfit-a-decision-tree}
+
+    La implementación por defecto de DecisionTreeClassifier de Scikit-learn
+hace overfit, pues no pone ningún límite al crecimiento del árbol. Pero
+no está claro hasta qué punto tenemos que dejarlo crecer, y hay muchos
+hiper-parámetros para modificar esto. En este notebook voy a trastear
+con los parámetros para ver como se comportan
+
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}1}]:} \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
         \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
         \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
         \PY{k+kn}{from} \PY{n+nn}{time} \PY{k}{import} \PY{n}{time}
+        \PY{k+kn}{import} \PY{n+nn}{math}
         
         \PY{c+c1}{\PYZsh{} Import datasets, classifiers and performance metrics}
-        \PY{k+kn}{from} \PY{n+nn}{sklearn} \PY{k}{import} \PY{n}{datasets}\PY{p}{,} \PY{n}{svm}\PY{p}{,} \PY{n}{pipeline}
-        \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{kernel\PYZus{}approximation} \PY{k}{import} \PY{p}{(}\PY{n}{RBFSampler}\PY{p}{,}
-                                                  \PY{n}{Nystroem}\PY{p}{)}
-        \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{decomposition} \PY{k}{import} \PY{n}{PCA}
-        
+        \PY{k+kn}{from} \PY{n+nn}{sklearn} \PY{k}{import} \PY{n}{datasets}
         \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{tree} \PY{k}{import} \PY{n}{DecisionTreeClassifier}
-        \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{linear\PYZus{}model} \PY{k}{import} \PY{n}{LogisticRegression}
-        \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{neural\PYZus{}network} \PY{k}{import} \PY{n}{MLPClassifier}
 \end{Verbatim}
 
 
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}2}]:} \PY{c+c1}{\PYZsh{} The digits dataset}
-        \PY{n}{digits} \PY{o}{=} \PY{n}{datasets}\PY{o}{.}\PY{n}{load\PYZus{}digits}\PY{p}{(}\PY{n}{n\PYZus{}class}\PY{o}{=}\PY{l+m+mi}{9}\PY{p}{)}
-\end{Verbatim}
-
+    \subsection{min\_impurity\_decrease}\label{min_impurity_decrease}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}3}]:} \PY{c+c1}{\PYZsh{} To apply an classifier on this data, we need to flatten the image, to}
-        \PY{c+c1}{\PYZsh{} turn the data in a (samples, feature) matrix:}
-        \PY{n}{n\PYZus{}samples} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{digits}\PY{o}{.}\PY{n}{data}\PY{p}{)}
-        \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data} \PY{o}{/} \PY{l+m+mf}{16.}
-        \PY{n}{data} \PY{o}{\PYZhy{}}\PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}4}]:} \PY{c+c1}{\PYZsh{} We learn the digits on the first half of the digits}
-        \PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{targets\PYZus{}train} \PY{o}{=} \PY{p}{(}\PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{n}{n\PYZus{}samples} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{2}\PY{p}{]}\PY{p}{,}
-                                     \PY{n}{digits}\PY{o}{.}\PY{n}{target}\PY{p}{[}\PY{p}{:}\PY{n}{n\PYZus{}samples} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{2}\PY{p}{]}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}2}]:} \PY{n}{digits} \PY{o}{=} \PY{n}{datasets}\PY{o}{.}\PY{n}{load\PYZus{}digits}\PY{p}{(}\PY{p}{)}
         
+        \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
+        \PY{n}{target} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{target}
+        \PY{n}{N} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+        \PY{n}{prop\PYZus{}train} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{/} \PY{l+m+mi}{3}
+        \PY{n}{N\PYZus{}train} \PY{o}{=} \PY{n}{math}\PY{o}{.}\PY{n}{ceil}\PY{p}{(}\PY{n}{N} \PY{o}{*} \PY{n}{prop\PYZus{}train}\PY{p}{)}
+        \PY{n}{N\PYZus{}test} \PY{o}{=} \PY{n}{N} \PY{o}{\PYZhy{}} \PY{n}{N\PYZus{}train}
         
-        \PY{c+c1}{\PYZsh{} Now predict the value of the digit on the second half:}
-        \PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{targets\PYZus{}test} \PY{o}{=} \PY{p}{(}\PY{n}{data}\PY{p}{[}\PY{n}{n\PYZus{}samples} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{2}\PY{p}{:}\PY{p}{]}\PY{p}{,}
-                                   \PY{n}{digits}\PY{o}{.}\PY{n}{target}\PY{p}{[}\PY{n}{n\PYZus{}samples} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{2}\PY{p}{:}\PY{p}{]}\PY{p}{)}
-        \PY{c+c1}{\PYZsh{} data\PYZus{}test = scaler.transform(data\PYZus{}test)}
+        \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
+        
+        \PY{c+c1}{\PYZsh{} Algunas columnas tienen todo 0. Estas features no aportan ninguna información,}
+        \PY{c+c1}{\PYZsh{} y además me impiden estandarizar, pues la std es 0}
+        \PY{c+c1}{\PYZsh{} La vamos a quitar. Este array es de booleanos}
+        \PY{n}{valid\PYZus{}cols} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{apply\PYZus{}along\PYZus{}axis}\PY{p}{(}\PY{k}{lambda} \PY{n}{a}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{count\PYZus{}nonzero}\PY{p}{(}\PY{n}{a}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{arr} \PY{o}{=} \PY{n}{data}\PY{p}{)}
+        
+        \PY{n}{data}\PY{o}{.}\PY{n}{shape}
+        
+        \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{valid\PYZus{}cols}\PY{p}{]}
+        
+        \PY{n}{data}\PY{o}{.}\PY{n}{shape}
+        
+        \PY{n}{mean} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
+        \PY{n}{std} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
+        
+        \PY{n}{data} \PY{o}{=} \PY{p}{(}\PY{n}{data} \PY{o}{\PYZhy{}} \PY{n}{mean}\PY{p}{)}\PY{o}{/}\PY{n}{std}
+        
+        \PY{n}{data\PYZus{}train} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
+        \PY{n}{data\PYZus{}test} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
+        
+        \PY{n}{target\PYZus{}train} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
+        \PY{n}{target\PYZus{}test} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
 \end{Verbatim}
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}5}]:} \PY{c+c1}{\PYZsh{} Create a classifier: a support vector classifier}
-        \PY{n}{kernel\PYZus{}svm} \PY{o}{=} \PY{n}{svm}\PY{o}{.}\PY{n}{SVC}\PY{p}{(}\PY{n}{gamma}\PY{o}{=}\PY{o}{.}\PY{l+m+mi}{2}\PY{p}{)}
-        \PY{n}{linear\PYZus{}svm} \PY{o}{=} \PY{n}{svm}\PY{o}{.}\PY{n}{LinearSVC}\PY{p}{(}\PY{p}{)}
-\end{Verbatim}
-
-
-    Código propio: añado un DecisionTree sin ninguna aproximación de kernel
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}6}]:} \PY{n}{simply\PYZus{}dt} \PY{o}{=} \PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{p}{)}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}7}]:} \PY{n}{non\PYZus{}overfitting\PYZus{}dt} \PY{o}{=} \PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{n}{min\PYZus{}samples\PYZus{}leaf}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{,}
-                                                    \PY{n}{max\PYZus{}depth} \PY{o}{=} \PY{l+m+mi}{50}\PY{p}{,}
-                                                    \PY{n}{min\PYZus{}samples\PYZus{}split} \PY{o}{=} \PY{l+m+mi}{10}\PY{p}{,}
-                                                    \PY{n}{min\PYZus{}impurity\PYZus{}decrease} \PY{o}{=} \PY{l+m+mf}{0.01}\PY{p}{)}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}8}]:} \PY{n}{logit} \PY{o}{=} \PY{n}{LogisticRegression}\PY{p}{(} \PY{n}{C} \PY{o}{=} \PY{l+m+mf}{1e30}\PY{p}{,} \PY{n}{multi\PYZus{}class} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{multinomial}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{solver} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{lbfgs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-        \PY{c+c1}{\PYZsh{} El solver por defecto no hace multinomial, solo \PYZdq{}one\PYZhy{}versus\PYZhy{}rest\PYZdq{}}
-        \PY{c+c1}{\PYZsh{} C muy grande para minimizar la regularización}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}9}]:} \PY{n}{mlp} \PY{o}{=} \PY{n}{MLPClassifier}\PY{p}{(}\PY{n}{solver}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{lbfgs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{1e\PYZhy{}5}\PY{p}{,}
-                            \PY{n}{hidden\PYZus{}layer\PYZus{}sizes}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
-        \PY{c+c1}{\PYZsh{} Dos capas ocultas, la primera con 5 neuronas, la segunda con 2}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}10}]:} \PY{c+c1}{\PYZsh{} create pipeline from kernel approximation}
-         \PY{c+c1}{\PYZsh{} and linear svm}
-         \PY{n}{feature\PYZus{}map\PYZus{}fourier} \PY{o}{=} \PY{n}{RBFSampler}\PY{p}{(}\PY{n}{gamma}\PY{o}{=}\PY{o}{.}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
-         \PY{n}{feature\PYZus{}map\PYZus{}nystroem} \PY{o}{=} \PY{n}{Nystroem}\PY{p}{(}\PY{n}{gamma}\PY{o}{=}\PY{o}{.}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}11}]:} \PY{n}{fourier\PYZus{}approx\PYZus{}svm} \PY{o}{=} \PY{n}{pipeline}\PY{o}{.}\PY{n}{Pipeline}\PY{p}{(}\PY{p}{[}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{feature\PYZus{}map}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{feature\PYZus{}map\PYZus{}fourier}\PY{p}{)}\PY{p}{,}
-                                                 \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{svm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{svm}\PY{o}{.}\PY{n}{LinearSVC}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}47}]:} \PY{c+c1}{\PYZsh{}decreases = np.arange(0,100)}
+         \PY{c+c1}{\PYZsh{}decreases = np.arange(0,0.1, 0.01)}
+         \PY{n}{decreases} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{)}
          
-         \PY{n}{nystroem\PYZus{}approx\PYZus{}svm} \PY{o}{=} \PY{n}{pipeline}\PY{o}{.}\PY{n}{Pipeline}\PY{p}{(}\PY{p}{[}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{feature\PYZus{}map}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{feature\PYZus{}map\PYZus{}nystroem}\PY{p}{)}\PY{p}{,}
-                                                 \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{svm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{svm}\PY{o}{.}\PY{n}{LinearSVC}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{]}\PY{p}{)}
-\end{Verbatim}
-
-
-    Código propio: hago el pipeline con un DecisionTree Nota: de momento uso
-el mismo RBFSampler que usan ellos, la misma instancia. Si afecta puedo
-usar uno nuevo. No lo creo
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}12}]:} \PY{n}{fourier\PYZus{}approx\PYZus{}dt} \PY{o}{=} \PY{n}{pipeline}\PY{o}{.}\PY{n}{Pipeline}\PY{p}{(}\PY{p}{[}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{feature\PYZus{}map}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{feature\PYZus{}map\PYZus{}fourier}\PY{p}{)}\PY{p}{,}
-                                                \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{]}\PY{p}{)}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}13}]:} \PY{n}{fourier\PYZus{}approx\PYZus{}logit} \PY{o}{=} \PY{n}{pipeline}\PY{o}{.}\PY{n}{Pipeline}\PY{p}{(}\PY{p}{[}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{feature\PYZus{}map}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{feature\PYZus{}map\PYZus{}fourier}\PY{p}{)}\PY{p}{,}
-                                                \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{logit}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{LogisticRegression}\PY{p}{(} \PY{n}{C} \PY{o}{=} \PY{l+m+mf}{1e30}\PY{p}{,}
-                                                                              \PY{n}{multi\PYZus{}class} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{multinomial}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
-                                                                              \PY{n}{solver} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{lbfgs}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}\PY{p}{]}\PY{p}{)}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}14}]:} \PY{c+c1}{\PYZsh{} fit and predict using linear and kernel svm:}
+         \PY{n}{test\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{train\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
          
-         \PY{n}{kernel\PYZus{}svm\PYZus{}time} \PY{o}{=} \PY{n}{time}\PY{p}{(}\PY{p}{)}
-         \PY{n}{kernel\PYZus{}svm}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{targets\PYZus{}train}\PY{p}{)}
-         \PY{n}{kernel\PYZus{}svm\PYZus{}score} \PY{o}{=} \PY{n}{kernel\PYZus{}svm}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{targets\PYZus{}test}\PY{p}{)}
-         \PY{n}{kernel\PYZus{}svm\PYZus{}time} \PY{o}{=} \PY{n}{time}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{kernel\PYZus{}svm\PYZus{}time}
+         \PY{n}{clf} \PY{o}{=} \PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{p}{)}
          
-         \PY{n}{linear\PYZus{}svm\PYZus{}time} \PY{o}{=} \PY{n}{time}\PY{p}{(}\PY{p}{)}
-         \PY{n}{linear\PYZus{}svm}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{targets\PYZus{}train}\PY{p}{)}
-         \PY{n}{linear\PYZus{}svm\PYZus{}score} \PY{o}{=} \PY{n}{linear\PYZus{}svm}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{targets\PYZus{}test}\PY{p}{)}
-         \PY{n}{linear\PYZus{}svm\PYZus{}time} \PY{o}{=} \PY{n}{time}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{linear\PYZus{}svm\PYZus{}time}
-\end{Verbatim}
-
-
-    Código propio: hago lo mismo con el DT él solo
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}15}]:} \PY{n}{simply\PYZus{}dt\PYZus{}time} \PY{o}{=} \PY{n}{time}\PY{p}{(}\PY{p}{)}
-         \PY{n}{simply\PYZus{}dt}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{targets\PYZus{}train}\PY{p}{)}
-         \PY{n}{simply\PYZus{}dt\PYZus{}score} \PY{o}{=} \PY{n}{simply\PYZus{}dt}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{targets\PYZus{}test}\PY{p}{)}
-         \PY{n}{simply\PYZus{}dt\PYZus{}time} \PY{o}{=} \PY{n}{time}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{simply\PYZus{}dt\PYZus{}time}
-\end{Verbatim}
-
-
-    Lo de abajo es solo por probar, hay que borrarlo
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}16}]:} \PY{n}{gg} \PY{o}{=} \PY{n}{simply\PYZus{}dt}\PY{o}{.}\PY{n}{decision\PYZus{}path}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{)}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}17}]:} \PY{n+nb}{len}\PY{p}{(}\PY{n}{gg}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{toarray}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}17}]:} 163
-\end{Verbatim}
-            
-    Código propio: hago lo mismo con logit
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}18}]:} \PY{n}{logit\PYZus{}time} \PY{o}{=} \PY{n}{time}\PY{p}{(}\PY{p}{)}
-         \PY{n}{logit}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{targets\PYZus{}train}\PY{p}{)}
-         \PY{n}{logit\PYZus{}score} \PY{o}{=} \PY{n}{logit}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{targets\PYZus{}test}\PY{p}{)}
-         \PY{n}{logit\PYZus{}time} \PY{o}{=} \PY{n}{time}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{logit\PYZus{}time}
-\end{Verbatim}
-
-
-    Código propio: hago lo mismo con mlp
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}19}]:} \PY{n}{mlp\PYZus{}time} \PY{o}{=} \PY{n}{time}\PY{p}{(}\PY{p}{)}
-         \PY{n}{mlp}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{targets\PYZus{}train}\PY{p}{)}
-         \PY{n}{mlp\PYZus{}score} \PY{o}{=} \PY{n}{mlp}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{targets\PYZus{}test}\PY{p}{)}
-         \PY{n}{mlp\PYZus{}time} \PY{o}{=} \PY{n}{time}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{mlp\PYZus{}time}
-\end{Verbatim}
-
-
-    Código propio: hago lo mismo con non\_overfitting\_dt
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}20}]:} \PY{n}{non\PYZus{}overfitting\PYZus{}dt\PYZus{}time} \PY{o}{=} \PY{n}{time}\PY{p}{(}\PY{p}{)}
-         \PY{n}{non\PYZus{}overfitting\PYZus{}dt}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{targets\PYZus{}train}\PY{p}{)}
-         \PY{n}{non\PYZus{}overfitting\PYZus{}dt\PYZus{}score} \PY{o}{=} \PY{n}{non\PYZus{}overfitting\PYZus{}dt}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{targets\PYZus{}test}\PY{p}{)}
-         \PY{n}{non\PYZus{}overfitting\PYZus{}dt\PYZus{}time} \PY{o}{=} \PY{n}{time}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{non\PYZus{}overfitting\PYZus{}dt\PYZus{}time}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}21}]:} \PY{n}{sample\PYZus{}sizes} \PY{o}{=} \PY{l+m+mi}{30} \PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}
-         \PY{n}{fourier\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-         \PY{n}{nystroem\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-         \PY{n}{fourier\PYZus{}times} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-         \PY{n}{nystroem\PYZus{}times} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-\end{Verbatim}
-
-
-    Código propio: hago las listas para mi nuevo modelo. Nota: ellos usan un
-nombre ambiguo. Les llaman fourier\_scores y fourier\_times porque
-solamente la svm usa fourier. Nosotros usamos fourier con dt.
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}22}]:} \PY{n}{fourier\PYZus{}dt\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-         \PY{n}{fourier\PYZus{}dt\PYZus{}times} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}23}]:} \PY{n}{fourier\PYZus{}logit\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-         \PY{n}{fourier\PYZus{}logit\PYZus{}times} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}24}]:} \PY{k}{for} \PY{n}{D} \PY{o+ow}{in} \PY{n}{sample\PYZus{}sizes}\PY{p}{:}
-             \PY{n}{fourier\PYZus{}approx\PYZus{}svm}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{n}{feature\PYZus{}map\PYZus{}\PYZus{}n\PYZus{}components}\PY{o}{=}\PY{n}{D}\PY{p}{)}
-             \PY{n}{nystroem\PYZus{}approx\PYZus{}svm}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{n}{feature\PYZus{}map\PYZus{}\PYZus{}n\PYZus{}components}\PY{o}{=}\PY{n}{D}\PY{p}{)}
+         \PY{k}{for} \PY{n}{dec} \PY{o+ow}{in} \PY{n}{decreases}\PY{p}{:}
+             \PY{n}{clf}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{n}{min\PYZus{}impurity\PYZus{}decrease} \PY{o}{=} \PY{n}{dec}\PY{p}{)}
+             \PY{n}{clf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
+             \PY{n}{test\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{target\PYZus{}test}\PY{p}{)}
+             \PY{n}{train\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
              
-             \PY{c+c1}{\PYZsh{}\PYZsh{}Código propio: lo mismo con mi pipeline}
-             \PY{n}{fourier\PYZus{}approx\PYZus{}dt}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{n}{feature\PYZus{}map\PYZus{}\PYZus{}n\PYZus{}components}\PY{o}{=}\PY{n}{D}\PY{p}{)}
-             \PY{n}{fourier\PYZus{}approx\PYZus{}logit}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{n}{feature\PYZus{}map\PYZus{}\PYZus{}n\PYZus{}components}\PY{o}{=}\PY{n}{D}\PY{p}{)}
-             
-             \PY{c+c1}{\PYZsh{}Nystroem svm}
-             \PY{n}{start} \PY{o}{=} \PY{n}{time}\PY{p}{(}\PY{p}{)}
-             \PY{n}{nystroem\PYZus{}approx\PYZus{}svm}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{targets\PYZus{}train}\PY{p}{)}
-             \PY{n}{nystroem\PYZus{}times}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{time}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{start}\PY{p}{)}
+             \PY{n}{test\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{test\PYZus{}score}\PY{p}{)}
+             \PY{n}{train\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{train\PYZus{}score}\PY{p}{)}
          
-             \PY{c+c1}{\PYZsh{} Fourier svm}
-             \PY{n}{start} \PY{o}{=} \PY{n}{time}\PY{p}{(}\PY{p}{)}
-             \PY{n}{fourier\PYZus{}approx\PYZus{}svm}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{targets\PYZus{}train}\PY{p}{)}
-             \PY{n}{fourier\PYZus{}times}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{time}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{start}\PY{p}{)}
-             
-             \PY{c+c1}{\PYZsh{} Código propio: el tiempo del fourier dt y del fourier logit}
-             \PY{n}{start} \PY{o}{=} \PY{n}{time}\PY{p}{(}\PY{p}{)}
-             \PY{n}{fourier\PYZus{}approx\PYZus{}dt}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{targets\PYZus{}train}\PY{p}{)}
-             \PY{n}{fourier\PYZus{}dt\PYZus{}times}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{time}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{start}\PY{p}{)}
-             
-             \PY{n}{start} \PY{o}{=} \PY{n}{time}\PY{p}{(}\PY{p}{)}
-             \PY{n}{fourier\PYZus{}approx\PYZus{}logit}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{targets\PYZus{}train}\PY{p}{)}
-             \PY{n}{fourier\PYZus{}logit\PYZus{}times}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{time}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{start}\PY{p}{)}
-         
-             \PY{c+c1}{\PYZsh{} Cálculo de scores}
-             \PY{n}{fourier\PYZus{}score} \PY{o}{=} \PY{n}{fourier\PYZus{}approx\PYZus{}svm}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{targets\PYZus{}test}\PY{p}{)}
-             \PY{n}{nystroem\PYZus{}score} \PY{o}{=} \PY{n}{nystroem\PYZus{}approx\PYZus{}svm}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{targets\PYZus{}test}\PY{p}{)}
-             
-             \PY{c+c1}{\PYZsh{} Código propio: calculo sl score con mi pipeline}
-             \PY{n}{fourier\PYZus{}dt\PYZus{}score} \PY{o}{=} \PY{n}{fourier\PYZus{}approx\PYZus{}dt}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{targets\PYZus{}test}\PY{p}{)}
-             \PY{n}{fourier\PYZus{}logit\PYZus{}score} \PY{o}{=} \PY{n}{fourier\PYZus{}approx\PYZus{}logit}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{targets\PYZus{}test}\PY{p}{)}
-             
-             
-             \PY{c+c1}{\PYZsh{} Poner los scores en las listas de score}
-             \PY{n}{nystroem\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{nystroem\PYZus{}score}\PY{p}{)}
-             \PY{n}{fourier\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{fourier\PYZus{}score}\PY{p}{)}
-             
-             \PY{c+c1}{\PYZsh{} Código propio: pongo mis propios scores y times}
-             \PY{n}{fourier\PYZus{}dt\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{fourier\PYZus{}dt\PYZus{}score}\PY{p}{)}
-             \PY{n}{fourier\PYZus{}logit\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{fourier\PYZus{}logit\PYZus{}score}\PY{p}{)}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}25}]:} \PY{c+c1}{\PYZsh{} plot the results:}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{16}\PY{p}{,} \PY{l+m+mi}{32}\PY{p}{)}\PY{p}{)}
-         \PY{n}{accuracy} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{211}\PY{p}{)}
-         \PY{c+c1}{\PYZsh{} second y axis for timeings}
-         \PY{n}{timescale} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{212}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{} Accuracy y tiempo de nystroem}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{nystroem\PYZus{}scores}\PY{p}{,}
-                       \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Nystroem approx. kernel with svm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{timescale}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{nystroem\PYZus{}times}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
-                        \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Nystroem approx. kernel with svm}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{} Accuracy y tiempo de fourier svm}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{fourier\PYZus{}scores}\PY{p}{,} 
-                       \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fourier approx. kernel with svm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{timescale}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{fourier\PYZus{}times}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
-                        \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Fourier approx. kernel with svm}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{} Accuracy y tiempo de fourier dt}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{fourier\PYZus{}dt\PYZus{}scores}\PY{p}{,}
-                       \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fourier approx. kernel with dt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{timescale}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{fourier\PYZus{}dt\PYZus{}times}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
-                        \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Fourier approx. kernel with dt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{} Accuracy y tiempo de fourier logit}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{fourier\PYZus{}logit\PYZus{}scores}\PY{p}{,}
-                       \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fourier approx. kernel with logit}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{timescale}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{fourier\PYZus{}logit\PYZus{}times}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
-                        \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Fourier approx. kernel with logit}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
-         \PY{c+c1}{\PYZsh{} Aquí empiezan las horizontales}
-         \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
-         
-         \PY{c+c1}{\PYZsh{} horizontal lines for exact rbf and linear kernels:}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                       \PY{p}{[}\PY{n}{linear\PYZus{}svm\PYZus{}score}\PY{p}{,} \PY{n}{linear\PYZus{}svm\PYZus{}score}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{linear svm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{timescale}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                        \PY{p}{[}\PY{n}{linear\PYZus{}svm\PYZus{}time}\PY{p}{,} \PY{n}{linear\PYZus{}svm\PYZus{}time}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{linear svm}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-         
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                       \PY{p}{[}\PY{n}{kernel\PYZus{}svm\PYZus{}score}\PY{p}{,} \PY{n}{kernel\PYZus{}svm\PYZus{}score}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{rbf svm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{timescale}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                        \PY{p}{[}\PY{n}{kernel\PYZus{}svm\PYZus{}time}\PY{p}{,} \PY{n}{kernel\PYZus{}svm\PYZus{}time}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rbf svm}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{} Código propio: lo mismo, las lineas horizontales para el DT simple}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                       \PY{p}{[}\PY{n}{simply\PYZus{}dt\PYZus{}score}\PY{p}{,} \PY{n}{simply\PYZus{}dt\PYZus{}score}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{timescale}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                        \PY{p}{[}\PY{n}{simply\PYZus{}dt\PYZus{}time}\PY{p}{,} \PY{n}{simply\PYZus{}dt\PYZus{}time}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                       \PY{p}{[}\PY{n}{non\PYZus{}overfitting\PYZus{}dt\PYZus{}score}\PY{p}{,} \PY{n}{non\PYZus{}overfitting\PYZus{}dt\PYZus{}score}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{non overfitting dt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{timescale}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                        \PY{p}{[}\PY{n}{non\PYZus{}overfitting\PYZus{}dt\PYZus{}time}\PY{p}{,} \PY{n}{non\PYZus{}overfitting\PYZus{}dt\PYZus{}time}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{non overfitting dt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                       \PY{p}{[}\PY{n}{logit\PYZus{}score}\PY{p}{,} \PY{n}{logit\PYZus{}score}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{logit}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{timescale}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                        \PY{p}{[}\PY{n}{logit\PYZus{}time}\PY{p}{,} \PY{n}{logit\PYZus{}time}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{logit}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                       \PY{p}{[}\PY{n}{mlp\PYZus{}score}\PY{p}{,} \PY{n}{mlp\PYZus{}score}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mlp}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{timescale}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                        \PY{p}{[}\PY{n}{mlp\PYZus{}time}\PY{p}{,} \PY{n}{mlp\PYZus{}time}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mlp}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-         
-         
-         \PY{c+c1}{\PYZsh{} vertical line for dataset dimensionality = 64}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{64}\PY{p}{,} \PY{l+m+mi}{64}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mf}{0.7}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{n\PYZus{}features}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{} legends and labels}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Classification accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{timescale}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Training times}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{set\PYZus{}xlim}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{set\PYZus{}xticks}\PY{p}{(}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-         \PY{c+c1}{\PYZsh{}accuracy.set\PYZus{}ylim(np.min(fourier\PYZus{}scores), 1)}
-         \PY{n}{timescale}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Sampling steps = transformed feature dimension}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Classification accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{timescale}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Training time in seconds}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{p}{(}\PY{l+m+mf}{1.01}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} Modifico la posición de la leyenda, que no se ve bien}
-         \PY{n}{timescale}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{p}{(}\PY{l+m+mf}{1.01}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}25}]:} <matplotlib.legend.Legend at 0x7fdd63f42da0>
-\end{Verbatim}
-            
-    \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_32_1.png}
-    \end{center}
-    { \hspace*{\fill} \\}
-    
-    Nota: observo que el accuracy de MLP oscila mucho. A veces genial, otras
-fatal. Creo que es normal
-
-    \subsection{Repito las gráficas para que se vean
-mejor}\label{repito-las-gruxe1ficas-para-que-se-vean-mejor}
-
-    \subsubsection{Solamente las
-aproximaciones}\label{solamente-las-aproximaciones}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}26}]:} \PY{c+c1}{\PYZsh{} plot the results:}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{16}\PY{p}{,} \PY{l+m+mi}{16}\PY{p}{)}\PY{p}{)}
          \PY{n}{accuracy} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{111}\PY{p}{)}
-         \PY{c+c1}{\PYZsh{} second y axis for timeings}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{decreases}\PY{p}{,} \PY{n}{test\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{decreases}\PY{p}{,} \PY{n}{train\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Train score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{}accuracy.xaxis.set\PYZus{}ticks(np.arange(0,100, 10))}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{locator\PYZus{}params}\PY{p}{(}\PY{n}{nbins} \PY{o}{=} \PY{l+m+mi}{15}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{min impurity decrease}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
          
-         
-         \PY{c+c1}{\PYZsh{} Accuracy y tiempo de nystroem}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{nystroem\PYZus{}scores}\PY{p}{,}
-                       \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Nystroem approx. kernel with svm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{} Accuracy y tiempo de fourier svm}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{fourier\PYZus{}scores}\PY{p}{,} 
-                       \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fourier approx. kernel with svm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         
-         \PY{c+c1}{\PYZsh{} Accuracy y tiempo de fourier dt}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{fourier\PYZus{}dt\PYZus{}scores}\PY{p}{,}
-                       \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fourier approx. kernel with dt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         
-         \PY{c+c1}{\PYZsh{} Accuracy y tiempo de fourier logit}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{fourier\PYZus{}logit\PYZus{}scores}\PY{p}{,}
-                       \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fourier approx. kernel with logit}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         
-         \PY{c+c1}{\PYZsh{} vertical line for dataset dimensionality = 64}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{64}\PY{p}{,} \PY{l+m+mi}{64}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mf}{0.7}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{n\PYZus{}features}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{} legends and labels}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Classification accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{set\PYZus{}xlim}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{set\PYZus{}xticks}\PY{p}{(}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-         \PY{c+c1}{\PYZsh{}accuracy.set\PYZus{}ylim(np.min(fourier\PYZus{}scores), 1)}
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Classification accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{p}{(}\PY{l+m+mf}{1.01}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} Modifico la posición de la leyenda, que no se ve bien}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{best}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
 \end{Verbatim}
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}26}]:} <matplotlib.legend.Legend at 0x7fdd63df0828>
+{\color{outcolor}Out[{\color{outcolor}47}]:} <matplotlib.legend.Legend at 0x7f30caa38358>
 \end{Verbatim}
             
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_36_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_5_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    \subsubsection{Recortando las lineas
-horizontales}\label{recortando-las-lineas-horizontales}
+    min\_impurity\_decrease
+
+A node will be split if this split induces a decrease of the impurity
+greater than or equal to this value.
+
+The weighted impurity decrease equation is the following:
+
+\begin{verbatim}
+N_t / N * (impurity - N_t_R / N_t * right_impurity
+                    - N_t_L / N_t * left_impurity)
+\end{verbatim}
+
+    \subsection{max\_depth}\label{max_depth}
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}27}]:} \PY{c+c1}{\PYZsh{} plot the results:}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{16}\PY{p}{,} \PY{l+m+mi}{16}\PY{p}{)}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}23}]:} \PY{n}{digits} \PY{o}{=} \PY{n}{datasets}\PY{o}{.}\PY{n}{load\PYZus{}digits}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
+         \PY{n}{target} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{target}
+         \PY{n}{N} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+         \PY{n}{prop\PYZus{}train} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{/} \PY{l+m+mi}{3}
+         \PY{n}{N\PYZus{}train} \PY{o}{=} \PY{n}{math}\PY{o}{.}\PY{n}{ceil}\PY{p}{(}\PY{n}{N} \PY{o}{*} \PY{n}{prop\PYZus{}train}\PY{p}{)}
+         \PY{n}{N\PYZus{}test} \PY{o}{=} \PY{n}{N} \PY{o}{\PYZhy{}} \PY{n}{N\PYZus{}train}
+         
+         \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
+         
+         \PY{c+c1}{\PYZsh{} Algunas columnas tienen todo 0. Estas features no aportan ninguna información,}
+         \PY{c+c1}{\PYZsh{} y además me impiden estandarizar, pues la std es 0}
+         \PY{c+c1}{\PYZsh{} La vamos a quitar. Este array es de booleanos}
+         \PY{n}{valid\PYZus{}cols} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{apply\PYZus{}along\PYZus{}axis}\PY{p}{(}\PY{k}{lambda} \PY{n}{a}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{count\PYZus{}nonzero}\PY{p}{(}\PY{n}{a}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{arr} \PY{o}{=} \PY{n}{data}\PY{p}{)}
+         
+         \PY{n}{data}\PY{o}{.}\PY{n}{shape}
+         
+         \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{valid\PYZus{}cols}\PY{p}{]}
+         
+         \PY{n}{data}\PY{o}{.}\PY{n}{shape}
+         
+         \PY{n}{mean} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
+         \PY{n}{std} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
+         
+         \PY{n}{data} \PY{o}{=} \PY{p}{(}\PY{n}{data} \PY{o}{\PYZhy{}} \PY{n}{mean}\PY{p}{)}\PY{o}{/}\PY{n}{std}
+         
+         \PY{n}{data\PYZus{}train} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
+         \PY{n}{data\PYZus{}test} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
+         
+         \PY{n}{target\PYZus{}train} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
+         \PY{n}{target\PYZus{}test} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}33}]:} \PY{n}{depth} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{)}
+         \PY{n}{test\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{train\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         
+         \PY{n}{clf} \PY{o}{=} \PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{p}{)}
+         
+         \PY{k}{for} \PY{n}{dep} \PY{o+ow}{in} \PY{n}{depth}\PY{p}{:}
+             \PY{n}{clf}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{n}{max\PYZus{}depth} \PY{o}{=} \PY{n}{dep}\PY{p}{)}
+             \PY{n}{clf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
+             \PY{n}{test\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{target\PYZus{}test}\PY{p}{)}
+             \PY{n}{train\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
+             
+             \PY{n}{test\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{test\PYZus{}score}\PY{p}{)}
+             \PY{n}{train\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{train\PYZus{}score}\PY{p}{)}
+         
          \PY{n}{accuracy} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{111}\PY{p}{)}
-         \PY{c+c1}{\PYZsh{} second y axis for timeings}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{depth}\PY{p}{,} \PY{n}{test\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{depth}\PY{p}{,} \PY{n}{train\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Train score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{}accuracy.xaxis.set\PYZus{}ticks(np.arange(0,depth[\PYZhy{}1], depth[\PYZhy{}1] / 10))}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{locator\PYZus{}params}\PY{p}{(}\PY{n}{nbins} \PY{o}{=} \PY{l+m+mi}{15}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Max depth}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
          
-         
-         \PY{c+c1}{\PYZsh{} Accuracy y tiempo de nystroem}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{nystroem\PYZus{}scores}\PY{p}{,}
-                       \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Nystroem approx. kernel with svm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{} Accuracy y tiempo de fourier svm}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{fourier\PYZus{}scores}\PY{p}{,} 
-                       \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fourier approx. kernel with svm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         
-         \PY{c+c1}{\PYZsh{} Accuracy y tiempo de fourier dt}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{fourier\PYZus{}dt\PYZus{}scores}\PY{p}{,}
-                       \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fourier approx. kernel with dt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         
-         \PY{c+c1}{\PYZsh{} Accuracy y tiempo de fourier logit}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{fourier\PYZus{}logit\PYZus{}scores}\PY{p}{,}
-                       \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Fourier approx. kernel with logit}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         
-         \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
-         \PY{c+c1}{\PYZsh{} Aquí empiezan las horizontales}
-         \PY{c+c1}{\PYZsh{} \PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}\PYZhy{}}
-         
-         \PY{c+c1}{\PYZsh{} horizontal lines for exact rbf and linear kernels:}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{n+nb}{len}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{)} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{5}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                       \PY{p}{[}\PY{n}{linear\PYZus{}svm\PYZus{}score}\PY{p}{,} \PY{n}{linear\PYZus{}svm\PYZus{}score}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{linear svm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{n+nb}{len}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{)} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{5}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                       \PY{p}{[}\PY{n}{kernel\PYZus{}svm\PYZus{}score}\PY{p}{,} \PY{n}{kernel\PYZus{}svm\PYZus{}score}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{rbf svm}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         
-         \PY{c+c1}{\PYZsh{} Código propio: lo mismo, las lineas horizontales para el DT simple}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{n+nb}{len}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{)} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{5}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                       \PY{p}{[}\PY{n}{simply\PYZus{}dt\PYZus{}score}\PY{p}{,} \PY{n}{simply\PYZus{}dt\PYZus{}score}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{dt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{n+nb}{len}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{)} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{5}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                       \PY{p}{[}\PY{n}{non\PYZus{}overfitting\PYZus{}dt\PYZus{}score}\PY{p}{,} \PY{n}{non\PYZus{}overfitting\PYZus{}dt\PYZus{}score}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{non overfitting dt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{n+nb}{len}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{)} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{5}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                       \PY{p}{[}\PY{n}{logit\PYZus{}score}\PY{p}{,} \PY{n}{logit\PYZus{}score}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{logit}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{n+nb}{len}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{)} \PY{o}{/}\PY{o}{/} \PY{l+m+mi}{5}\PY{p}{]}\PY{p}{]}\PY{p}{,}
-                       \PY{p}{[}\PY{n}{mlp\PYZus{}score}\PY{p}{,} \PY{n}{mlp\PYZus{}score}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{mlp}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         
-         
-         \PY{c+c1}{\PYZsh{} vertical line for dataset dimensionality = 64}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{64}\PY{p}{,} \PY{l+m+mi}{64}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mf}{0.7}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{n\PYZus{}features}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         \PY{c+c1}{\PYZsh{} legends and labels}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Classification accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{set\PYZus{}xlim}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{sample\PYZus{}sizes}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{set\PYZus{}xticks}\PY{p}{(}\PY{p}{(}\PY{p}{)}\PY{p}{)}
-         \PY{c+c1}{\PYZsh{}accuracy.set\PYZus{}ylim(np.min(fourier\PYZus{}scores), 1)}
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Classification accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{p}{(}\PY{l+m+mf}{1.01}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)} \PY{c+c1}{\PYZsh{} Modifico la posición de la leyenda, que no se ve bien}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{best}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
 \end{Verbatim}
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}27}]:} <matplotlib.legend.Legend at 0x7fdd63d705c0>
+{\color{outcolor}Out[{\color{outcolor}33}]:} <matplotlib.legend.Legend at 0x7f30cafebfd0>
 \end{Verbatim}
             
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_38_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_9_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
+    max\_depth
+
+The maximum depth of the tree. If None, then nodes are expanded until
+all leaves are pure or until all leaves contain less than
+min\_samples\_split samples
+
+    \subsection{min\_samples\_split}\label{min_samples_split}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}6}]:} \PY{n}{digits} \PY{o}{=} \PY{n}{datasets}\PY{o}{.}\PY{n}{load\PYZus{}digits}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}7}]:} \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
+        \PY{n}{target} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{target}
+        \PY{n}{N} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+        \PY{n}{prop\PYZus{}train} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{/} \PY{l+m+mi}{3}
+        \PY{n}{N\PYZus{}train} \PY{o}{=} \PY{n}{math}\PY{o}{.}\PY{n}{ceil}\PY{p}{(}\PY{n}{N} \PY{o}{*} \PY{n}{prop\PYZus{}train}\PY{p}{)}
+        \PY{n}{N\PYZus{}test} \PY{o}{=} \PY{n}{N} \PY{o}{\PYZhy{}} \PY{n}{N\PYZus{}train}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}8}]:} \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}9}]:} \PY{c+c1}{\PYZsh{} Algunas columnas tienen todo 0. Estas features no aportan ninguna información,}
+        \PY{c+c1}{\PYZsh{} y además me impiden estandarizar, pues la std es 0}
+        \PY{c+c1}{\PYZsh{} La vamos a quitar. Este array es de booleanos}
+        \PY{n}{valid\PYZus{}cols} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{apply\PYZus{}along\PYZus{}axis}\PY{p}{(}\PY{k}{lambda} \PY{n}{a}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{count\PYZus{}nonzero}\PY{p}{(}\PY{n}{a}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{arr} \PY{o}{=} \PY{n}{data}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}10}]:} \PY{n}{data}\PY{o}{.}\PY{n}{shape}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}10}]:} (1797, 64)
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}11}]:} \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{valid\PYZus{}cols}\PY{p}{]}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}12}]:} \PY{n}{data}\PY{o}{.}\PY{n}{shape}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}12}]:} (1797, 61)
+\end{Verbatim}
+            
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}13}]:} \PY{n}{mean} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
+         \PY{n}{std} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
+         
+         \PY{n}{data} \PY{o}{=} \PY{p}{(}\PY{n}{data} \PY{o}{\PYZhy{}} \PY{n}{mean}\PY{p}{)}\PY{o}{/}\PY{n}{std}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}14}]:} \PY{n}{data\PYZus{}train} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
+         \PY{n}{data\PYZus{}test} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
+         
+         \PY{n}{target\PYZus{}train} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
+         \PY{n}{target\PYZus{}test} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}39}]:} \PY{n}{sample\PYZus{}sizes} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{150}\PY{p}{)}
+         \PY{n}{test\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{train\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         
+         \PY{n}{clf} \PY{o}{=} \PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{p}{)}
+         
+         \PY{k}{for} \PY{n}{dep} \PY{o+ow}{in} \PY{n}{sample\PYZus{}sizes}\PY{p}{:}
+             \PY{n}{clf}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{n}{min\PYZus{}samples\PYZus{}split} \PY{o}{=} \PY{n}{dep}\PY{p}{)}
+             \PY{n}{clf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
+             
+             \PY{n}{test\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{target\PYZus{}test}\PY{p}{)}
+             \PY{n}{train\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
+             
+             \PY{n}{test\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{test\PYZus{}score}\PY{p}{)}
+             \PY{n}{train\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{train\PYZus{}score}\PY{p}{)}
+         
+         \PY{n}{accuracy} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{111}\PY{p}{)}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{test\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{train\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Train score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{}accuracy.xaxis.set\PYZus{}ticks(np.arange(0,depth[\PYZhy{}1], depth[\PYZhy{}1] / 10))}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{locator\PYZus{}params}\PY{p}{(}\PY{n}{nbins} \PY{o}{=} \PY{l+m+mi}{15}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{min\PYZus{}samples\PYZus{}split}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{best}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}39}]:} <matplotlib.legend.Legend at 0x7f30cacd0358>
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_21_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    min\_samples\_split
+
+The minimum number of samples required to split an internal node
+
+    \subsection{min\_samples\_leaf}\label{min_samples_leaf}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}18}]:} \PY{n}{digits} \PY{o}{=} \PY{n}{datasets}\PY{o}{.}\PY{n}{load\PYZus{}digits}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
+         \PY{n}{target} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{target}
+         \PY{n}{N} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+         \PY{n}{prop\PYZus{}train} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{/} \PY{l+m+mi}{3}
+         \PY{n}{N\PYZus{}train} \PY{o}{=} \PY{n}{math}\PY{o}{.}\PY{n}{ceil}\PY{p}{(}\PY{n}{N} \PY{o}{*} \PY{n}{prop\PYZus{}train}\PY{p}{)}
+         \PY{n}{N\PYZus{}test} \PY{o}{=} \PY{n}{N} \PY{o}{\PYZhy{}} \PY{n}{N\PYZus{}train}
+         
+         \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
+         
+         \PY{c+c1}{\PYZsh{} Algunas columnas tienen todo 0. Estas features no aportan ninguna información,}
+         \PY{c+c1}{\PYZsh{} y además me impiden estandarizar, pues la std es 0}
+         \PY{c+c1}{\PYZsh{} La vamos a quitar. Este array es de booleanos}
+         \PY{n}{valid\PYZus{}cols} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{apply\PYZus{}along\PYZus{}axis}\PY{p}{(}\PY{k}{lambda} \PY{n}{a}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{count\PYZus{}nonzero}\PY{p}{(}\PY{n}{a}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{arr} \PY{o}{=} \PY{n}{data}\PY{p}{)}
+         
+         \PY{n}{data}\PY{o}{.}\PY{n}{shape}
+         
+         \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{valid\PYZus{}cols}\PY{p}{]}
+         
+         \PY{n}{data}\PY{o}{.}\PY{n}{shape}
+         
+         \PY{n}{mean} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
+         \PY{n}{std} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
+         
+         \PY{n}{data} \PY{o}{=} \PY{p}{(}\PY{n}{data} \PY{o}{\PYZhy{}} \PY{n}{mean}\PY{p}{)}\PY{o}{/}\PY{n}{std}
+         
+         \PY{n}{data\PYZus{}train} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
+         \PY{n}{data\PYZus{}test} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
+         
+         \PY{n}{target\PYZus{}train} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
+         \PY{n}{target\PYZus{}test} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}19}]:} \PY{n}{sample\PYZus{}sizes} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{150}\PY{p}{)}
+         \PY{n}{test\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{train\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         
+         \PY{n}{clf} \PY{o}{=} \PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{p}{)}
+         
+         \PY{k}{for} \PY{n}{dep} \PY{o+ow}{in} \PY{n}{sample\PYZus{}sizes}\PY{p}{:}
+             \PY{n}{clf}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{n}{min\PYZus{}samples\PYZus{}leaf} \PY{o}{=} \PY{n}{dep}\PY{p}{)}
+             \PY{n}{clf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
+             \PY{n}{test\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{target\PYZus{}test}\PY{p}{)}
+             \PY{n}{train\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
+             
+             \PY{n}{test\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{test\PYZus{}score}\PY{p}{)}
+             \PY{n}{train\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{train\PYZus{}score}\PY{p}{)}
+         
+         \PY{n}{accuracy} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{111}\PY{p}{)}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{test\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{train\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Train Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{}accuracy.xaxis.set\PYZus{}ticks(np.arange(0,depth[\PYZhy{}1], depth[\PYZhy{}1] / 10))}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{locator\PYZus{}params}\PY{p}{(}\PY{n}{nbins} \PY{o}{=} \PY{l+m+mi}{15}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{min\PYZus{}samples\PYZus{}leaf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{best}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}19}]:} <matplotlib.legend.Legend at 0x7f30cd577fd0>
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_25_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    min\_samples\_leaf
+
+The minimum number of samples required to be at a leaf node. A split
+point at any depth will only be considered if it leaves at least
+min\_samples\_leaf training samples in each of the left and right
+branches. This may have the effect of smoothing the model, especially in
+regression.
+
+    \subsection{min\_weight\_fraction\_leaf}\label{min_weight_fraction_leaf}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}41}]:} \PY{n}{digits} \PY{o}{=} \PY{n}{datasets}\PY{o}{.}\PY{n}{load\PYZus{}digits}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
+         \PY{n}{target} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{target}
+         \PY{n}{N} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+         \PY{n}{prop\PYZus{}train} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{/} \PY{l+m+mi}{3}
+         \PY{n}{N\PYZus{}train} \PY{o}{=} \PY{n}{math}\PY{o}{.}\PY{n}{ceil}\PY{p}{(}\PY{n}{N} \PY{o}{*} \PY{n}{prop\PYZus{}train}\PY{p}{)}
+         \PY{n}{N\PYZus{}test} \PY{o}{=} \PY{n}{N} \PY{o}{\PYZhy{}} \PY{n}{N\PYZus{}train}
+         
+         \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
+         
+         \PY{c+c1}{\PYZsh{} Algunas columnas tienen todo 0. Estas features no aportan ninguna información,}
+         \PY{c+c1}{\PYZsh{} y además me impiden estandarizar, pues la std es 0}
+         \PY{c+c1}{\PYZsh{} La vamos a quitar. Este array es de booleanos}
+         \PY{n}{valid\PYZus{}cols} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{apply\PYZus{}along\PYZus{}axis}\PY{p}{(}\PY{k}{lambda} \PY{n}{a}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{count\PYZus{}nonzero}\PY{p}{(}\PY{n}{a}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{arr} \PY{o}{=} \PY{n}{data}\PY{p}{)}
+         
+         \PY{n}{data}\PY{o}{.}\PY{n}{shape}
+         
+         \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{valid\PYZus{}cols}\PY{p}{]}
+         
+         \PY{n}{data}\PY{o}{.}\PY{n}{shape}
+         
+         \PY{n}{mean} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
+         \PY{n}{std} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
+         
+         \PY{n}{data} \PY{o}{=} \PY{p}{(}\PY{n}{data} \PY{o}{\PYZhy{}} \PY{n}{mean}\PY{p}{)}\PY{o}{/}\PY{n}{std}
+         
+         \PY{n}{data\PYZus{}train} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
+         \PY{n}{data\PYZus{}test} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
+         
+         \PY{n}{target\PYZus{}train} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
+         \PY{n}{target\PYZus{}test} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}48}]:} \PY{c+c1}{\PYZsh{}sample\PYZus{}sizes = np.arange(0.0,0.5, 0.02)}
+         \PY{n}{sample\PYZus{}sizes} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mf}{0.5}\PY{p}{)}
+         \PY{n}{test\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{train\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         
+         \PY{n}{clf} \PY{o}{=} \PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{p}{)}
+         
+         \PY{k}{for} \PY{n}{dep} \PY{o+ow}{in} \PY{n}{sample\PYZus{}sizes}\PY{p}{:}
+             \PY{n}{clf}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{n}{min\PYZus{}weight\PYZus{}fraction\PYZus{}leaf} \PY{o}{=} \PY{n}{dep}\PY{p}{)}
+             \PY{n}{clf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
+             \PY{n}{test\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{target\PYZus{}test}\PY{p}{)}
+             \PY{n}{train\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
+             
+             \PY{n}{test\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{test\PYZus{}score}\PY{p}{)}
+             \PY{n}{train\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{train\PYZus{}score}\PY{p}{)}
+         
+         \PY{n}{accuracy} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{111}\PY{p}{)}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{test\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{train\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Train Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{}accuracy.xaxis.set\PYZus{}ticks(np.arange(0,depth[\PYZhy{}1], depth[\PYZhy{}1] / 10))}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{locator\PYZus{}params}\PY{p}{(}\PY{n}{nbins} \PY{o}{=} \PY{l+m+mi}{15}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{min\PYZus{}weight\PYZus{}fraction\PYZus{}leaf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{best}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}48}]:} <matplotlib.legend.Legend at 0x7f30ca9b2908>
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_29_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    min\_weight\_fraction\_leaf
+
+The minimum weighted fraction of the sum total of weights (of all the
+input samples) required to be at a leaf node. Samples have equal weight
+when sample\_weight is not provided.
+
+    \subsection{max\_leaf\_nodes}\label{max_leaf_nodes}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}51}]:} \PY{n}{digits} \PY{o}{=} \PY{n}{datasets}\PY{o}{.}\PY{n}{load\PYZus{}digits}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
+         \PY{n}{target} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{target}
+         \PY{n}{N} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+         \PY{n}{prop\PYZus{}train} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{/} \PY{l+m+mi}{3}
+         \PY{n}{N\PYZus{}train} \PY{o}{=} \PY{n}{math}\PY{o}{.}\PY{n}{ceil}\PY{p}{(}\PY{n}{N} \PY{o}{*} \PY{n}{prop\PYZus{}train}\PY{p}{)}
+         \PY{n}{N\PYZus{}test} \PY{o}{=} \PY{n}{N} \PY{o}{\PYZhy{}} \PY{n}{N\PYZus{}train}
+         
+         \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
+         
+         \PY{c+c1}{\PYZsh{} Algunas columnas tienen todo 0. Estas features no aportan ninguna información,}
+         \PY{c+c1}{\PYZsh{} y además me impiden estandarizar, pues la std es 0}
+         \PY{c+c1}{\PYZsh{} La vamos a quitar. Este array es de booleanos}
+         \PY{n}{valid\PYZus{}cols} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{apply\PYZus{}along\PYZus{}axis}\PY{p}{(}\PY{k}{lambda} \PY{n}{a}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{count\PYZus{}nonzero}\PY{p}{(}\PY{n}{a}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{arr} \PY{o}{=} \PY{n}{data}\PY{p}{)}
+         
+         \PY{n}{data}\PY{o}{.}\PY{n}{shape}
+         
+         \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{valid\PYZus{}cols}\PY{p}{]}
+         
+         \PY{n}{data}\PY{o}{.}\PY{n}{shape}
+         
+         \PY{n}{mean} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
+         \PY{n}{std} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
+         
+         \PY{n}{data} \PY{o}{=} \PY{p}{(}\PY{n}{data} \PY{o}{\PYZhy{}} \PY{n}{mean}\PY{p}{)}\PY{o}{/}\PY{n}{std}
+         
+         \PY{n}{data\PYZus{}train} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
+         \PY{n}{data\PYZus{}test} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
+         
+         \PY{n}{target\PYZus{}train} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
+         \PY{n}{target\PYZus{}test} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}55}]:} \PY{n}{sample\PYZus{}sizes} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{200}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{}sample\PYZus{}sizes = np.linspace(0,0.5)}
+         \PY{n}{test\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         \PY{n}{train\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+         
+         \PY{n}{clf} \PY{o}{=} \PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{p}{)}
+         
+         \PY{k}{for} \PY{n}{dep} \PY{o+ow}{in} \PY{n}{sample\PYZus{}sizes}\PY{p}{:}
+             \PY{n}{clf}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{n}{max\PYZus{}leaf\PYZus{}nodes} \PY{o}{=} \PY{n}{dep}\PY{p}{)}
+             \PY{n}{clf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
+             \PY{n}{test\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{target\PYZus{}test}\PY{p}{)}
+             \PY{n}{train\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
+             
+             \PY{n}{test\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{test\PYZus{}score}\PY{p}{)}
+             \PY{n}{train\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{train\PYZus{}score}\PY{p}{)}
+         
+         \PY{n}{accuracy} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{111}\PY{p}{)}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{test\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{train\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Train Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{}accuracy.xaxis.set\PYZus{}ticks(np.arange(0,depth[\PYZhy{}1], depth[\PYZhy{}1] / 10))}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{locator\PYZus{}params}\PY{p}{(}\PY{n}{nbins} \PY{o}{=} \PY{l+m+mi}{15}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}leaf\PYZus{}nodes}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+         
+         \PY{n}{accuracy}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{best}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}55}]:} <matplotlib.legend.Legend at 0x7f30ca71c5c0>
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    max\_leaf\_nodes
+
+Grow a tree with max\_leaf\_nodes in best-first fashion. Best nodes are
+defined as relative reduction in impurity. If None then unlimited number
+of leaf nodes.
+
 
     % Add a bibliography block to the postdoc
     
