@@ -141,7 +141,7 @@
     \def\gt{>}
     \def\lt{<}
     % Document parameters
-    \title{Quitando Overfit a DT}
+    \title{DT con dataset Covertype}
     
     
     
@@ -280,57 +280,186 @@
     
 
     
-    \section{Quitar Overfit a Decision
-Tree}\label{quitar-overfit-a-decision-tree}
+    He usado el dataset "Forest Covertypes" de
+http://archive.ics.uci.edu/ml/datasets/Covertype
 
-    La implementación por defecto de DecisionTreeClassifier de Scikit-learn
-hace overfit, pues no pone ningún límite al crecimiento del árbol. Pero
-no está claro hasta qué punto tenemos que dejarlo crecer, y hay muchos
-hiper-parámetros para modificar esto. En este notebook voy a trastear
-con los parámetros para ver como se comportan
+El original tenía unas 500 000 instancias, y eso era demasiado, así que
+he sacado un subconjunto Es un problema de clasificación con 7 clases
+con datos categóricos y numéricos
+
+El problema era que las instancias de cada una de las clases estaban muy
+mal distribuidas: - 1 → 36 \% - 2 → 48 \% - 3 → 6 \% - 4 → 0.4 \% - 5 →
+1 \% - 6 → 3 \% - 7 → 3.5 \%
+
+Entonces he cogido 700 instancias aleatorias de cada una de las clases y
+las he juntado en otro dataset, que es el que estoy cargando
+
+Por eso tiene 4900 instancias
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}1}]:} \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
-        \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
-        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
-        \PY{k+kn}{from} \PY{n+nn}{time} \PY{k}{import} \PY{n}{time}
-        \PY{k+kn}{import} \PY{n+nn}{math}
-        
-        \PY{c+c1}{\PYZsh{} Import datasets, classifiers and performance metrics}
-        \PY{k+kn}{from} \PY{n+nn}{sklearn} \PY{k}{import} \PY{n}{datasets}
-        \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{tree} \PY{k}{import} \PY{n}{DecisionTreeClassifier}
+{\color{incolor}In [{\color{incolor}1}]:} \PY{o}{\PYZpc{}}\PY{o}{\PYZpc{}}\PY{n+nx}{javascript}
+        \PY{n+nx}{IPython}\PY{p}{.}\PY{n+nx}{OutputArea}\PY{p}{.}\PY{n+nx}{prototype}\PY{p}{.}\PY{n+nx}{\PYZus{}should\PYZus{}scroll} \PY{o}{=} \PY{k+kd}{function}\PY{p}{(}\PY{n+nx}{lines}\PY{p}{)} \PY{p}{\PYZob{}}
+            \PY{k}{return} \PY{k+kc}{false}\PY{p}{;}
+        \PY{p}{\PYZcb{}}
 \end{Verbatim}
 
 
-    \subsection{min\_impurity\_decrease}\label{min_impurity_decrease}
+    
+    \begin{verbatim}
+<IPython.core.display.Javascript object>
+    \end{verbatim}
+
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}2}]:} \PY{o}{\PYZpc{}}\PY{k}{matplotlib} inline
+        \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+        \PY{k+kn}{import} \PY{n+nn}{json}
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+        \PY{k+kn}{import} \PY{n+nn}{math}
+        
+        \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{tree} \PY{k}{import} \PY{n}{DecisionTreeClassifier}
+        \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{ensemble} \PY{k}{import} \PY{n}{RandomForestClassifier}
+        \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{pipeline} \PY{k}{import} \PY{n}{Pipeline}
+        \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{decomposition} \PY{k}{import} \PY{n}{PCA}
+\end{Verbatim}
+
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}2}]:} \PY{n}{digits} \PY{o}{=} \PY{n}{datasets}\PY{o}{.}\PY{n}{load\PYZus{}digits}\PY{p}{(}\PY{p}{)}
+/home/hobber/.local/lib/python3.6/site-packages/sklearn/ensemble/weight\_boosting.py:29: DeprecationWarning: numpy.core.umath\_tests is an internal NumPy module and should not be imported. It will be removed in a future NumPy release.
+  from numpy.core.umath\_tests import inner1d
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}3}]:} \PY{n}{chosen\PYZus{}clf} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{DecisionTreeClassifier}\PY{l+s+s2}{\PYZdq{}}
+        \PY{n}{chosen\PYZus{}clf} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{RandomForestClassifier}\PY{l+s+s2}{\PYZdq{}}
         
-        \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
-        \PY{n}{target} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{target}
+        \PY{n}{estims} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+        \PY{k}{if} \PY{n}{chosen\PYZus{}clf} \PY{o}{==} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{RandomForestClassifier}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}
+            \PY{n}{estims} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{n\PYZus{}estimators}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:}\PY{l+m+mi}{100}\PY{p}{\PYZcb{}}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}4}]:} \PY{c+c1}{\PYZsh{} Retorna una tupla (data, target) con todo el preprocesado hecho}
+        \PY{k}{def} \PY{n+nf}{get\PYZus{}data}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+            \PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{data\PYZus{}4900.json}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{r}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)} \PY{k}{as} \PY{n}{jd}\PY{p}{:}
+                \PY{n}{d} \PY{o}{=} \PY{n}{json}\PY{o}{.}\PY{n}{load}\PY{p}{(}\PY{n}{jd}\PY{p}{)}
+            
+            \PY{n}{data} \PY{o}{=} \PY{n}{d}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{data}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+            \PY{n}{target} \PY{o}{=} \PY{n}{d}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{target}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+            
+            \PY{n}{data} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{data}\PY{p}{)}
+            \PY{n}{target} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{n}{target}\PY{p}{)}
+            
+            \PY{c+c1}{\PYZsh{} Quitar las columnas que tienen todo 0}
+            \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{count\PYZus{}nonzero}\PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{]}
+            \PY{c+c1}{\PYZsh{} Realmente lo que tendría que hacer es quitar las}
+            \PY{c+c1}{\PYZsh{} columnas en las que son todos iguales. Sino la std}
+            \PY{c+c1}{\PYZsh{} también podría ser 0. De momento da igual}
+            
+            \PY{n}{mean} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
+            \PY{n}{std} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
+            
+            \PY{n}{data} \PY{o}{=} \PY{p}{(}\PY{n}{data} \PY{o}{\PYZhy{}} \PY{n}{mean}\PY{p}{)}\PY{o}{/}\PY{n}{std}
+            
+            \PY{c+c1}{\PYZsh{}Hay que cambiar el orden, pues está ordenado por clases}
+            \PY{n}{ordering} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{target}\PY{p}{)}\PY{p}{)}
+            \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{shuffle}\PY{p}{(}\PY{n}{ordering}\PY{p}{)}
+            
+            \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{ordering}\PY{p}{]}
+            \PY{n}{target} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{n}{ordering}\PY{p}{]}
+            
+            
+            \PY{k}{return} \PY{n}{data}\PY{p}{,} \PY{n}{target}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}5}]:} \PY{k}{def} \PY{n+nf}{show\PYZus{}accuracy}\PY{p}{(}\PY{n}{tune\PYZus{}param}\PY{p}{,} \PY{n}{decreases}\PY{p}{)}\PY{p}{:}
+            \PY{n}{data}\PY{p}{,} \PY{n}{target} \PY{o}{=} \PY{n}{get\PYZus{}data}\PY{p}{(}\PY{p}{)}
+        
+            \PY{n}{N} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+            \PY{n}{prop\PYZus{}train} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{/} \PY{l+m+mi}{3}
+            \PY{n}{N\PYZus{}train} \PY{o}{=} \PY{n}{math}\PY{o}{.}\PY{n}{ceil}\PY{p}{(}\PY{n}{N} \PY{o}{*} \PY{n}{prop\PYZus{}train}\PY{p}{)}
+            \PY{n}{N\PYZus{}test} \PY{o}{=} \PY{n}{N} \PY{o}{\PYZhy{}} \PY{n}{N\PYZus{}train}
+        
+            \PY{n}{data\PYZus{}train} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
+            \PY{n}{data\PYZus{}test} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
+        
+            \PY{n}{target\PYZus{}train} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
+            \PY{n}{target\PYZus{}test} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
+        
+            \PY{n}{clf\PYZus{}pipe} \PY{o}{=} \PY{n}{Pipeline}\PY{p}{(}\PY{p}{[}
+                  \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{pca}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{PCA}\PY{p}{(}\PY{n}{n\PYZus{}components} \PY{o}{=} \PY{l+m+mf}{0.9}\PY{p}{,} \PY{n}{svd\PYZus{}solver} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{full}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+                  \PY{c+c1}{\PYZsh{}(\PYZdq{}clf\PYZdq{}, DecisionTreeClassifier())}
+                  \PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{clf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n+nb}{eval}\PY{p}{(}\PY{n}{chosen\PYZus{}clf}\PY{p}{)}\PY{p}{(}\PY{o}{*}\PY{o}{*}\PY{n}{estims}\PY{p}{)}\PY{p}{)}
+              \PY{p}{]}\PY{p}{)}
+        
+            \PY{c+c1}{\PYZsh{}clf = DecisionTreeClassifier()}
+            \PY{n}{clf} \PY{o}{=} \PY{n+nb}{eval}\PY{p}{(}\PY{n}{chosen\PYZus{}clf}\PY{p}{)}\PY{p}{(}\PY{o}{*}\PY{o}{*}\PY{n}{estims}\PY{p}{)}
+        
+        
+        
+            \PY{n}{train\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+            \PY{n}{test\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        
+            \PY{n}{pca\PYZus{}train\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+            \PY{n}{pca\PYZus{}test\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+        
+            \PY{k}{for} \PY{n}{dec} \PY{o+ow}{in} \PY{n}{decreases}\PY{p}{:}
+              \PY{c+c1}{\PYZsh{}clf.set\PYZus{}params(min\PYZus{}impurity\PYZus{}decrease = dec)}
+              \PY{n}{clf}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{o}{*}\PY{o}{*}\PY{p}{\PYZob{}}\PY{n}{tune\PYZus{}param}\PY{p}{:} \PY{n}{dec}\PY{p}{\PYZcb{}}\PY{p}{)}
+              \PY{n}{clf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
+              \PY{n}{test\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{target\PYZus{}test}\PY{p}{)}
+              \PY{n}{train\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
+              \PY{n}{test\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{test\PYZus{}score}\PY{p}{)}
+              \PY{n}{train\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{train\PYZus{}score}\PY{p}{)}
+              
+              \PY{c+c1}{\PYZsh{}clf\PYZus{}pipe.set\PYZus{}params(dtc\PYZus{}\PYZus{}min\PYZus{}impurity\PYZus{}decrease = dec)}
+              \PY{n}{clf\PYZus{}pipe}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{o}{*}\PY{o}{*}\PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{clf\PYZus{}\PYZus{}}\PY{l+s+s2}{\PYZdq{}}\PY{o}{+}\PY{n}{tune\PYZus{}param}\PY{p}{:} \PY{n}{dec}\PY{p}{\PYZcb{}}\PY{p}{)}
+              \PY{n}{clf\PYZus{}pipe}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
+              \PY{n}{pca\PYZus{}test\PYZus{}score} \PY{o}{=} \PY{n}{clf\PYZus{}pipe}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{target\PYZus{}test}\PY{p}{)}
+              \PY{n}{pca\PYZus{}train\PYZus{}score} \PY{o}{=} \PY{n}{clf\PYZus{}pipe}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
+              \PY{n}{pca\PYZus{}test\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{pca\PYZus{}test\PYZus{}score}\PY{p}{)}
+              \PY{n}{pca\PYZus{}train\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{pca\PYZus{}train\PYZus{}score}\PY{p}{)}
+        
+            \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+        
+            \PY{n}{accuracy} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{121}\PY{p}{)}
+            \PY{n}{accuracy}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Normal DT}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{decreases}\PY{p}{,} \PY{n}{test\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{decreases}\PY{p}{,} \PY{n}{train\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Train score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{accuracy}\PY{o}{.}\PY{n}{locator\PYZus{}params}\PY{p}{(}\PY{n}{nbins} \PY{o}{=} \PY{l+m+mi}{15}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{accuracy}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{n}{tune\PYZus{}param}\PY{p}{)}
+            \PY{n}{accuracy}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{accuracy}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+            \PY{n}{accuracy}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{best}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        
+            \PY{n}{pca\PYZus{}accuracy} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{122}\PY{p}{,} \PY{n}{sharey} \PY{o}{=} \PY{n}{accuracy}\PY{p}{)}
+            \PY{n}{pca\PYZus{}accuracy}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Using PCA}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{pca\PYZus{}accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{decreases}\PY{p}{,} \PY{n}{pca\PYZus{}test\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{pca\PYZus{}accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{decreases}\PY{p}{,} \PY{n}{pca\PYZus{}train\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Train score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{pca\PYZus{}accuracy}\PY{o}{.}\PY{n}{locator\PYZus{}params}\PY{p}{(}\PY{n}{nbins} \PY{o}{=} \PY{l+m+mi}{15}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{pca\PYZus{}accuracy}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{n}{tune\PYZus{}param}\PY{p}{)}
+            \PY{n}{pca\PYZus{}accuracy}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+            \PY{n}{pca\PYZus{}accuracy}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
+            \PY{n}{pca\PYZus{}accuracy}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{best}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        
+        
+            \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \subsection{Valores por defecto}\label{valores-por-defecto}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}6}]:} \PY{n}{data}\PY{p}{,} \PY{n}{target} \PY{o}{=} \PY{n}{get\PYZus{}data}\PY{p}{(}\PY{p}{)}
+        
         \PY{n}{N} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
         \PY{n}{prop\PYZus{}train} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{/} \PY{l+m+mi}{3}
         \PY{n}{N\PYZus{}train} \PY{o}{=} \PY{n}{math}\PY{o}{.}\PY{n}{ceil}\PY{p}{(}\PY{n}{N} \PY{o}{*} \PY{n}{prop\PYZus{}train}\PY{p}{)}
         \PY{n}{N\PYZus{}test} \PY{o}{=} \PY{n}{N} \PY{o}{\PYZhy{}} \PY{n}{N\PYZus{}train}
-        
-        \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
-        
-        \PY{c+c1}{\PYZsh{} Algunas columnas tienen todo 0. Estas features no aportan ninguna información,}
-        \PY{c+c1}{\PYZsh{} y además me impiden estandarizar, pues la std es 0}
-        \PY{c+c1}{\PYZsh{} La vamos a quitar. Este array es de booleanos}
-        \PY{n}{valid\PYZus{}cols} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{apply\PYZus{}along\PYZus{}axis}\PY{p}{(}\PY{k}{lambda} \PY{n}{a}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{count\PYZus{}nonzero}\PY{p}{(}\PY{n}{a}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{arr} \PY{o}{=} \PY{n}{data}\PY{p}{)}
-        
-        \PY{n}{data}\PY{o}{.}\PY{n}{shape}
-        
-        \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{valid\PYZus{}cols}\PY{p}{]}
-        
-        \PY{n}{data}\PY{o}{.}\PY{n}{shape}
-        
-        \PY{n}{mean} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
-        \PY{n}{std} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
-        
-        \PY{n}{data} \PY{o}{=} \PY{p}{(}\PY{n}{data} \PY{o}{\PYZhy{}} \PY{n}{mean}\PY{p}{)}\PY{o}{/}\PY{n}{std}
         
         \PY{n}{data\PYZus{}train} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
         \PY{n}{data\PYZus{}test} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
@@ -341,503 +470,73 @@ con los parámetros para ver como se comportan
 
 
     \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}47}]:} \PY{c+c1}{\PYZsh{}decreases = np.arange(0,100)}
-         \PY{c+c1}{\PYZsh{}decreases = np.arange(0,0.1, 0.01)}
-         \PY{n}{decreases} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mf}{0.1}\PY{p}{)}
-         
-         \PY{n}{test\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-         \PY{n}{train\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-         
-         \PY{n}{clf} \PY{o}{=} \PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{p}{)}
-         
-         \PY{k}{for} \PY{n}{dec} \PY{o+ow}{in} \PY{n}{decreases}\PY{p}{:}
-             \PY{n}{clf}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{n}{min\PYZus{}impurity\PYZus{}decrease} \PY{o}{=} \PY{n}{dec}\PY{p}{)}
-             \PY{n}{clf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
-             \PY{n}{test\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{target\PYZus{}test}\PY{p}{)}
-             \PY{n}{train\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
-             
-             \PY{n}{test\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{test\PYZus{}score}\PY{p}{)}
-             \PY{n}{train\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{train\PYZus{}score}\PY{p}{)}
-         
-         \PY{n}{accuracy} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{111}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{decreases}\PY{p}{,} \PY{n}{test\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{decreases}\PY{p}{,} \PY{n}{train\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Train score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{c+c1}{\PYZsh{}accuracy.xaxis.set\PYZus{}ticks(np.arange(0,100, 10))}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{locator\PYZus{}params}\PY{p}{(}\PY{n}{nbins} \PY{o}{=} \PY{l+m+mi}{15}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{min impurity decrease}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{best}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+{\color{incolor}In [{\color{incolor}7}]:} \PY{c+c1}{\PYZsh{}clf = DecisionTreeClassifier()}
+        \PY{n}{clf} \PY{o}{=} \PY{n+nb}{eval}\PY{p}{(}\PY{n}{chosen\PYZus{}clf}\PY{p}{)}\PY{p}{(}\PY{o}{*}\PY{o}{*}\PY{n}{estims}\PY{p}{)}
+        \PY{n}{clf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
+        \PY{n}{train\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
+        \PY{n}{test\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{target\PYZus{}test}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}8}]:} \PY{n}{train\PYZus{}score}\PY{p}{,} \PY{n}{test\PYZus{}score}
 \end{Verbatim}
 
 
 \begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}47}]:} <matplotlib.legend.Legend at 0x7f30caa38358>
+{\color{outcolor}Out[{\color{outcolor}8}]:} (1.0, 0.7881200244947949)
 \end{Verbatim}
             
+    \subsection{Tuneando parámetros}\label{tuneando-paruxe1metros}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}9}]:} \PY{n}{params} \PY{o}{=} \PY{p}{\PYZob{}}
+            \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}depth}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{150}\PY{p}{,} \PY{n}{dtype} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{int64}\PY{p}{)}\PY{p}{,}
+            \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{min\PYZus{}samples\PYZus{}split}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{150}\PY{p}{,} \PY{n}{dtype} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{int64}\PY{p}{)}\PY{p}{,}
+            \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{min\PYZus{}samples\PYZus{}leaf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{150}\PY{p}{,} \PY{n}{dtype} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{int64}\PY{p}{)}\PY{p}{,}
+            \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{min\PYZus{}weight\PYZus{}fraction\PYZus{}leaf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mf}{0.5}\PY{p}{,} \PY{n}{dtype} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{float64}\PY{p}{)}\PY{p}{,}
+            \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}leaf\PYZus{}nodes}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{150}\PY{p}{,} \PY{n}{dtype} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{int64}\PY{p}{)}\PY{p}{,}
+            \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{min\PYZus{}impurity\PYZus{}decrease}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{150}\PY{p}{,} \PY{n}{dtype} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{float64}\PY{p}{)}\PY{p}{,}
+        \PY{p}{\PYZcb{}}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}10}]:} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{params}\PY{p}{:}
+             \PY{n}{show\PYZus{}accuracy}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{params}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}
+\end{Verbatim}
+
+
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_5_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_12_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    min\_impurity\_decrease
-
-A node will be split if this split induces a decrease of the impurity
-greater than or equal to this value.
-
-The weighted impurity decrease equation is the following:
-
-\begin{verbatim}
-N_t / N * (impurity - N_t_R / N_t * right_impurity
-                    - N_t_L / N_t * left_impurity)
-\end{verbatim}
-
-    \subsection{max\_depth}\label{max_depth}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}23}]:} \PY{n}{digits} \PY{o}{=} \PY{n}{datasets}\PY{o}{.}\PY{n}{load\PYZus{}digits}\PY{p}{(}\PY{p}{)}
-         
-         \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
-         \PY{n}{target} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{target}
-         \PY{n}{N} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-         \PY{n}{prop\PYZus{}train} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{/} \PY{l+m+mi}{3}
-         \PY{n}{N\PYZus{}train} \PY{o}{=} \PY{n}{math}\PY{o}{.}\PY{n}{ceil}\PY{p}{(}\PY{n}{N} \PY{o}{*} \PY{n}{prop\PYZus{}train}\PY{p}{)}
-         \PY{n}{N\PYZus{}test} \PY{o}{=} \PY{n}{N} \PY{o}{\PYZhy{}} \PY{n}{N\PYZus{}train}
-         
-         \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
-         
-         \PY{c+c1}{\PYZsh{} Algunas columnas tienen todo 0. Estas features no aportan ninguna información,}
-         \PY{c+c1}{\PYZsh{} y además me impiden estandarizar, pues la std es 0}
-         \PY{c+c1}{\PYZsh{} La vamos a quitar. Este array es de booleanos}
-         \PY{n}{valid\PYZus{}cols} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{apply\PYZus{}along\PYZus{}axis}\PY{p}{(}\PY{k}{lambda} \PY{n}{a}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{count\PYZus{}nonzero}\PY{p}{(}\PY{n}{a}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{arr} \PY{o}{=} \PY{n}{data}\PY{p}{)}
-         
-         \PY{n}{data}\PY{o}{.}\PY{n}{shape}
-         
-         \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{valid\PYZus{}cols}\PY{p}{]}
-         
-         \PY{n}{data}\PY{o}{.}\PY{n}{shape}
-         
-         \PY{n}{mean} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
-         \PY{n}{std} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
-         
-         \PY{n}{data} \PY{o}{=} \PY{p}{(}\PY{n}{data} \PY{o}{\PYZhy{}} \PY{n}{mean}\PY{p}{)}\PY{o}{/}\PY{n}{std}
-         
-         \PY{n}{data\PYZus{}train} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
-         \PY{n}{data\PYZus{}test} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
-         
-         \PY{n}{target\PYZus{}train} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
-         \PY{n}{target\PYZus{}test} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}33}]:} \PY{n}{depth} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{)}
-         \PY{n}{test\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-         \PY{n}{train\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-         
-         \PY{n}{clf} \PY{o}{=} \PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{p}{)}
-         
-         \PY{k}{for} \PY{n}{dep} \PY{o+ow}{in} \PY{n}{depth}\PY{p}{:}
-             \PY{n}{clf}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{n}{max\PYZus{}depth} \PY{o}{=} \PY{n}{dep}\PY{p}{)}
-             \PY{n}{clf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
-             \PY{n}{test\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{target\PYZus{}test}\PY{p}{)}
-             \PY{n}{train\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
-             
-             \PY{n}{test\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{test\PYZus{}score}\PY{p}{)}
-             \PY{n}{train\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{train\PYZus{}score}\PY{p}{)}
-         
-         \PY{n}{accuracy} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{111}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{depth}\PY{p}{,} \PY{n}{test\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{depth}\PY{p}{,} \PY{n}{train\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Train score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{c+c1}{\PYZsh{}accuracy.xaxis.set\PYZus{}ticks(np.arange(0,depth[\PYZhy{}1], depth[\PYZhy{}1] / 10))}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{locator\PYZus{}params}\PY{p}{(}\PY{n}{nbins} \PY{o}{=} \PY{l+m+mi}{15}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Max depth}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{best}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}33}]:} <matplotlib.legend.Legend at 0x7f30cafebfd0>
-\end{Verbatim}
-            
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_9_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_12_1.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    max\_depth
-
-The maximum depth of the tree. If None, then nodes are expanded until
-all leaves are pure or until all leaves contain less than
-min\_samples\_split samples
-
-    \subsection{min\_samples\_split}\label{min_samples_split}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}6}]:} \PY{n}{digits} \PY{o}{=} \PY{n}{datasets}\PY{o}{.}\PY{n}{load\PYZus{}digits}\PY{p}{(}\PY{p}{)}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}7}]:} \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
-        \PY{n}{target} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{target}
-        \PY{n}{N} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-        \PY{n}{prop\PYZus{}train} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{/} \PY{l+m+mi}{3}
-        \PY{n}{N\PYZus{}train} \PY{o}{=} \PY{n}{math}\PY{o}{.}\PY{n}{ceil}\PY{p}{(}\PY{n}{N} \PY{o}{*} \PY{n}{prop\PYZus{}train}\PY{p}{)}
-        \PY{n}{N\PYZus{}test} \PY{o}{=} \PY{n}{N} \PY{o}{\PYZhy{}} \PY{n}{N\PYZus{}train}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}8}]:} \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}9}]:} \PY{c+c1}{\PYZsh{} Algunas columnas tienen todo 0. Estas features no aportan ninguna información,}
-        \PY{c+c1}{\PYZsh{} y además me impiden estandarizar, pues la std es 0}
-        \PY{c+c1}{\PYZsh{} La vamos a quitar. Este array es de booleanos}
-        \PY{n}{valid\PYZus{}cols} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{apply\PYZus{}along\PYZus{}axis}\PY{p}{(}\PY{k}{lambda} \PY{n}{a}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{count\PYZus{}nonzero}\PY{p}{(}\PY{n}{a}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{arr} \PY{o}{=} \PY{n}{data}\PY{p}{)}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}10}]:} \PY{n}{data}\PY{o}{.}\PY{n}{shape}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}10}]:} (1797, 64)
-\end{Verbatim}
-            
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}11}]:} \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{valid\PYZus{}cols}\PY{p}{]}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}12}]:} \PY{n}{data}\PY{o}{.}\PY{n}{shape}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}12}]:} (1797, 61)
-\end{Verbatim}
-            
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}13}]:} \PY{n}{mean} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
-         \PY{n}{std} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
-         
-         \PY{n}{data} \PY{o}{=} \PY{p}{(}\PY{n}{data} \PY{o}{\PYZhy{}} \PY{n}{mean}\PY{p}{)}\PY{o}{/}\PY{n}{std}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}14}]:} \PY{n}{data\PYZus{}train} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
-         \PY{n}{data\PYZus{}test} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
-         
-         \PY{n}{target\PYZus{}train} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
-         \PY{n}{target\PYZus{}test} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}39}]:} \PY{n}{sample\PYZus{}sizes} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{150}\PY{p}{)}
-         \PY{n}{test\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-         \PY{n}{train\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-         
-         \PY{n}{clf} \PY{o}{=} \PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{p}{)}
-         
-         \PY{k}{for} \PY{n}{dep} \PY{o+ow}{in} \PY{n}{sample\PYZus{}sizes}\PY{p}{:}
-             \PY{n}{clf}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{n}{min\PYZus{}samples\PYZus{}split} \PY{o}{=} \PY{n}{dep}\PY{p}{)}
-             \PY{n}{clf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
-             
-             \PY{n}{test\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{target\PYZus{}test}\PY{p}{)}
-             \PY{n}{train\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
-             
-             \PY{n}{test\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{test\PYZus{}score}\PY{p}{)}
-             \PY{n}{train\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{train\PYZus{}score}\PY{p}{)}
-         
-         \PY{n}{accuracy} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{111}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{test\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{train\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Train score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{c+c1}{\PYZsh{}accuracy.xaxis.set\PYZus{}ticks(np.arange(0,depth[\PYZhy{}1], depth[\PYZhy{}1] / 10))}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{locator\PYZus{}params}\PY{p}{(}\PY{n}{nbins} \PY{o}{=} \PY{l+m+mi}{15}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{min\PYZus{}samples\PYZus{}split}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{best}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}39}]:} <matplotlib.legend.Legend at 0x7f30cacd0358>
-\end{Verbatim}
-            
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_21_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_12_2.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    min\_samples\_split
-
-The minimum number of samples required to split an internal node
-
-    \subsection{min\_samples\_leaf}\label{min_samples_leaf}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}18}]:} \PY{n}{digits} \PY{o}{=} \PY{n}{datasets}\PY{o}{.}\PY{n}{load\PYZus{}digits}\PY{p}{(}\PY{p}{)}
-         
-         \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
-         \PY{n}{target} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{target}
-         \PY{n}{N} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-         \PY{n}{prop\PYZus{}train} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{/} \PY{l+m+mi}{3}
-         \PY{n}{N\PYZus{}train} \PY{o}{=} \PY{n}{math}\PY{o}{.}\PY{n}{ceil}\PY{p}{(}\PY{n}{N} \PY{o}{*} \PY{n}{prop\PYZus{}train}\PY{p}{)}
-         \PY{n}{N\PYZus{}test} \PY{o}{=} \PY{n}{N} \PY{o}{\PYZhy{}} \PY{n}{N\PYZus{}train}
-         
-         \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
-         
-         \PY{c+c1}{\PYZsh{} Algunas columnas tienen todo 0. Estas features no aportan ninguna información,}
-         \PY{c+c1}{\PYZsh{} y además me impiden estandarizar, pues la std es 0}
-         \PY{c+c1}{\PYZsh{} La vamos a quitar. Este array es de booleanos}
-         \PY{n}{valid\PYZus{}cols} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{apply\PYZus{}along\PYZus{}axis}\PY{p}{(}\PY{k}{lambda} \PY{n}{a}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{count\PYZus{}nonzero}\PY{p}{(}\PY{n}{a}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{arr} \PY{o}{=} \PY{n}{data}\PY{p}{)}
-         
-         \PY{n}{data}\PY{o}{.}\PY{n}{shape}
-         
-         \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{valid\PYZus{}cols}\PY{p}{]}
-         
-         \PY{n}{data}\PY{o}{.}\PY{n}{shape}
-         
-         \PY{n}{mean} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
-         \PY{n}{std} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
-         
-         \PY{n}{data} \PY{o}{=} \PY{p}{(}\PY{n}{data} \PY{o}{\PYZhy{}} \PY{n}{mean}\PY{p}{)}\PY{o}{/}\PY{n}{std}
-         
-         \PY{n}{data\PYZus{}train} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
-         \PY{n}{data\PYZus{}test} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
-         
-         \PY{n}{target\PYZus{}train} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
-         \PY{n}{target\PYZus{}test} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}19}]:} \PY{n}{sample\PYZus{}sizes} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{150}\PY{p}{)}
-         \PY{n}{test\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-         \PY{n}{train\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-         
-         \PY{n}{clf} \PY{o}{=} \PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{p}{)}
-         
-         \PY{k}{for} \PY{n}{dep} \PY{o+ow}{in} \PY{n}{sample\PYZus{}sizes}\PY{p}{:}
-             \PY{n}{clf}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{n}{min\PYZus{}samples\PYZus{}leaf} \PY{o}{=} \PY{n}{dep}\PY{p}{)}
-             \PY{n}{clf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
-             \PY{n}{test\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{target\PYZus{}test}\PY{p}{)}
-             \PY{n}{train\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
-             
-             \PY{n}{test\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{test\PYZus{}score}\PY{p}{)}
-             \PY{n}{train\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{train\PYZus{}score}\PY{p}{)}
-         
-         \PY{n}{accuracy} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{111}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{test\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{train\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Train Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{c+c1}{\PYZsh{}accuracy.xaxis.set\PYZus{}ticks(np.arange(0,depth[\PYZhy{}1], depth[\PYZhy{}1] / 10))}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{locator\PYZus{}params}\PY{p}{(}\PY{n}{nbins} \PY{o}{=} \PY{l+m+mi}{15}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{min\PYZus{}samples\PYZus{}leaf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{best}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}19}]:} <matplotlib.legend.Legend at 0x7f30cd577fd0>
-\end{Verbatim}
-            
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_25_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_12_3.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    min\_samples\_leaf
-
-The minimum number of samples required to be at a leaf node. A split
-point at any depth will only be considered if it leaves at least
-min\_samples\_leaf training samples in each of the left and right
-branches. This may have the effect of smoothing the model, especially in
-regression.
-
-    \subsection{min\_weight\_fraction\_leaf}\label{min_weight_fraction_leaf}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}41}]:} \PY{n}{digits} \PY{o}{=} \PY{n}{datasets}\PY{o}{.}\PY{n}{load\PYZus{}digits}\PY{p}{(}\PY{p}{)}
-         
-         \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
-         \PY{n}{target} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{target}
-         \PY{n}{N} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-         \PY{n}{prop\PYZus{}train} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{/} \PY{l+m+mi}{3}
-         \PY{n}{N\PYZus{}train} \PY{o}{=} \PY{n}{math}\PY{o}{.}\PY{n}{ceil}\PY{p}{(}\PY{n}{N} \PY{o}{*} \PY{n}{prop\PYZus{}train}\PY{p}{)}
-         \PY{n}{N\PYZus{}test} \PY{o}{=} \PY{n}{N} \PY{o}{\PYZhy{}} \PY{n}{N\PYZus{}train}
-         
-         \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
-         
-         \PY{c+c1}{\PYZsh{} Algunas columnas tienen todo 0. Estas features no aportan ninguna información,}
-         \PY{c+c1}{\PYZsh{} y además me impiden estandarizar, pues la std es 0}
-         \PY{c+c1}{\PYZsh{} La vamos a quitar. Este array es de booleanos}
-         \PY{n}{valid\PYZus{}cols} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{apply\PYZus{}along\PYZus{}axis}\PY{p}{(}\PY{k}{lambda} \PY{n}{a}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{count\PYZus{}nonzero}\PY{p}{(}\PY{n}{a}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{arr} \PY{o}{=} \PY{n}{data}\PY{p}{)}
-         
-         \PY{n}{data}\PY{o}{.}\PY{n}{shape}
-         
-         \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{valid\PYZus{}cols}\PY{p}{]}
-         
-         \PY{n}{data}\PY{o}{.}\PY{n}{shape}
-         
-         \PY{n}{mean} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
-         \PY{n}{std} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
-         
-         \PY{n}{data} \PY{o}{=} \PY{p}{(}\PY{n}{data} \PY{o}{\PYZhy{}} \PY{n}{mean}\PY{p}{)}\PY{o}{/}\PY{n}{std}
-         
-         \PY{n}{data\PYZus{}train} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
-         \PY{n}{data\PYZus{}test} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
-         
-         \PY{n}{target\PYZus{}train} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
-         \PY{n}{target\PYZus{}test} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}48}]:} \PY{c+c1}{\PYZsh{}sample\PYZus{}sizes = np.arange(0.0,0.5, 0.02)}
-         \PY{n}{sample\PYZus{}sizes} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{linspace}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mf}{0.5}\PY{p}{)}
-         \PY{n}{test\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-         \PY{n}{train\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-         
-         \PY{n}{clf} \PY{o}{=} \PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{p}{)}
-         
-         \PY{k}{for} \PY{n}{dep} \PY{o+ow}{in} \PY{n}{sample\PYZus{}sizes}\PY{p}{:}
-             \PY{n}{clf}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{n}{min\PYZus{}weight\PYZus{}fraction\PYZus{}leaf} \PY{o}{=} \PY{n}{dep}\PY{p}{)}
-             \PY{n}{clf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
-             \PY{n}{test\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{target\PYZus{}test}\PY{p}{)}
-             \PY{n}{train\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
-             
-             \PY{n}{test\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{test\PYZus{}score}\PY{p}{)}
-             \PY{n}{train\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{train\PYZus{}score}\PY{p}{)}
-         
-         \PY{n}{accuracy} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{111}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{test\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{train\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Train Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{c+c1}{\PYZsh{}accuracy.xaxis.set\PYZus{}ticks(np.arange(0,depth[\PYZhy{}1], depth[\PYZhy{}1] / 10))}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{locator\PYZus{}params}\PY{p}{(}\PY{n}{nbins} \PY{o}{=} \PY{l+m+mi}{15}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{min\PYZus{}weight\PYZus{}fraction\PYZus{}leaf}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{best}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}48}]:} <matplotlib.legend.Legend at 0x7f30ca9b2908>
-\end{Verbatim}
-            
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_29_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_12_4.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    min\_weight\_fraction\_leaf
-
-The minimum weighted fraction of the sum total of weights (of all the
-input samples) required to be at a leaf node. Samples have equal weight
-when sample\_weight is not provided.
-
-    \subsection{max\_leaf\_nodes}\label{max_leaf_nodes}
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}51}]:} \PY{n}{digits} \PY{o}{=} \PY{n}{datasets}\PY{o}{.}\PY{n}{load\PYZus{}digits}\PY{p}{(}\PY{p}{)}
-         
-         \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
-         \PY{n}{target} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{target}
-         \PY{n}{N} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
-         \PY{n}{prop\PYZus{}train} \PY{o}{=} \PY{l+m+mi}{2} \PY{o}{/} \PY{l+m+mi}{3}
-         \PY{n}{N\PYZus{}train} \PY{o}{=} \PY{n}{math}\PY{o}{.}\PY{n}{ceil}\PY{p}{(}\PY{n}{N} \PY{o}{*} \PY{n}{prop\PYZus{}train}\PY{p}{)}
-         \PY{n}{N\PYZus{}test} \PY{o}{=} \PY{n}{N} \PY{o}{\PYZhy{}} \PY{n}{N\PYZus{}train}
-         
-         \PY{n}{data} \PY{o}{=} \PY{n}{digits}\PY{o}{.}\PY{n}{data}
-         
-         \PY{c+c1}{\PYZsh{} Algunas columnas tienen todo 0. Estas features no aportan ninguna información,}
-         \PY{c+c1}{\PYZsh{} y además me impiden estandarizar, pues la std es 0}
-         \PY{c+c1}{\PYZsh{} La vamos a quitar. Este array es de booleanos}
-         \PY{n}{valid\PYZus{}cols} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{apply\PYZus{}along\PYZus{}axis}\PY{p}{(}\PY{k}{lambda} \PY{n}{a}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{count\PYZus{}nonzero}\PY{p}{(}\PY{n}{a}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{arr} \PY{o}{=} \PY{n}{data}\PY{p}{)}
-         
-         \PY{n}{data}\PY{o}{.}\PY{n}{shape}
-         
-         \PY{n}{data} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{valid\PYZus{}cols}\PY{p}{]}
-         
-         \PY{n}{data}\PY{o}{.}\PY{n}{shape}
-         
-         \PY{n}{mean} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
-         \PY{n}{std} \PY{o}{=} \PY{n}{data}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis} \PY{o}{=} \PY{l+m+mi}{0}\PY{p}{)}
-         
-         \PY{n}{data} \PY{o}{=} \PY{p}{(}\PY{n}{data} \PY{o}{\PYZhy{}} \PY{n}{mean}\PY{p}{)}\PY{o}{/}\PY{n}{std}
-         
-         \PY{n}{data\PYZus{}train} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
-         \PY{n}{data\PYZus{}test} \PY{o}{=} \PY{n}{data}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
-         
-         \PY{n}{target\PYZus{}train} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{p}{:}\PY{n}{N\PYZus{}train}\PY{p}{]}
-         \PY{n}{target\PYZus{}test} \PY{o}{=} \PY{n}{target}\PY{p}{[}\PY{n}{N\PYZus{}train}\PY{p}{:}\PY{p}{]}
-\end{Verbatim}
-
-
-    \begin{Verbatim}[commandchars=\\\{\}]
-{\color{incolor}In [{\color{incolor}55}]:} \PY{n}{sample\PYZus{}sizes} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{200}\PY{p}{)}
-         \PY{c+c1}{\PYZsh{}sample\PYZus{}sizes = np.linspace(0,0.5)}
-         \PY{n}{test\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-         \PY{n}{train\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{p}{]}
-         
-         \PY{n}{clf} \PY{o}{=} \PY{n}{DecisionTreeClassifier}\PY{p}{(}\PY{p}{)}
-         
-         \PY{k}{for} \PY{n}{dep} \PY{o+ow}{in} \PY{n}{sample\PYZus{}sizes}\PY{p}{:}
-             \PY{n}{clf}\PY{o}{.}\PY{n}{set\PYZus{}params}\PY{p}{(}\PY{n}{max\PYZus{}leaf\PYZus{}nodes} \PY{o}{=} \PY{n}{dep}\PY{p}{)}
-             \PY{n}{clf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
-             \PY{n}{test\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}test}\PY{p}{,} \PY{n}{target\PYZus{}test}\PY{p}{)}
-             \PY{n}{train\PYZus{}score} \PY{o}{=} \PY{n}{clf}\PY{o}{.}\PY{n}{score}\PY{p}{(}\PY{n}{data\PYZus{}train}\PY{p}{,} \PY{n}{target\PYZus{}train}\PY{p}{)}
-             
-             \PY{n}{test\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{test\PYZus{}score}\PY{p}{)}
-             \PY{n}{train\PYZus{}scores}\PY{o}{.}\PY{n}{append}\PY{p}{(}\PY{n}{train\PYZus{}score}\PY{p}{)}
-         
-         \PY{n}{accuracy} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{111}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{test\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{sample\PYZus{}sizes}\PY{p}{,} \PY{n}{train\PYZus{}scores}\PY{p}{,} \PY{n}{label} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Train Score}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{c+c1}{\PYZsh{}accuracy.xaxis.set\PYZus{}ticks(np.arange(0,depth[\PYZhy{}1], depth[\PYZhy{}1] / 10))}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{locator\PYZus{}params}\PY{p}{(}\PY{n}{nbins} \PY{o}{=} \PY{l+m+mi}{15}\PY{p}{,} \PY{n}{axis} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{x}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{max\PYZus{}leaf\PYZus{}nodes}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Accuracy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
-         
-         \PY{n}{accuracy}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{best}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
-\end{Verbatim}
-
-
-\begin{Verbatim}[commandchars=\\\{\}]
-{\color{outcolor}Out[{\color{outcolor}55}]:} <matplotlib.legend.Legend at 0x7f30ca71c5c0>
-\end{Verbatim}
-            
     \begin{center}
-    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_1.png}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_12_5.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    max\_leaf\_nodes
-
-Grow a tree with max\_leaf\_nodes in best-first fashion. Best nodes are
-defined as relative reduction in impurity. If None then unlimited number
-of leaf nodes.
-
 
     % Add a bibliography block to the postdoc
     
