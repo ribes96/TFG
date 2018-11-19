@@ -1,0 +1,1 @@
+full_mnist.csv tiene 60000 instancias, y eso me parece demasiado. mnist es un subconjunto de 10000, y es el que usaremos por defecto
