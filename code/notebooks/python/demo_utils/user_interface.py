@@ -16,13 +16,13 @@ def get_new_model_bar():
 
     sampler_selector = widgets.Dropdown(
         options=['None', 'rbf', 'nystroem'],
-        value='rbf',
+        value='None',
         layout = widgets.Layout(flex = '1 3 auto'),
         #description=':',
     )
     box_type_selector = widgets.Dropdown(
         options=['None', 'black', 'grey'],
-        value='black',
+        value='None',
         layout = widgets.Layout(flex = '1 3 auto'),
         #description=':',
     )
@@ -70,7 +70,9 @@ def get_gui():
             "covertype",
             "digits",
             "fall_detection",
-            "mnist",
+            #"mnist",
+            # De momento he tenido que quitarlo, por demasiado pesado
+            # Todo reducir el dataset y añadirlo de nuevo
             "pen_digits",
             "satellite",
             "segment",
@@ -170,23 +172,13 @@ def get_gui():
     cool_models_bar = widgets.VBox([headers, models_bar])
 
 
-
-
-
-    def calculate_bt_wrapper(e):
-        l1 = get_all_model_scores()
-        if clear_output_button.value:
-            graphs_output.clear_output(wait = True)
-        with graphs_output:
-            display(l1)
-
     calculate_bt = widgets.Button(
         description='Calculate',
         button_style='success', # 'success', 'info', 'warning', 'danger' or ''
         tooltip='Calculate the models',
         #icon='check'
     )
-    calculate_bt.on_click(calculate_bt_wrapper)
+    # calculate_bt.on_click(calculate_bt_wrapper)
 
     clear_output_button = widgets.ToggleButton(
         value=True,
@@ -194,6 +186,26 @@ def get_gui():
         button_style='', # 'success', 'info', 'warning', 'danger' or ''
         tooltip='Clear Previous Output',
         icon='check'
+    )
+
+    progress_bar = widgets.IntProgress(
+        value=0,
+        min=0,
+        max=10,
+        step=1,
+        description='Calculating:',
+        bar_style='info', # 'success', 'info', 'warning', 'danger' or ''
+        orientation='horizontal'
+    )
+
+    sub_progress_bar = widgets.IntProgress(
+        value=0,
+        min=0,
+        max=10,
+        step=1,
+        #description='',
+        bar_style='info', # 'success', 'info', 'warning', 'danger' or ''
+        orientation='horizontal'
     )
 
 
@@ -205,6 +217,19 @@ def get_gui():
         cool_models_bar,
         calculate_bt,
         clear_output_button,
+        progress_bar,
+        sub_progress_bar,
     ])
 
-    return gui
+    gui_dic = {
+        'calculate_bt': calculate_bt,
+        'models_bar': models_bar,
+        'dataset_selector': dataset_selector,
+        'size_selector': size_selector,
+        'features_selector': features_selector,
+        'clear_output_button': clear_output_button,
+        'progress_bar': progress_bar,
+        'sub_progress_bar': sub_progress_bar,
+    }
+
+    return gui, gui_dic
