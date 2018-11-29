@@ -1,18 +1,7 @@
 import ipywidgets as widgets
 from IPython.display import display
-# from demo_utils.general import SUPPORTED_DATASETS
-from demo_utils.learning import get_graph_from_scores
+from demo_utils.general import get_graph_from_scores
 from IPython.display import Markdown as md
-# from demo_utils.general import get_data
-# from demo_utils.learning import get_model_scores
-# from demo_utils.demos_resources import demos_resources
-# from demo_utils.user_interface import get_new_model_bar
-# from demo_utils.learning import get_model
-# from demo_utils.learning import get_non_sampling_model_scores
-# from demo_utils.learning import get_sampling_model_scores
-
-# todo añadir mnist reducido
-# todo hacer el modo no interactivo
 
 
 class Demo:
@@ -33,6 +22,11 @@ class Demo:
 
     def run_demo(self):
         print("run_demo must be implemented by the child demo")
+
+    def non_interactive(self, **argw):
+        train_scores, test_scores = self.run_demo(**argw)
+        fig = get_graph_from_scores(train_scores, test_scores)
+        display(fig)
 
     def button_action(self, e=None):
         '''

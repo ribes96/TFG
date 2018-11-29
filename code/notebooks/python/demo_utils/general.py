@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
 SUPPORTED_DATASETS = [
     "covertype",
@@ -64,27 +65,12 @@ def get_data(dataset_name, prop_train=2/3, n_ins=None):
     dict
         With keys: ['data_train', 'data_test', 'target_train', 'target_test']
     '''
-    # todo la comprovación de parámetros creo que no habría que hacerla
     # todo encargarse de mnist
     options = SUPPORTED_DATASETS
-    # options = [
-    #     "covertype",
-    #     "digits",
-    #     "fall_detection",
-    #     "mnist",
-    #     "pen_digits",
-    #     "satellite",
-    #     "segment",
-    #     "vowel",
-    #     ]
     if dataset_name not in options:
         raise ValueError("{} dataset is not available".format(dataset_name))
     if not 0 < prop_train < 1:
         raise ValueError("prop_train must be 0 < prop_train < 1")
-    if not isinstance(n_ins, (type(None), int)):
-        raise ValueError("Bad type for n_ins")
-    if isinstance(n_ins, int) and n_ins <= 0:
-        raise ValueError("n_ins must be positive")
 
     dir_path = '../../datasets/'
     file_path = '{0}{1}/{1}.csv'.format(dir_path, dataset_name)
@@ -115,82 +101,40 @@ def get_data(dataset_name, prop_train=2/3, n_ins=None):
 
     return ret_dic
 
-# Commented for not using
-# def get_models_bar_data(models_bar):
-#     '''
-#     Returns a list of dictionarys, where each one represents one of the
-#     models
-#     to run, and which have keys ['model', 'sampling', 'box_type',
-#     'n_estimators', 'pca']. The values are exactly the ones of the widget
-#
-#     Parameters
-#     ----------
-#     models_bar : VBox
-#         containing many HBox, each with widgets [Dropdown,
-#         Dropdown, Dropdown, IntSlider, Checkbox]
-#
-#     Returns
-#     -------
-#     list of dict
-#         with keys ['model', 'sampling', 'box_type',
-#         'n_estimators', 'pca']
-#     '''
-#     def get_single_model_bar_data(model_bar):
-#         '''
-#         For each element in the models_bar
-#         Returns
-#         -------
-#         A dictionary
-#         '''
-#         d = {
-#             'model': model_bar.children[0].value,
-#             'sampling': model_bar.children[1].value,
-#             'box_type': model_bar.children[2].value,
-#             'n_estimators': model_bar.children[3].value,
-#             'pca': model_bar.children[4].value,
-#         }
-#         return d
-#     ret_list = [get_single_model_bar_data(bar) for bar in
-#     models_bar.children]
-#     return ret_list
 
-# commented for not using
-# def get_gui_data(gui_dic):
-#     '''
-#     Return a dictionary with static data about  the gui_dic
-#
-#     Currently it only returns the keys
-#     ('dataset_selector', 'size_selector', 'features_selector')
-#
-#     Parameters
-#     -----------
-#     gui_dic: a dictionary with keys referencing items in gui, as returned by
-#     function get_gui
-#
-#     Returns
-#     -------
-#     dict
-#         with keys ['dataset_selector', 'size_selector',
-#         'features_selector', 'models_bar']
-#
-#     '''
-#     gui_data = {
-#         'dataset_selector': gui_dic['dataset_selector'].value,
-#         'size_selector': gui_dic['size_selector'].value,
-#         'features_selector': gui_dic['features_selector'].value,
-#
-#         # 'models_bar':gui_dic['models_bar'],
-#         'models_bar': get_models_bar_data(gui_dic['models_bar']),
-#     }
-#     return gui_data
+def get_graph_from_scores(train_scores, test_scores):
+    '''
+    Returns a graph with the scores from parameters. You will be able to add a
+    title to the returned object
 
-    # gui_dic = {
-    #     'calculate_bt': calculate_bt,
-    #     'models_bar': models_bar,
-    #     'dataset_selector': dataset_selector,
-    #     'size_selector': size_selector,
-    #     'features_selector': features_selector,
-    #     'clear_output_button': clear_output_button,
-    #     'progress_bar': progress_bar,
-    #     'sub_progress_bar': sub_progress_bar,
-    # }
+    Parameters
+    ----------
+    train_scores, test_scores : list of dict
+        each dict with keys ['absi', 'ord', 'label']. 'absi' is required to
+        be real units, -1 is not allowed
+
+    Returns
+    -------
+    matplotlib.pyplot.Figure
+        with two subplots, horizontally aligned, with test and train score,
+        ready to be shown
+    '''
+    fig = plt.figure(figsize=(12.8, 4.8))
+    test_sp = fig.add_subplot(121)
+    train_sp = fig.add_subplot(122, sharey=test_sp)
+
+    test_sp.set_title("Test scores")
+    train_sp.set_title("Train scores")
+
+    # fig.suptitle("{}, {} instances".format(
+    #                             gui_data['dataset_selector'],
+    #                             gui_data['size_selector']))
+    for te, tr in zip(test_scores, train_scores):
+        test_sp.plot(te['absi'], te['ord'], label=te['label'])
+        train_sp.plot(tr['absi'], tr['ord'], label=tr['label'])
+    test_sp.legend()
+    train_sp.legend()
+    test_sp.grid(True)
+    train_sp.grid(True)
+    plt.close()
+    return fig

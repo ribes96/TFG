@@ -7,9 +7,6 @@ from demo_utils.learning import get_sampling_model_scores
 from demo_utils.general import get_data
 import numpy as np
 
-# todo poner los nombres para la barra de modelos
-# Usar un HBox de VBox para la barra de modelos, y no lo contrario
-
 
 class Demo0(Demo):
     desc = """
@@ -27,7 +24,14 @@ class Demo0(Demo):
     # podría desconfigurarse el disabled si modifico get_new_model_bar
     features_selector = widgets.IntRangeSlider(value=[30, 100], min=30,
                                                max=400, step=10, disabled=True)
-    models_bar = widgets.VBox([])
+
+    models_bar = widgets.HBox([
+        widgets.VBox([widgets.Label(value='Model')]),
+        widgets.VBox([widgets.Label(value='Sampler')]),
+        widgets.VBox([widgets.Label(value='Box Type')]),
+        widgets.VBox([widgets.Label(value='Number Estimators')]),
+        widgets.VBox([widgets.Label(value='PCA?')]),
+    ], layout=widgets.Layout(border='3px solid black'))
     gui = widgets.VBox([
         dts_selector,
         size_selector,
@@ -44,6 +48,36 @@ class Demo0(Demo):
         self.insert_model_bar()
         super().__init__()
 
+    def models_gui_to_data(self, i):
+        '''
+        Parameters
+        ----------
+        i : int
+            The position of the model to convert. The first one should be 1
+        '''
+        model_name = self.models_bar.children[0].children[i].value
+        sampler_name = self.models_bar.children[1].children[i].value
+        box_type = self.models_bar.children[2].children[i].value
+        n_estim = self.models_bar.children[3].children[i].value
+        pca = self.models_bar.children[4].children[i].value
+
+        if sampler_name == 'None':
+            sampler_name = 'identity'
+        if box_type == 'None':
+            box_type = 'none'
+
+        if box_type == 'none':
+            n_estim = None
+
+        ret_dict = {
+            'model_name': model_name,
+            'sampler_name': sampler_name,
+            'box_type': box_type,
+            'n_estim': n_estim,
+            'pca': pca,
+        }
+        return ret_dict
+
     def gui_to_data(self):
         '''
         Just reading from self.gui, return a dictionary with keys and values
@@ -54,7 +88,8 @@ class Demo0(Demo):
         dict
             With keys: ['dts_name', 'dts_size', 'features_range', 'models']
         '''
-        models = [self.widget_set_to_data(mod_wid.children) for mod_wid in self.models_bar.children]
+        col = self.models_bar.children[0].children
+        models = [self.models_gui_to_data(i) for i in range(1, len(col))]
         ret_dict = {
             'dts_name': self.dts_selector.value,
             'dts_size': self.size_selector.value,
@@ -63,10 +98,9 @@ class Demo0(Demo):
         }
         return ret_dict
 
-    # todo tan larga no me gusta nada
     def run_demo(self, dts_name, dts_size, features_range, models):
         '''
-        Just reading from the arguments, return a pair of list of dictionarys,
+        Just reading from the arguments, returns a pair of list of dictionarys,
         with the scores of the demo. Pair is (train, test)
 
         Parameters
@@ -83,7 +117,7 @@ class Demo0(Demo):
         Returns
         -------
         (train_scores, test_scores) : tuple of list of dict
-            The lists contain dictionarys with keys ['absi', 'ord', 'label']
+            Dict with keys ['absi', 'ord', 'label']
         '''
 
         dataset = get_data(dts_name, n_ins=dts_size)
@@ -92,18 +126,17 @@ class Demo0(Demo):
 
         for m in models:
             model_name = m['model_name']
-            sampler = m['sampler']
+            sampler_name = m['sampler_name']
             box_type = m['box_type']
             n_estim = m['n_estim']
             pca = m['pca']
-
-            if box_type is None:
+            if box_type == 'none':
                 n_estim = None
             clf = get_model(model_name=model_name,
-                            sampler=sampler,
-                            box_type=box_type,
-                            ensemble=n_estim,
-                            pca=pca)
+                            sampler_name=sampler_name,
+                            pca_bool=pca,
+                            n_estim=n_estim,
+                            box_type=box_type)
             n_splits_features = 30
             features = list(range(*features_range))
             if (features_range[1] - features_range[0]) > n_splits_features:
@@ -111,25 +144,24 @@ class Demo0(Demo):
                                        num=n_splits_features,
                                        dtype=np.int).tolist()
 
-            if sampler is None:
+            if sampler_name == 'identity':
                 features = None
 
-            if sampler is None:
+            if sampler_name is 'identity':
                 # train_score y test_score son floats
                 train_score, test_score =\
                     get_non_sampling_model_scores(clf, dataset)
-                lab = '{0}_{1}_{2}_{3}_{4}'.format(model_name, sampler,
+                # todo pensar el label
+                lab = '{0}_{1}_{2}_{3}_{4}'.format(model_name, sampler_name,
                                                    box_type, n_estim, pca)
                 train_score = {
                     'absi': features_range,
                     'ord': [train_score, train_score],
-                    # 'label': 'un label adecuado',
                     'label': lab,
                 }
                 test_score = {
                     'absi': features_range,
                     'ord': [test_score, test_score],
-                    # 'label': 'un label adecuado',
                     'label': lab,
                 }
             else:
@@ -137,7 +169,7 @@ class Demo0(Demo):
                 train_score, test_score =\
                     get_sampling_model_scores(clf, dataset, features)
                 # todo pensar el label
-                lab = '{0}_{1}_{2}_{3}_{4}'.format(model_name, sampler,
+                lab = '{0}_{1}_{2}_{3}_{4}'.format(model_name, sampler_name,
                                                    box_type, n_estim, pca)
                 train_score['label'] = lab
                 test_score['label'] = lab
@@ -147,57 +179,11 @@ class Demo0(Demo):
 
         return train_scores, test_scores
 
-    def get_new_model_bar(self):
-        '''
-        Returns
-        -------
-        Returns a new HBox with the widgets to define a new training model
-        '''
-        model_selector = widgets.Dropdown(
-            options=['dt', 'logit', 'linear_svc'], value='dt')
-        sampler_selector = widgets.Dropdown(
-            options=['None', 'rbf', 'nystroem'], value='None')
-        box_type_selector = widgets.Dropdown(
-            options=['None', 'black', 'grey'], value='None')
-        n_estimators_selector = widgets.IntSlider(
-            value=30, min=2, max=200, step=1, disabled=True)
-        pca_checkbox = widgets.Checkbox(value=False)
-        hb = widgets.HBox([
-            model_selector,
-            sampler_selector,
-            box_type_selector,
-            n_estimators_selector,
-            pca_checkbox,
-        ])
-
-        def box_type_changed(*args):
-            if box_type_selector.value == 'None':
-                n_estimators_selector.disabled = True
-            else:
-                n_estimators_selector.disabled = False
-
-        def sampler_changed(*args):
-            val = True
-            for i in self.models_bar.children:
-                # i es HBox, el que retorna la función get_new_model_bar
-                # todo hardcodeando el 1
-                if i.children[1].value != 'None':
-                    val = False
-                    break
-            if val:
-                self.features_selector.disabled = True
-            else:
-                self.features_selector.disabled = False
-
-        box_type_selector.observe(box_type_changed, 'value')
-        sampler_selector.observe(sampler_changed, 'value')
-        return hb
-
     def widget_set_to_data(self, model_tuple):
         '''
-        Converts from widget data to usable data, returning a dict
+        Reads the widgets of a model and returns its data in a dict
+
         Parameters
-        # todo explicarlo mejor, se trata de la barra de modelos
         ----------
         model_tuple : iterable
             Any iterable containg the widgets of a model
@@ -220,16 +206,16 @@ class Demo0(Demo):
         pca = model_tuple[4].value
 
         if sampler == 'None':
-            sampler = None
+            sampler = 'identity'
         if box_type == 'None':
-            box_type = None
+            box_type = 'none'
 
-        if box_type is None:
+        if box_type == 'none':
             n_estim = None
 
         ret_dict = {
             'model_name': model_name,
-            'sampler': sampler,
+            'sampler_name': sampler,
             'box_type': box_type,
             'n_estim': n_estim,
             'pca': pca,
@@ -237,9 +223,53 @@ class Demo0(Demo):
         return ret_dict
 
     def insert_model_bar(self, e=None):
-        mb = self.get_new_model_bar()
-        self.models_bar.children += (mb,)
+        la = widgets.Layout(width='90px')
+
+        model_selector = widgets.Dropdown(
+            options=['dt', 'logit', 'linear_svc'], value='dt', layout=la)
+        sampler_selector = widgets.Dropdown(
+            options=['None', 'rbf', 'nystroem'], value='None', layout=la)
+        box_type_selector = widgets.Dropdown(
+            options=['None', 'black', 'grey'], value='None', layout=la)
+        n_estimators_selector = widgets.IntSlider(
+            value=30, min=2, max=200,
+            step=1,
+            disabled=True,
+            layout=widgets.Layout(width='300px'))
+        pca_checkbox = widgets.Checkbox(value=False)
+
+        self.models_bar.children[0].children += (model_selector,)
+        self.models_bar.children[1].children += (sampler_selector,)
+        self.models_bar.children[2].children += (box_type_selector,)
+        self.models_bar.children[3].children += (n_estimators_selector,)
+        self.models_bar.children[4].children += (pca_checkbox, )
+
+        def box_type_changed(*args):
+            if box_type_selector.value == 'None':
+                n_estimators_selector.disabled = True
+            else:
+                n_estimators_selector.disabled = False
+
+        def sampler_changed(*args):
+            val = True
+            # todo hardcodeamos 1
+            col = self.models_bar.children[1]
+            for i, row in enumerate(col.children):
+                if i == 0:
+                    continue
+                if row.value != 'None':
+                    val = False
+                    break
+            if val:
+                self.features_selector.disabled = True
+            else:
+                self.features_selector.disabled = False
+
+        box_type_selector.observe(box_type_changed, 'value')
+        sampler_selector.observe(sampler_changed, 'value')
 
     def remove_model_bar(self, e=None):
-        if len(self.models_bar.children) > 1:
-            self.models_bar.children = self.models_bar.children[:-1]
+        if len(self.models_bar.children[0].children) > 2:
+            for i in range(5):
+                self.models_bar.children[i].children =\
+                    self.models_bar.children[i].children[:-1]

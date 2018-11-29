@@ -6,8 +6,6 @@ from demo_utils.general import get_data
 from demo_utils.learning import get_model
 from demo_utils.learning import get_non_sampling_model_scores
 
-# todo los resultados de demo1 y de demo0 con los datos de demo1 no son
-#   los mismos, y debería serlo. Ver qué está pasando
 # todo sobreescribir el button_action del padre para que haga un bar-plot
 #   en vez de el genérico
 # ahora mismo la interfaz es súper fea, hacerla más bonita
@@ -64,12 +62,11 @@ class Demo1(Demo):
         train_dicts = []
         test_dicts = []
         for model_name in models_name:
-            # dataset = get_data(dts_name, n_ins=1000)
-            # dataset = get_data(dts_name, n_ins=self.n_ins)
-            # dataset = get_data(dts_name, n_ins=self.size_selector.value)
             dataset = get_data(dts_name, n_ins=dts_size)
-            clf = get_model(model_name=model_name, sampler=None, pca=False,
-                            ensemble=None, box_type=None)
+            clf = get_model(model_name=model_name,
+                            sampler_name='identity',
+                            pca_bool=False,
+                            box_type='none')
             train_score, test_score = get_non_sampling_model_scores(clf,
                                                                     dataset)
             train_score = {

@@ -50,23 +50,26 @@ class Demo2(Demo):
         Just reading from self.gui, return a dictionary with keys and values
         needed to run the demo. Keys are the arguments of run_demo
         '''
-        model = self.model_selector.value
-        sampler = self.sampler_selector.value
-        if sampler == "None":
-            sampler = None
+        model_name = self.model_selector.value
+        sampler_name = self.sampler_selector.value
+        if sampler_name == "None":
+            sampler_name = 'identity'
         box_type = self.box_type_selector.value
         if box_type == "None":
-            box_type = None
+            box_type = 'none'
         n_estimators = self.n_estimators_selector.value
-        if box_type is None:
+        if box_type == 'none':
             n_estimators = None
         pca = self.pca_checkbox.value
         features_range = self.features_selector.value
 
-        clf = get_model(model_name=model, sampler=sampler, pca=pca,
-                        ensemble=n_estimators, box_type=box_type)
+        clf = get_model(model_name=model_name,
+                        sampler_name=sampler_name,
+                        pca_bool=pca,
+                        n_estim=n_estimators,
+                        box_type=box_type)
 
-        if sampler is None:
+        if sampler_name == 'identity':
             features_range = None
         ret_dict = {
             'model': clf,
