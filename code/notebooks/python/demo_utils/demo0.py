@@ -1,51 +1,76 @@
 from demo_utils.generic_demo import Demo
-import ipywidgets as widgets
 from demo_utils.general import SUPPORTED_DATASETS
 from demo_utils.learning import get_model
 from demo_utils.learning import get_non_sampling_model_scores
 from demo_utils.learning import get_sampling_model_scores
 from demo_utils.general import get_data
+
 import numpy as np
+from ipywidgets import Button
+from ipywidgets import Dropdown
+from ipywidgets import RadioButtons
+from ipywidgets import IntRangeSlider
+from ipywidgets import VBox
+from ipywidgets import HBox
+from ipywidgets import Label
+from ipywidgets import Layout
+from ipywidgets import IntSlider
+from ipywidgets import Checkbox
+
+# TODO una demo para ver cómo no sobreajustar DT es peor
+
+# TODO una demo para ver el orden adecuado para pca y sampler
+
+# TODO solucionar exportar que saque gráficas
+
+# TODO los run_specific hay que perfilarlos un poco,
 
 
 class Demo0(Demo):
-    desc = """
-    Una demo genérica, para comprobar cualquier cosa
-    """
-    run_bt = widgets.Button(description='Demo0', button_style='info')
-    mod_add_bt = widgets.Button(description='Add model', button_style='info')
-    mod_remove_bt = widgets.Button(description='Remove model',
-                                   button_style='warning')
-    dts_selector = widgets.Dropdown(options=SUPPORTED_DATASETS,
-                                    value=SUPPORTED_DATASETS[0],
-                                    descripttion='Dataset:')
-    size_selector = widgets.RadioButtons(options=[1000, 2000, 5000, 10000],
-                                         value=1000)
-    # podría desconfigurarse el disabled si modifico get_new_model_bar
-    features_selector = widgets.IntRangeSlider(value=[30, 100], min=30,
-                                               max=400, step=10, disabled=True)
-
-    models_bar = widgets.HBox([
-        widgets.VBox([widgets.Label(value='Model')]),
-        widgets.VBox([widgets.Label(value='Sampler')]),
-        widgets.VBox([widgets.Label(value='Box Type')]),
-        widgets.VBox([widgets.Label(value='Number Estimators')]),
-        widgets.VBox([widgets.Label(value='PCA?')]),
-    ], layout=widgets.Layout(border='3px solid black'))
-    gui = widgets.VBox([
-        dts_selector,
-        size_selector,
-        mod_add_bt,
-        mod_remove_bt,
-        features_selector,
-        models_bar,
-        run_bt,
-    ])
+    desc = """# Una demo genérica"""
 
     def __init__(self):
+        self.run_bt = Button(description='Demo0', button_style='info')
+        self.mod_add_bt = Button(description='Add model',
+                                 button_style='info')
+        self.mod_remove_bt = Button(description='Remove model',
+                                    button_style='warning')
+        self.dts_selector = Dropdown(options=SUPPORTED_DATASETS,
+                                     value=SUPPORTED_DATASETS[0],
+                                     description='Dataset:')
+        self.size_selector = RadioButtons(options=[1000, 2000, 5000, 10000],
+                                          value=1000, description='Size')
+        self.features_selector = IntRangeSlider(value=[30, 100], min=30,
+                                                max=400, step=10)
+
+        self.model_name_column = VBox([Label(value='Model')])
+        self.sampler_name_column = VBox([Label(value='Sampler')])
+        self.box_type_column = VBox([Label(value='Box Type')])
+        self.n_estim_column = VBox([Label(value='Number Estimators')])
+        self.pca_column = VBox([Label(value='PCA?')])
+
+        self.models_bar = HBox([
+            self.model_name_column,
+            self.sampler_name_column,
+            self.box_type_column,
+            self.n_estim_column,
+            self.pca_column,
+        ], layout=Layout(border='3px solid black'))
+
+        self.gui = VBox([
+            self.dts_selector,
+            self.size_selector,
+            self.mod_add_bt,
+            self.mod_remove_bt,
+            self.features_selector,
+            self.models_bar,
+            self.run_bt,
+        ])
         self.mod_add_bt.on_click(self.insert_model_bar)
         self.mod_remove_bt.on_click(self.remove_model_bar)
         self.insert_model_bar()
+        # self.box_type_changed()
+        self.sampler_changed()
         super().__init__()
 
     def models_gui_to_data(self, i):
@@ -55,11 +80,12 @@ class Demo0(Demo):
         i : int
             The position of the model to convert. The first one should be 1
         '''
-        model_name = self.models_bar.children[0].children[i].value
-        sampler_name = self.models_bar.children[1].children[i].value
-        box_type = self.models_bar.children[2].children[i].value
-        n_estim = self.models_bar.children[3].children[i].value
-        pca = self.models_bar.children[4].children[i].value
+
+        model_name = self.model_name_column.children[i].value
+        sampler_name = self.sampler_name_column.children[i].value
+        box_type = self.box_type_column.children[i].value
+        n_estim = self.n_estim_column.children[i].value
+        pca = self.pca_column.children[i].value
 
         if sampler_name == 'None':
             sampler_name = 'identity'
@@ -98,6 +124,43 @@ class Demo0(Demo):
         }
         return ret_dict
 
+    def get_label(self, model_name, sampler_name, box_type, n_estim, pca):
+        '''
+        Parameters
+        ----------
+        model_name : str
+            One of ['dt', 'logit', 'linear_svc']
+        sampler_name : str
+            One of ['rbf', 'nystroem', 'identity']
+        box_type : str
+            One of ['black', 'grey', 'none']
+        n_estim : int or None
+        pca : bool
+        '''
+        model_name += ' '
+        if sampler_name == 'identity':
+            sampler_name = ''
+        else:
+            sampler_name += ' '
+
+        if box_type == 'none':
+            box_type = ''
+        else:
+            box_type += ' '
+
+        if n_estim is None:
+            n_estim = ''
+        else:
+            n_estim = str(n_estim) + ' estims. '
+
+        if pca:
+            pca = 'PCA '
+        else:
+            pca = ''
+
+        ret_str = model_name + sampler_name + box_type + n_estim + pca
+        return ret_str
+
     def run_demo(self, dts_name, dts_size, features_range, models):
         '''
         Just reading from the arguments, returns a pair of list of dictionarys,
@@ -119,7 +182,11 @@ class Demo0(Demo):
         (train_scores, test_scores) : tuple of list of dict
             Dict with keys ['absi', 'ord', 'label']
         '''
-
+        info_run = '''
+- Dataset: **{0}**
+- Size: **{1}**
+        '''
+        self.run_specific = info_run.format(dts_name, dts_size)
         dataset = get_data(dts_name, n_ins=dts_size)
         train_scores = []
         test_scores = []
@@ -151,9 +218,8 @@ class Demo0(Demo):
                 # train_score y test_score son floats
                 train_score, test_score =\
                     get_non_sampling_model_scores(clf, dataset)
-                # todo pensar el label
-                lab = '{0}_{1}_{2}_{3}_{4}'.format(model_name, sampler_name,
-                                                   box_type, n_estim, pca)
+                lab = self.get_label(model_name, sampler_name, box_type,
+                                     n_estim, pca)
                 train_score = {
                     'absi': features_range,
                     'ord': [train_score, train_score],
@@ -168,9 +234,8 @@ class Demo0(Demo):
                 # train_score y test_score son diccionarios
                 train_score, test_score =\
                     get_sampling_model_scores(clf, dataset, features)
-                # todo pensar el label
-                lab = '{0}_{1}_{2}_{3}_{4}'.format(model_name, sampler_name,
-                                                   box_type, n_estim, pca)
+                lab = self.get_label(model_name, sampler_name, box_type,
+                                     n_estim, pca)
                 train_score['label'] = lab
                 test_score['label'] = lab
 
@@ -179,97 +244,61 @@ class Demo0(Demo):
 
         return train_scores, test_scores
 
-    def widget_set_to_data(self, model_tuple):
-        '''
-        Reads the widgets of a model and returns its data in a dict
-
-        Parameters
-        ----------
-        model_tuple : iterable
-            Any iterable containg the widgets of a model
-            It is assumed:
-                model_tupe[0] : Dropdown -> model_name
-                model_tupe[1] : Dropdown -> sampler
-                model_tupe[2] : Dropdown -> box_type
-                model_tupe[3] : IntRangeSlider -> n_estim
-                model_tupe[4] : Checkbox -> pca
-
-        Returns
-        -------
-        dict
-            With keys: ['model_name', 'sampler', 'box_type', 'n_estim', 'pca']
-        '''
-        model_name = model_tuple[0].value
-        sampler = model_tuple[1].value
-        box_type = model_tuple[2].value
-        n_estim = model_tuple[3].value
-        pca = model_tuple[4].value
-
-        if sampler == 'None':
-            sampler = 'identity'
-        if box_type == 'None':
-            box_type = 'none'
-
-        if box_type == 'none':
-            n_estim = None
-
-        ret_dict = {
-            'model_name': model_name,
-            'sampler_name': sampler,
-            'box_type': box_type,
-            'n_estim': n_estim,
-            'pca': pca,
-        }
-        return ret_dict
-
     def insert_model_bar(self, e=None):
-        la = widgets.Layout(width='90px')
+        la = Layout(width='90px')
 
-        model_selector = widgets.Dropdown(
+        model_selector = Dropdown(
             options=['dt', 'logit', 'linear_svc'], value='dt', layout=la)
-        sampler_selector = widgets.Dropdown(
+        sampler_selector = Dropdown(
             options=['None', 'rbf', 'nystroem'], value='None', layout=la)
-        box_type_selector = widgets.Dropdown(
+        box_type_selector = Dropdown(
             options=['None', 'black', 'grey'], value='None', layout=la)
-        n_estimators_selector = widgets.IntSlider(
+        n_estimators_selector = IntSlider(
             value=30, min=2, max=200,
             step=1,
             disabled=True,
-            layout=widgets.Layout(width='300px'))
-        pca_checkbox = widgets.Checkbox(value=False)
+            layout=Layout(width='300px', visibility='hidden'))
+        pca_checkbox = Checkbox(value=False)
 
-        self.models_bar.children[0].children += (model_selector,)
-        self.models_bar.children[1].children += (sampler_selector,)
-        self.models_bar.children[2].children += (box_type_selector,)
-        self.models_bar.children[3].children += (n_estimators_selector,)
-        self.models_bar.children[4].children += (pca_checkbox, )
+        self.model_name_column.children += (model_selector,)
+        self.sampler_name_column.children += (sampler_selector,)
+        self.box_type_column.children += (box_type_selector,)
+        self.n_estim_column.children += (n_estimators_selector,)
+        self.pca_column.children += (pca_checkbox, )
 
         def box_type_changed(*args):
             if box_type_selector.value == 'None':
                 n_estimators_selector.disabled = True
+                n_estimators_selector.layout.visibility = 'hidden'
             else:
                 n_estimators_selector.disabled = False
-
-        def sampler_changed(*args):
-            val = True
-            # todo hardcodeamos 1
-            col = self.models_bar.children[1]
-            for i, row in enumerate(col.children):
-                if i == 0:
-                    continue
-                if row.value != 'None':
-                    val = False
-                    break
-            if val:
-                self.features_selector.disabled = True
-            else:
-                self.features_selector.disabled = False
+                n_estimators_selector.layout.visibility = 'visible'
 
         box_type_selector.observe(box_type_changed, 'value')
-        sampler_selector.observe(sampler_changed, 'value')
+        sampler_selector.observe(self.sampler_changed, 'value')
+
+    def sampler_changed(self, *args):
+        '''
+        Sets features_selector weather enabled or disabled depending on
+        the number of sampler == None in the gui
+        '''
+        val = True
+        for i, row in enumerate(self.sampler_name_column.children):
+            if i == 0:
+                continue
+            if row.value != 'None':
+                val = False
+                break
+        if val:
+            self.features_selector.disabled = True
+            self.features_selector.layout.visibility = 'hidden'
+        else:
+            self.features_selector.disabled = False
+            self.features_selector.layout.visibility = 'visible'
 
     def remove_model_bar(self, e=None):
         if len(self.models_bar.children[0].children) > 2:
             for i in range(5):
                 self.models_bar.children[i].children =\
                     self.models_bar.children[i].children[:-1]
+            self.sampler_changed()

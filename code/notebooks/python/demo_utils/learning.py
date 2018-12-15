@@ -9,12 +9,14 @@ from sklearn.ensemble import BaggingClassifier
 from sklearn.decomposition import PCA
 
 
-def get_base_model(model_name):
+def get_base_model(model_name, C=1):
     '''
     Parameters
     ----------
     model_name : str
         One of ['dt', 'linear_svc', 'logit']
+    C : num
+        Parameter for linear_svc. Ignored if model_name != 'linear_svc'
 
     Returns
     -------
@@ -24,7 +26,8 @@ def get_base_model(model_name):
     if model_name == 'dt':
         m = DecisionTreeClassifier()
     elif model_name == 'linear_svc':
-        m = LinearSVC(C=1)
+        # m = LinearSVC(C=1)
+        m = LinearSVC(C=C)
     elif model_name == 'logit':
         m = LogisticRegression(C=1, multi_class='multinomial', solver='lbfgs')
     else:
@@ -33,7 +36,7 @@ def get_base_model(model_name):
     return m
 
 
-def get_sampler(sampler_name):
+def get_sampler(sampler_name, gamma=0.2):
     '''
     Parameters
     ----------
@@ -48,9 +51,9 @@ def get_sampler(sampler_name):
     if sampler_name == 'identity':
         s = FunctionTransformer(None, validate=False)
     elif sampler_name == 'nystroem':
-        s = Nystroem(gamma=0.2)
+        s = Nystroem(gamma=gamma)
     elif sampler_name == 'rbf':
-        s = RBFSampler(gamma=0.2)
+        s = RBFSampler(gamma=gamma)
     else:
         raise ValueError('This sampler is not supported')
     return s
@@ -75,11 +78,13 @@ def get_pca(pca_bool):
     return p
 
 
-def get_model(model_name='dt',
+def get_model(model_name,
               sampler_name='identity',
               pca_bool=False,
               n_estim=None,
-              box_type='none'):
+              box_type='none',
+              gamma=0.2,
+              C=1):
     '''
     Parameters
     ----------
@@ -92,12 +97,18 @@ def get_model(model_name='dt',
         n_estim > 0, ignored  if box_type == 'none'
     box_type : str
         One of ['black', 'grey', 'none']
+    gamma : float
+        Just used when sampler_name in ['rbf', 'nystroem']. Parameter for those
+        methods
+    C : float
+        Just used when model_name == 'linear_svc'. Parameter for that mehtod
 
     Returns
     -------
+    An abstract model. Something to which you can call fit and score
     '''
-    model = get_base_model(model_name)
-    sampler = get_sampler(sampler_name)
+    model = get_base_model(model_name=model_name, C=C)
+    sampler = get_sampler(sampler_name=sampler_name, gamma=gamma)
     pca = get_pca(pca_bool)
 
     if box_type == 'none':
@@ -124,6 +135,68 @@ def get_model(model_name='dt',
         raise ValueError('This box_type is not supported')
 
     return clf
+############################
+
+
+def get_model_first_pca(model_name,
+                        sampler_name='identity',
+                        pca_bool=False,
+                        n_estim=None,
+                        box_type='none',
+                        gamma=0.2,
+                        C=1):
+    '''
+    Parameters
+    ----------
+    model_name : str
+        One of One of ['dt', 'linear_svc', 'logit']
+    sampler_name : str
+        One of ['identity', 'rbf', 'nystroem']
+    pca_bool : bool
+    n_estim : int or None
+        n_estim > 0, ignored  if box_type == 'none'
+    box_type : str
+        One of ['black', 'grey', 'none']
+    gamma : float
+        Just used when sampler_name in ['rbf', 'nystroem']. Parameter for those
+        methods
+    C : float
+        Just used when model_name == 'linear_svc'. Parameter for that mehtod
+
+    Returns
+    -------
+    An abstract model. Something to which you can call fit and score
+    '''
+    model = get_base_model(model_name=model_name, C=C)
+    sampler = get_sampler(sampler_name=sampler_name, gamma=gamma)
+    pca = get_pca(pca_bool)
+
+    if box_type == 'none':
+        clf = Pipeline([
+            ('pca', pca),
+            ('sampler', sampler),
+            ('model', model),
+        ])
+    elif box_type == 'grey':
+        pipe = Pipeline([
+            ('pca', pca),
+            ('sampler', sampler),
+            ('model', model),
+        ])
+        clf = BaggingClassifier(base_estimator=pipe, n_estimators=n_estim)
+    elif box_type == 'black':
+        bag = BaggingClassifier(base_estimator=model, n_estimators=n_estim)
+        clf = Pipeline([
+            ('pca', pca),
+            ('sampler', sampler),
+            ('model', bag),
+        ])
+    else:
+        raise ValueError('This box_type is not supported')
+
+    return clf
+
+###############################
 
 
 def get_non_sampling_model_scores(clf, dataset):
@@ -186,8 +259,23 @@ def get_sampling_model_scores(clf, dataset, features):
 
     train_scores = []
     test_scores = []
+    # Lo podría hacer dentro del for, pero siempre dará el mismo resultado
+    try:
+        clf.set_params(sampler__n_components=2)
+        is_black = True
+    except ValueError:
+        clf.set_params(base_estimator__sampler__n_components=2)
+        is_black = False
+
     for f in features:
-        clf.set_params(sampler__n_components=f)
+        # try:
+        #     clf.set_params(sampler__n_components=f)
+        # except ValueError:
+        #     clf.set_params(base_estimator__sampler__n_components=f)
+        if is_black:
+            clf.set_params(sampler__n_components=f)
+        else:
+            clf.set_params(base_estimator__sampler__n_components=f)
         clf.fit(data_train, target_train)
         train_score = clf.score(data_train, target_train)
         test_score = clf.score(data_test, target_test)

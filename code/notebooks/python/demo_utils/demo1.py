@@ -1,31 +1,38 @@
 from demo_utils.generic_demo import Demo
-import ipywidgets as widgets
+# import ipywidgets as widgets
 from demo_utils.general import SUPPORTED_DATASETS
 from demo_utils.general import get_data
 # from demo_utils.learning import get_model_scores
 from demo_utils.learning import get_model
 from demo_utils.learning import get_non_sampling_model_scores
+# from demo_utils.general import get_non_sampling_graph_from_scores
 
-# todo sobreescribir el button_action del padre para que haga un bar-plot
-#   en vez de el genérico
-# ahora mismo la interfaz es súper fea, hacerla más bonita
+
+from ipywidgets import Button
+from ipywidgets import Dropdown
+from ipywidgets import RadioButtons
+from ipywidgets import VBox
 
 
 class Demo1(Demo):
-    desc = """
+    desc = """# Modelos básicos
     Permite ver cómo se comportan los modelos simples (Decision Tree, Logit,
-    LinearSVM) con un dataset determinado. De esta manera sabremos si un
-    problema es más fácil para un modelo o para otro.
+    LinearSVM) con un dataset determinado. Permite saber si algunos problemas
+    son más difíciles que otros para on modelo básico.
     """
 
-    run_bt = widgets.Button(description='Demo1', button_style='info',
-                            tooltip=desc)
-    dataset_selector = widgets.Dropdown(options=SUPPORTED_DATASETS,
-                                        value=SUPPORTED_DATASETS[0],
-                                        description='Dataset:')
-    size_selector = widgets.RadioButtons(options=[1000, 2000, 5000, 10000],
-                                         value=1000)
-    gui = widgets.HBox([dataset_selector, size_selector, run_bt])
+    def __init__(self):
+            self.run_bt = Button(description='Demo1', button_style='info',
+                                 tooltip=self.desc)
+            self.dataset_selector = Dropdown(options=SUPPORTED_DATASETS,
+                                             value=SUPPORTED_DATASETS[0],
+                                             description='Dataset:')
+            self.size_selector = RadioButtons(
+                options=[1000, 2000, 5000, 10000],
+                value=1000, description='Size')
+            self.gui = VBox([self.size_selector, self.dataset_selector,
+                             self.run_bt])
+            super().__init__()
 
     def gui_to_data(self):
         '''
@@ -58,6 +65,12 @@ class Demo1(Demo):
             Dicts have keys: ['absi', 'ord', 'label'], and 'absi' are valid
             numbers, -1 is not valid
         '''
+        info_run = """
+- Dataset: **{0}**
+- Size: **{1}**
+        """
+        self.run_specific = info_run.format(dts_name, dts_size)
+        # self.title = dts_name
         models_name = ['dt', 'logit', 'linear_svc']
         train_dicts = []
         test_dicts = []

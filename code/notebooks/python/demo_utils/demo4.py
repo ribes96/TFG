@@ -7,6 +7,7 @@ from demo_utils.learning import get_sampling_model_scores
 from demo_utils.learning import get_non_sampling_model_scores
 import numpy as np
 
+
 from ipywidgets import Button
 from ipywidgets import Dropdown
 from ipywidgets import IntRangeSlider
@@ -15,33 +16,34 @@ from ipywidgets import IntSlider
 from ipywidgets import Checkbox
 
 
-class Demo2(Demo):
-    desc = '''# Mismo modelo, distintos datasets
-    Prueba un modelo determinado con todos los datasets disponibles.
-    Permite ver si un modelo presenta comportamientos distintos dependiendo
-    del tipo de problema al que se enfrenta
+class Demo4(Demo):
+    desc = '''# Diferencias entre los valores de C para la SVM
+    Solo ejecuta LinearSVC con los parámetros indicados
     '''
 
     def __init__(self):
+        self.valores_C = [0.001, 0.01, 0.1, 1, 10, 100]
         self.all_datasets_names = SUPPORTED_DATASETS
-        self.run_bt = Button(description='Demo2', button_style='info')
+        self.n_ins = 1000
+        self.run_bt = Button(description='Demo4', button_style='info')
 
-        self.model_selector = Dropdown(options=['dt', 'logit', 'linear_svc'],
-                                       value='dt', description='Model')
+        self.dataset_selector = Dropdown(options=SUPPORTED_DATASETS,
+                                         value=SUPPORTED_DATASETS[0],
+                                         description='Dataset:')
         self.sampler_selector = Dropdown(
             options=['None', 'rbf', 'nystroem'], value='None',
             description='Sampler')
         self.features_selector = IntRangeSlider(value=[30, 100], min=30,
                                                 max=400, step=10,
                                                 description='Features')
-        self.box_type_selector = Dropdown(
-            options=['None', 'black', 'grey'], value='None',
-            description='Bagging')
+        self.box_type_selector = Dropdown(options=['None', 'black', 'grey'],
+                                          value='None', description='Bagging')
         self.n_estimators_selector = IntSlider(value=30, min=2, max=200,
                                                step=1, description='N. estim.')
         self.pca_checkbox = Checkbox(value=False, description='Perform PCA?')
         self.g = VBox([
-            self.model_selector,
+            self.dataset_selector,
+            # model_selector,
             self.sampler_selector,
             self.features_selector,
             self.box_type_selector,
@@ -60,7 +62,7 @@ class Demo2(Demo):
         Just reading from self.gui, return a dictionary with keys and values
         needed to run the demo. Keys are the arguments of run_demo
         '''
-        model_name = self.model_selector.value
+        dts_name = self.dataset_selector.value
         sampler_name = self.sampler_selector.value
         if sampler_name == "None":
             sampler_name = 'identity'
@@ -72,58 +74,58 @@ class Demo2(Demo):
             n_estim = None
         pca_bool = self.pca_checkbox.value
         features_range = self.features_selector.value
+
         if sampler_name == 'identity':
             features_range = None
 
-        model_info = {
-            'model_name': model_name,
+        model_data = {
+            'model_name': 'linear_svc',
             'sampler_name': sampler_name,
             'pca_bool': pca_bool,
             'n_estim': n_estim,
             'box_type': box_type,
         }
 
-        # clf = get_model(model_name=model_name,
-        #                 sampler_name=sampler_name,
-        #                 pca_bool=pca,
-        #                 n_estim=n_estimators,
-        #                 box_type=box_type)
-
         ret_dict = {
-            # 'model': clf,
-            'model_info': model_info,
+            'dts_name': dts_name,
+            'model_data': model_data,
             'features_range': features_range,
         }
         return ret_dict
 
-    # def run_demo(self, model, features_range):
-    def run_demo(self, model_info, features_range):
+    def run_demo(self, dts_name, model_data, features_range):
         '''
         Parameters
         ----------
-        model_info : dict
+        dts_name : str
+        model_data : dict
             Required keys: ['model_name', 'sampler_name', 'pca_bool',
             'n_estim', 'box_type']
+            Almost everything get_model needs
         features_range : list or None
             The list is the range, so len(features) == 2, and increasing order
             is assumed
+
+        Returns
+        -------
+        (train, test) : tuple of list of dict
+            The scores for many models equal in everything except in C for
+            linear_svc
         '''
         info_run = '''
-- Model: **{0}**
+- Dataset: **{0}**
 - Sampler: **{1}**
 - Bagging: **{2}**
 - N. estim.: **{3}**
 - PCA: **{4}**
         '''
-        self.run_specific = info_run.format(model_info['model_name'],
-                                            model_info['sampler_name'],
-                                            model_info['box_type'],
-                                            model_info['n_estim'],
-                                            model_info['pca_bool'])
-
-        model = get_model(**model_info)
+        self.run_specific = info_run.format(dts_name,
+                                            model_data['sampler_name'],
+                                            model_data['box_type'],
+                                            model_data['n_estim'],
+                                            model_data['pca_bool'])
         if features_range is None:
-            return self.run_demo_non_sampling(model)
+            return self.run_demo_non_sampling(dts_name, model_data)
         else:
             # a list of int is assumed
             n_splits_features = 30
@@ -131,57 +133,75 @@ class Demo2(Demo):
             if (features_range[1] - features_range[0]) > n_splits_features:
                 features = np.linspace(*features_range, num=n_splits_features,
                                        dtype=np.int).tolist()
-            return self.run_demo_with_sampling(model, features)
+            return self.run_demo_with_sampling(dts_name, model_data, features)
 
-    def run_demo_with_sampling(self, model, features):
+    def run_demo_with_sampling(self, dts_name, model_data, features):
+        '''
+        Parameters
+        ----------
+        dts_name : str
+        model_data : dict
+            Required keys: ['model_name', 'sampler_name', 'pca_bool',
+            'n_estim', 'box_type']
+            Almost everything get_model needs
+        features : list of int
+            Only real values are allowed (-1 is not valid)
+
+        Returns
+        -------
+        (train, test) : tuple of list of dict
+            The scores for many models equal in everything except in C for
+            linear_svc
+        '''
         train_dicts = []
         test_dicts = []
-        for dts_name in self.all_datasets_names:
-            dataset = get_data(dts_name)
+        dataset = get_data(dts_name, n_ins=self.n_ins)
+        for C in self.valores_C:
+            model = get_model(C=C, **model_data)
             train_score, test_score = get_sampling_model_scores(model,
                                                                 dataset,
                                                                 features)
-            train_score['label'] = dts_name
-            test_score['label'] = dts_name
+            train_score['label'] = 'C = {}'.format(C)
+            test_score['label'] = 'C = {}'.format(C)
 
             train_dicts.append(train_score)
             test_dicts.append(test_score)
 
         return train_dicts, test_dicts
 
-    def run_demo_non_sampling(self, model):
+    def run_demo_non_sampling(self, dts_name, model_data):
         # run_demo llamará a esta o a la otra dependiendo del tipo.
         '''
         Parameters
         ----------
-        model : abstract model
-            Something on which you can call fit and score
+        dts_name : str
+        model_data : dict
+            Required keys: ['model_name', 'sampler_name', 'pca_bool',
+            'n_estim', 'box_type']
+            Almost everything get_model needs
 
         Returns
         -------
         (train_scores, test_scores) : tuple of list of dict
             dict with keys ['absi', 'ord', 'labels']
         '''
-        train_scores = []
-        test_scores = []
-        for dts_name in self.all_datasets_names:
-            dataset = get_data(dts_name)
-            train_score, test_score = get_non_sampling_model_scores(model,
-                                                                    dataset)
-            train_scores.append(train_score)
-            test_scores.append(test_score)
         train_dicts = []
         test_dicts = []
-        for i, dts_name in enumerate(self.all_datasets_names):
+        dataset = get_data(dts_name, n_ins=self.n_ins)
+        for C in self.valores_C:
+            model = get_model(C=C, **model_data)
+            train_score, test_score = get_non_sampling_model_scores(model,
+                                                                    dataset)
+
             train_d = {
                 'absi': [0, 1],
-                'ord': [train_scores[i], train_scores[i]],
-                'label': dts_name,
+                'ord': [train_score, train_score],
+                'label': 'C = {}'.format(C),
             }
             test_d = {
                 'absi': [0, 1],
-                'ord': [test_scores[i], test_scores[i]],
-                'label': dts_name,
+                'ord': [test_score, test_score],
+                'label': 'C = {}'.format(C),
             }
             train_dicts.append(train_d)
             test_dicts.append(test_d)
