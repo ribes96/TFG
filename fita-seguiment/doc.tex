@@ -6,6 +6,11 @@
 \usepackage{tabularx}
 \usepackage{graphicx}
 \usepackage{float}
+
+
+
+
+\usepackage{hyperref}
 \restylefloat{table}
 
 \title{Using Random Fourier Features with Random Forest}
@@ -20,7 +25,7 @@
     \subsection{General Framework}
 
     Machine Learning uses statistical models to make predictions or decisions
-    when there is not known formula of feasible procedure to find the correct
+    when there is no known formula of feasible procedure to find the correct
     answer. In the supervised learning sub-field, it uses a collection of
     data instances and their corresponding answer to predict
     the correct outcome for new unseen data. This is known as learning.
@@ -32,7 +37,7 @@
     a decent level of accuracy.
 
     Moreover, nowadays it is relatively easy to find or produce huge datasets
-    about almost any field, and that makes it possible for many busineses to learn
+    about almost any field, and that makes it possible for many businesses to learn
     from this data and to make better decisions.
 
     Nevertheless, the current level of learning is not enough. The error rate is still too high for some applications, and it is needed a lot of
@@ -56,15 +61,15 @@
     algorithm, such as having a lot of bias or variance. One way to reduce this
     last problem in to use some kind of ensemble of predictors.
 
-    Bagging is an ensemble technique which has shown very good results for
+    Bagging\cite{breiman94} is an ensemble technique which has shown very good results for
     some algorithms. It is known to substantially reduce the variance of a model when each of the estimators has very little correlation with the others. It
-    achieves that by using the bootstrap process (a random sampling with
-    replacement), but for most of the models this is not enough. This is why it is rarely used for any model but the Decision Tree. The unstability in this
+    achieves that by using bootstrap (a random sampling with
+    replacement), but for most of the models this is not enough. This is why it is rarely used for any model but the Decision Tree. The instability in this
     algorithm helps each of the estimators to have low correlation.
 
-    There exists a mapping to transform data from a given space to a different one which is called Random Fourier Features. It can approximate any
+    There exists a mapping to transform data from a given space to a different one which is called Random Fourier Features\cite{rahimi07}. It can approximate any
     shift-invariant kernel function with a randomized mapping, and has successfully
-    been used to decrease the error rate of a Neural Network.
+    been used to decrease the error rate of a Neural Network\cite{zhangs17}.
 
     In this project I try to use this mapping to increase the accuracy that can
     be achieved by models using the bagging ensemble. It is expected that it will
@@ -92,12 +97,15 @@
     scores.
 
     Deep Learning has proven to give very good results when you feed the network
-    with huge ammounts of data. It has been used to master some difficult games
-    and for image processing, among others.
+    with huge amounts of data. It has been used to master some difficult games\cite{alphago16}
+    and for image processing\cite{jiwan14}, among others.
 
-    Support Vector Machine are also very used with the kernel trick ......
 
-    But what is really carring Machine Learning to another level is the posibility
+    Support Vector Machines are also showing very good results using the
+    kernel trick\cite{rahimi07}.
+    % Support Vector Machine are also very used with the kernel trick ......
+
+    But what is really carrying Machine Learning to another level is the possibility
     of building computation mega-clusters to train models in a way that some time
     ago would have required many years of training.
 
@@ -158,7 +166,6 @@
     % tiene que hacer, por lo tanto es más barato
 
 % \section{Context}
-% % TODO mucho más corto
 %
 % Machine Learning is a science which studies how algorithms and mathematical
 % models which computer systems use can learn to give
@@ -203,15 +210,15 @@
 % way to reduce them is to use an ensemble of estimators. Bagging is one example
 % of ensemble method which tries to reduce the variance of an estimator.
 %
-% It is well suited for very inestable methods. This is, methods which produce
+% It is well suited for very unstable methods. This is, methods which produce
 % very different models given slightly different datasets. In bagging, you train
 % many instances of the same model encouraging them to have very little
 % correlation, and then make all of them predict on the test data. The answer that
 % has the majority of the votes is the chosen one.
 %
 % However, it is important for the models in the ensemble to disagree with the
-% answers, just as a comittee of experts needs to have different opinions to unleash
-% all it power. If all of them say the same, there is no need for a comittee.
+% answers, just as a committee of experts needs to have different opinions to unleash
+% all it power. If all of them say the same, there is no need for a committee.
 %
 % On the other hand, it's quite common in Machine Learning to perform a mapping
 % of the original data to a different feature space, in order to ease the work
@@ -222,7 +229,7 @@
 % There exists a special mapping called Random Fourier Features which is able to
 % approximate some kernel functions to a randomized feature space. It has shown
 % to be useful in Support Vector Machines by replacing the kernel function and
-% reducing the ammount of computation needed to do the trick, but it is not
+% reducing the amount of computation needed to do the trick, but it is not
 % restricted to this usage.
 %
 % In this project I explore the opportunities that this mapping brings to reduce
@@ -233,7 +240,7 @@
 % in order to be able to generalize. That is the reason why bootstrap is used to
 % resample the dataset to each of the estimators, and that's also the reason
 % why it is usually applied to decision trees (generating the Random Forest
-% algorithm): the unstability of this method makes it easier for each of the trees
+% algorithm): the instability of this method makes it easier for each of the trees
 % to have low correlation.
 %
 % Random Fourier Features allows us to generate various different random
@@ -361,10 +368,10 @@
 %
 % Pero todas las formas pueden trabajar juntas para resolver los problemas.
 
-\section{Planification}
-    \subsection{Original Planification}
+\section{Planning}
+    \subsection{Original Planning}
 
-    In the original planification of this project the scope was
+    In the original planning of this project the scope was
     expected to be limited to the study of Random Fourier Features with the
     Random Forest algorithm. After checking that accuracy could not be increased
     to this model, it was changed to cover also other models, such as Logistic
@@ -385,13 +392,13 @@
     %     \item La fecha para la que pensaba entregar
     % \end{itemize}
 
-    \subsection{Problems encountered with original planification}
-    I encountered many problems with the original planification, both in the
+    \subsection{Problems encountered with original planning}
+    I encountered many problems with the original planning, both in the
     setting and in the execution. The problems were:
     \begin{itemize}
-        \item \textbf{Very few knowledge of the study field}: in the begining of the project I didn't have a clear image of how the whole project
+        \item \textbf{Very few knowledge of the study field}: in the beginning of the project I didn't have a clear image of how the whole project
         would be. I lacked much of the knowledge that I would need in the
-        project, and was not able to write a realistic planification.
+        project, and was not able to write a realistic planning.
         \item \textbf{Naive assumption of success}: I expected to find good
         results on the first experiments I performed and didn't have a plan for
         when they failed.
@@ -399,15 +406,15 @@
         \item \textbf{Meetings with the project director}: I didn't have a good
         planning on when to meet the director of the project, and time passed
         without advancing on the work.
-        \item \textbf{Comunication problems}: for some time it was not possible
-        to meet the director of the project physically, and the comunication
-        was too slow.
+        \item \textbf{Communication problems}: for some time it was not possible
+        to meet the director of the project physically, due to a sick leave of
+        3 months. For this reason the communication was too slow.
         \item \textbf{Lack of initiative}: during the whole project I've been
         blindly following the path proposed by the director, not knowing where
         we were going. Thus, I needed constant feedback and was not able to
         advance without his advices.
-        \item \textbf{Lack or rogour in following the planification}:
-        the planification was not checked during the project.
+        \item \textbf{Lack or rigour in following the planning}:
+        the planning was not checked during the project.
     \end{itemize}
     % \begin{itemize}
     %     \item No me ceñí a lo que tenía previsto, y no llegué a tiempo
@@ -419,10 +426,11 @@
     %     \item El profesor estuvo enfermo
     %     \item No estuve a tiempo para entregarlo el cuatrimestre pasado
     % \end{itemize}
-    \subsection{Proposed new planification}
-    La fecha de entrega
+    \subsection{Proposed new planning}
+    % TODO la fecha de entrega
+    % La fecha de entrega
 
-    As the contents of the project have changed from the original planification,
+    As the contents of the project have changed from the original planning,
     It is needed to define a new set of tasks to finish the work. The ones which
     still need to be done are:
 
@@ -482,11 +490,11 @@ Unexpected extras& 20\\ \hline
 
 
 
-% \section{Planification}
-% The original planification of the project was to test the ideas explained in
+% \section{Planning}
+% The original planning of the project was to test the ideas explained in
 % the Context section just with Random Forest. It was expected that they would
 % allow to decrease the error rate of this algorithm, but this haven't been
-% succesful.
+% successful.
 %
 % After running many experiments, I have come to the conlussion that Random Forest
 % in particular is not able to benefit from using Random Fourier Features. Although
@@ -556,22 +564,22 @@ Unexpected extras& 20\\ \hline
     The original proposed methodology was to define a set of tasks which should
     be done by the end of the project and a correct arrangement of them to
     assure all of them can be done.
-    \subsection{Problems encountered with original Methodology}
+    \subsection{Problems encountered with original methodology}
     The problems encountered with the original methodology are similar to the
-    ones in the planification.
+    ones in the planning.
 
-    For the one hand, by the time I defined the set of task I didn't have a
+    For the one hand, by the time I defined the set of tasks I didn't have a
     clear idea of how the project would go. I lacked a lot of knowledge about
-    the study case and planned the task assuming that I would obtain a results
+    the study case and planned the tasks assuming that I would obtain some results
     which I never got. Therefore, most of the tasks defined where useless and
-    other other ones should have been there.
+    other ones should have been there.
 
     By the other hand, there was not a strict monitoring of the tasks that were
     done  and the ones that where missing.
-    \subsection{New methodoogy}
+    \subsection{New methodology}
 
     I will continue to use the same methodology, but having fixed the problems
-    that I had.
+    I had.
 
     Now I have a clear understanding of the ins and outs of the project, so the
     new planning is expected to meet the requirements. Moreover, I do
@@ -579,11 +587,11 @@ Unexpected extras& 20\\ \hline
 
 
 % \section{Methodology}
-% From the begining of the project I've been using the Waterfall Model, since there
+% From the beginning of the project I've been using the Waterfall Model, since there
 % is a logical and simple order in which tasks must be done, and it is very
 % flexible.
 %
-% Although the planification of the project has changed very much, the metholology
+% Although the planning of the project has changed very much, the methodology
 % I use is pretty much the same, since the conditions haven't changed.
 %
 % The only substantial change has been that now there is a commitment of meeting
@@ -613,11 +621,23 @@ Unexpected extras& 20\\ \hline
 % No tengo muy claro qué es lo que tengo que hacer aquí. Se supone que con el
 % Trabajo tengo que tengo que mostrar que he integrado muchas de las disciplinas
 % que me han enseñado en la carrera, que no estoy usando solo una de ellas.
-% TODO pensar qué disciplinas sería bueno que integrara
-
 \section{Alternatives Analysis}
     \subsection{Language for development}
-        \paragraph{Python}
+    Although any programming language could potentially be used for Machine
+    Learning, there are some characteristics that make them more suitable for
+    it.
+
+    As there is a lot of trial and error, it is very comfortable if you use an
+    interpreted language, which most of the times can be run in interactive
+    mode.
+
+    Besides, it is very helpful if there is a big community which is already
+    using that language for Machine Learning, since a lot of code will already
+    be written and there will be fewer bugs.
+
+    The two main options with this characteristics are Python\cite{python} and R\cite{r}, and both
+    have pros and cons:
+        % \paragraph{Python}
         \begin{table}[H]
         \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
         \toprule
@@ -625,7 +645,7 @@ Unexpected extras& 20\\ \hline
         &
         \hfil\bfseries Cons
         \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
-        %% PROS, seperated by empty line or \par
+        %% PROS, separated by empty line or \par
         Very fast\par
         Easy to program with it\par
         Very big community \par
@@ -633,10 +653,11 @@ Unexpected extras& 20\\ \hline
         Open source \par
         General purpose \par
         &
-        %% CONS, seperated by empty line or \par
+        %% CONS, separated by empty line or \par
         Machine Learning algorithms could be more robust\par
         Doesn't have a graphical interface by default\par
-        Modular architecture\par
+        Need to import many modules for simple tasks\par
+        % Modular architecture\par
         Lack of support for a native categorical variable\par
         Not known by the director of the project\par
         \\\bottomrule
@@ -660,7 +681,7 @@ Unexpected extras& 20\\ \hline
 %     \item Lack of support for a native categorical variable
 %     \item Not known by director of project
 % \end{itemize}
-        \paragraph{R}
+        % \paragraph{R}
         \begin{table}[H]
         \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
         \toprule
@@ -668,19 +689,21 @@ Unexpected extras& 20\\ \hline
         &
         \hfil\bfseries Cons
         \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
-        %% PROS, seperated by empty line or \par
+        %% PROS, separated by empty line or \par
         Easy to learn\par
         Well integrated with graphical interface\par
         Very robust and well tested libraries\par
         Open Source\par
         Well known by the director of the project\par
         &
-        %% CONS, seperated by empty line or \par
-        Not intuitive for a programmer\par
+        %% CONS, separated by empty line or \par
+        Not intuitive for a programmer coming from another language\par
         Very slow\par
         Very ugly graphs\par
-        The majority of the community is from statistics\par
-        Many ways to do the same thing (different modules)\par
+        The majority of the community comes from statistics\par
+        Many different modules to do the same thing\par
+        There isn't a standardized interface for calling functions\par
+        % Many ways to do the same thing (different modules)\par
         It is very biased towards statistics\par
         Hard to use outside of RStudio\par
         \\\bottomrule
@@ -705,24 +728,38 @@ Unexpected extras& 20\\ \hline
 %     \item Purpose biased towards statistics
 %     \item Hard to use outside RStudio
 % \end{itemize}
-        \subsubsection{Chosen Option}
-        Python
-        \subsubsection{Reasons to chose that option}
+    I have chosen Python as the main development language. The main reason is
+    that it is a language I already know well and that it is much faster than
+    R.
+
+    The only drawback is that the Machine Learning module for Python still
+    has some issues with the code.
+        % \subsubsection{Chosen Option}
+        % Python
+        % \subsubsection{Reasons to chose that option}
     \subsection{Running environment}
-    \paragraph{Text editor and console}
-    \begin{table}[h]
+
+    This is not a very important decision, but it may contribute to make the
+    programming process faster and more comfortable.
+
+    The options range from very simple and flexible to some more sophisticated
+    ones. The ones I considered where: \textbf{text editor and console, Jupyter
+    Notebook} and \textbf{Atom's Hydrogen package}.
+
+    % \paragraph{Text editor and console}
+    \begin{table}[H]
     \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
     \toprule
     \hfil\bfseries Pros
     &
     \hfil\bfseries Cons
     \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
-    %% PROS, seperated by empty line or \par
+    %% PROS, separated by empty line or \par
     Very simple\par
     Can use whatever text editor I want\par
     Very scalable\par
     &
-    %% CONS, seperated by empty line or \par
+    %% CONS, separated by empty line or \par
     Not very interactive\par
     Graphics integration not enabled by default\par
     \\\bottomrule
@@ -732,7 +769,7 @@ Unexpected extras& 20\\ \hline
 % Pros:
 % \begin{itemize}
 %     \item Simplicity
-%     \item Can chose whatever text editor I'm confortable with
+%     \item Can chose whatever text editor I'm comfortable with
 %     \item Very Scalable
 % \end{itemize}
 % Cons:
@@ -740,7 +777,7 @@ Unexpected extras& 20\\ \hline
 %     \item To have it ordered, it is hard
 %     \item Have to hand-make the graphics integration
 % \end{itemize}
-    \paragraph{Jupyter Notebook}
+    % \paragraph{Jupyter Notebook}
     \begin{table}[H]
     \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
     \toprule
@@ -748,18 +785,19 @@ Unexpected extras& 20\\ \hline
     &
     \hfil\bfseries Cons
     \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
-    %% PROS, seperated by empty line or \par
+    %% PROS, separated by empty line or \par
     Very easy to integrate code, graphs and documentation\par
     Easy to show results to the director\par
     Open Source\par
-    Extensions and addons to make a GUI\par
+    Very interactive\par
+    Extensions and add-ons to make a GUI\par
     Very agnostic of the code\par
     &
-    %% CONS, seperated by empty line or \par
+    %% CONS, separated by empty line or \par
     A little bit buggy\par
-    The interface for writing code is not confortable\par
-    Very interactive\par
-    Not scalleble for large projects\par
+    The interface for writing code is not comfortable\par
+    % Very interactive\par
+    Not scalable for large projects\par
     \\\bottomrule
     \end{tabularx}
     \caption{Pros and cons of Jupyter Notebook}
@@ -775,11 +813,11 @@ Unexpected extras& 20\\ \hline
 % Cons:
 % \begin{itemize}
 %     \item A little bit buggy
-%     \item Writing interface is not confortable
+%     \item Writing interface is not comfortable
 %     \item Allows unordered programming, giving place to buggy code
-%     \item Not scallable to large projects
+%     \item Not scalable to large projects
 % \end{itemize}
-    \paragraph{Atom's Hydrogen}
+    % \paragraph{Atom's Hydrogen}
     \begin{table}[H]
     \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
     \toprule
@@ -787,41 +825,46 @@ Unexpected extras& 20\\ \hline
     &
     \hfil\bfseries Cons
     \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
-    %% PROS, seperated by empty line or \par
-    It's nice\par
-    It's very nice\par
+    %% PROS, separated by empty line or \par
+    Integrated with my favourite text editor\par
+    Nice graphs and programming experience\par
     &
-    %% CONS, seperated by empty line or \par
-    It's ugly\par
-    It's really ugly\par
+    %% CONS, separated by empty line or \par
+    Not easy to export the results to another format\par
+    Makes programming bug-prone\par
     \\\bottomrule
     \end{tabularx}
-    \caption{Pros and cons of ...}
+    \caption{Pros and cons of Atom's Hydrogen}
     \end{table}
-    \paragraph{Python IDE}
-    \begin{table}
-    \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
-    \toprule
-    \hfil\bfseries Pros
-    &
-    \hfil\bfseries Cons
-    \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
-    %% PROS, seperated by empty line or \par
-    It's nice\par
-    It's very nice\par
-    &
-    %% CONS, seperated by empty line or \par
-    It's ugly\par
-    It's really ugly\par
-    \\\bottomrule
-    \end{tabularx}
-    \caption{Pros and cons of ...}
-    \end{table}
+    % \paragraph{Python IDE}
+    % \begin{table}
+    % \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
+    % \toprule
+    % \hfil\bfseries Pros
+    % &
+    % \hfil\bfseries Cons
+    % \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
+    % %% PROS, seperated by empty line or \par
+    % It's nice\par
+    % It's very nice\par
+    % &
+    % %% CONS, seperated by empty line or \par
+    % It's ugly\par
+    % It's really ugly\par
+    % \\\bottomrule
+    % \end{tabularx}
+    % \caption{Pros and cons of ...}
+    % \end{table}
 
+    I finally chose Jupyter Notebook because of the good programming experience
+    I have with it and the easiness of seeing and showing the obtained results.
 
-        \subsubsection{Chosen Option}
-        Jupyter
-        \subsubsection{Reasons to chose that option}
+    Concerning the problems with large projects, I have solved it by using a
+    module architecture and writing the modules in separate files, with a
+    normal text editor, and importing them to Jupyter
+        % \subsubsection{Chosen Option}
+        % Jupyter
+        % \subsubsection{Reasons to chose that option}
 %     \subsection{Types of problems to focus on}
 %     \paragraph{Classification}
 %     \begin{table}
@@ -837,7 +880,7 @@ Unexpected extras& 20\\ \hline
 %     use the same datasets and compare with their result\par
 %     &
 %     %% CONS, seperated by empty line or \par
-%     Not standarized the way to vote\par
+%     Not standardized the way to vote\par
 %     \\\bottomrule
 %     \end{tabularx}
 %     \caption{Pros and cons of Classification}
@@ -883,206 +926,232 @@ Unexpected extras& 20\\ \hline
         % Classification
         % \subsubsection{Reasons to chose that option}
     \subsection{Machine Learning Algorithms}
-        \paragraph{Linear Regression}
-        \begin{table}
-        \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
-        \toprule
-        \hfil\bfseries Pros
-        &
-        \hfil\bfseries Cons
-        \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
-        %% PROS, seperated by empty line or \par
-        Very simple\par
-        &
-        %% CONS, seperated by empty line or \par
-        Can't solve non-linear problems\par
-        Designed for regresion\par
-        Requires many hyperparameters\par
-        \\\bottomrule
-        \end{tabularx}
-        \caption{Pros and cons of ...}
-        \end{table}
-% Pros:
-% \begin{itemize}
-%     \item Very simple
-% \end{itemize}
-% Cons:
-% \begin{itemize}
-%     \item Can't solve non-linear problems
-%     \item Designed for regression
-%     \item Requires many hyper-parameters
-% \end{itemize}
-        \paragraph{Logistic Regression}
-        \begin{table}
-        \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
-        \toprule
-        \hfil\bfseries Pros
-        &
-        \hfil\bfseries Cons
-        \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
-        %% PROS, seperated by empty line or \par
-        Very stable\par
-        Designed for classification\par
-        Capable of non-linear problems\par
-        No need for hyper-parameters\par
-        &
-        %% CONS, seperated by empty line or \par
-        Also, its stability\par
-        \\\bottomrule
-        \end{tabularx}
-        \caption{Pros and cons of ...}
-        \end{table}
-% Pros:
-% \begin{itemize}
-%     \item Very Stable
-%     \item Designed for classification
-%     \item Capable of non-linear problems
-%     \item No hyper-parameters
-% \end{itemize}
-% Cons:
-% \begin{itemize}
-%     \item Also, its stability
-% \end{itemize}
-        \paragraph{Naive Bayes}
-        \begin{table}
-        \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
-        \toprule
-        \hfil\bfseries Pros
-        &
-        \hfil\bfseries Cons
-        \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
-        %% PROS, seperated by empty line or \par
-        Very simple and fast\par
-        Designed for classification\par
-        &
-        %% CONS, seperated by empty line or \par
-        Naive assumption\par
-        \\\bottomrule
-        \end{tabularx}
-        \caption{Pros and cons of ...}
-        \end{table}
-% Pros:
-% \begin{itemize}
-%     \item Very Simple and fast
-%     \item Designed for classification
-% \end{itemize}
-% Cons:
-% \begin{itemize}
-%     \item Naive Assumption
-% \end{itemize}
-        \paragraph{KNN}
-        \begin{table}
-        \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
-        \toprule
-        \hfil\bfseries Pros
-        &
-        \hfil\bfseries Cons
-        \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
-        %% PROS, seperated by empty line or \par
-        It's nice\par
-        It's very nice\par
-        &
-        %% CONS, seperated by empty line or \par
-        Need to chose the type of distance to use\par
-        Need to chose the number of neighbours\par
-        \\\bottomrule
-        \end{tabularx}
-        \caption{Pros and cons of KNN}
-        \end{table}
-% Pros:
-% \begin{itemize}
-%     \item
-% \end{itemize}
-% Cons:
-% \begin{itemize}
-%     \item ¿What distance to chose?
-%     \item Have to chose number of neighbour
-% \end{itemize}
-        \paragraph{SVM}
-        \begin{table}
-        \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
-        \toprule
-        \hfil\bfseries Pros
-        &
-        \hfil\bfseries Cons
-        \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
-        %% PROS, seperated by empty line or \par
-        It uses kernels, just like RFF\par
-        Suitable for classification
-        &
-        %% CONS, seperated by empty line or \par
-        Normal algorithm just discriminates on two classes\par
-        Training is so hard
-        \\\bottomrule
-        \end{tabularx}
-        \caption{Pros and cons of SVM}
-        \end{table}
-% Pros:
-% \begin{itemize}
-%     \item Uses kernels, just like RFF
-%     \item Suitable for classification
-% \end{itemize}
-% Cons:
-% \begin{itemize}
-%     \item Normal algorithm just separes two classes, it is needed one vs rest
-%     \item Training is so hard
-% \end{itemize}
-        \paragraph{Decision Tree}
-        \begin{table}
-        \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
-        \toprule
-        \hfil\bfseries Pros
-        &
-        \hfil\bfseries Cons
-        \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
-        %% PROS, seperated by empty line or \par
-        Very unstable\par
-        Suitable to use bagging\par
-        &
-        %% CONS, seperated by empty line or \par
-        Needs a lot of hyperparameters\par
-        It is not well implemented in scikit-learn\par
-        \\\bottomrule
-        \end{tabularx}
-        \caption{Pros and cons of Decision Tree}
-        \end{table}
-% Pros:
-% \begin{itemize}
-%     \item Very Instable
-%     \item Suitable to use with bagging
-% \end{itemize}
-% Cons:
-% \begin{itemize}
-%     \item So many hyper-parameters
-%     \item Not well implemented in scikit-learn
-% \end{itemize}
+    There is a big range of options to test with the ideas of this project.
+    However, it is not possible to test all of them, so I need to get a subset.
 
-        \subsubsection{Chosen Option}
-        Decision Tree, Logistic Regression and Linear SVM.
-        \subsubsection{Reasons to chose that option}
+    The considered algorithms were: \textbf{Logistic Regression, Naive Bayes,
+    K-Nearest Neighbours, Support Vector Machines, Decision Tree}.
+
+    The final decision had in mind the needed number of hyper-parameters, the
+    training speed and a very opinionated thinking of which of them would show
+    interesting results.
+
+    The ones I chose were \textbf{Decision Tree, Logistic Regression} and
+    \textbf{Support Vector Machine with a Linear Kernel}
+%         \paragraph{Linear Regression}
+%         \begin{table}[H]
+%         \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
+%         \toprule
+%         \hfil\bfseries Pros
+%         &
+%         \hfil\bfseries Cons
+%         \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
+%         %% PROS, seperated by empty line or \par
+%         Very simple\par
+%         &
+%         %% CONS, seperated by empty line or \par
+%         Can't solve non-linear problems\par
+%         Designed for regresion\par
+%         Requires many hyperparameters\par
+%         \\\bottomrule
+%         \end{tabularx}
+%         \caption{Pros and cons of ...}
+%         \end{table}
+% % Pros:
+% % \begin{itemize}
+% %     \item Very simple
+% % \end{itemize}
+% % Cons:
+% % \begin{itemize}
+% %     \item Can't solve non-linear problems
+% %     \item Designed for regression
+% %     \item Requires many hyper-parameters
+% % \end{itemize}
+%         \paragraph{Logistic Regression}
+%         \begin{table}[H]
+%         \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
+%         \toprule
+%         \hfil\bfseries Pros
+%         &
+%         \hfil\bfseries Cons
+%         \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
+%         %% PROS, seperated by empty line or \par
+%         Very stable\par
+%         Designed for classification\par
+%         Capable of non-linear problems\par
+%         No need for hyper-parameters\par
+%         &
+%         %% CONS, seperated by empty line or \par
+%         Also, its stability\par
+%         \\\bottomrule
+%         \end{tabularx}
+%         \caption{Pros and cons of ...}
+%         \end{table}
+% % Pros:
+% % \begin{itemize}
+% %     \item Very Stable
+% %     \item Designed for classification
+% %     \item Capable of non-linear problems
+% %     \item No hyper-parameters
+% % \end{itemize}
+% % Cons:
+% % \begin{itemize}
+% %     \item Also, its stability
+% % \end{itemize}
+%         \paragraph{Naive Bayes}
+%         \begin{table}[H]
+%         \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
+%         \toprule
+%         \hfil\bfseries Pros
+%         &
+%         \hfil\bfseries Cons
+%         \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
+%         %% PROS, seperated by empty line or \par
+%         Very simple and fast\par
+%         Designed for classification\par
+%         &
+%         %% CONS, seperated by empty line or \par
+%         Naive assumption\par
+%         \\\bottomrule
+%         \end{tabularx}
+%         \caption{Pros and cons of Naive Bayes}
+%         \end{table}
+% % Pros:
+% % \begin{itemize}
+% %     \item Very Simple and fast
+% %     \item Designed for classification
+% % \end{itemize}
+% % Cons:
+% % \begin{itemize}
+% %     \item Naive Assumption
+% % \end{itemize}
+%         \paragraph{KNN}
+%         \begin{table}[H]
+%         \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
+%         \toprule
+%         \hfil\bfseries Pros
+%         &
+%         \hfil\bfseries Cons
+%         \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
+%         %% PROS, seperated by empty line or \par
+%         It's nice\par
+%         It's very nice\par
+%         &
+%         %% CONS, seperated by empty line or \par
+%         Need to chose the type of distance to use\par
+%         Need to chose the number of neighbours\par
+%         \\\bottomrule
+%         \end{tabularx}
+%         \caption{Pros and cons of KNN}
+%         \end{table}
+% % Pros:
+% % \begin{itemize}
+% %     \item
+% % \end{itemize}
+% % Cons:
+% % \begin{itemize}
+% %     \item ¿What distance to chose?
+% %     \item Have to chose number of neighbour
+% % \end{itemize}
+%         \paragraph{SVM}
+%         \begin{table}[H]
+%         \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
+%         \toprule
+%         \hfil\bfseries Pros
+%         &
+%         \hfil\bfseries Cons
+%         \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
+%         %% PROS, seperated by empty line or \par
+%         It uses kernels, just like RFF\par
+%         Suitable for classification
+%         &
+%         %% CONS, seperated by empty line or \par
+%         Normal algorithm just discriminates on two classes\par
+%         Training is so hard
+%         \\\bottomrule
+%         \end{tabularx}
+%         \caption{Pros and cons of SVM}
+%         \end{table}
+% % Pros:
+% % \begin{itemize}
+% %     \item Uses kernels, just like RFF
+% %     \item Suitable for classification
+% % \end{itemize}
+% % Cons:
+% % \begin{itemize}
+% %     \item Normal algorithm just separes two classes, it is needed one vs rest
+% %     \item Training is so hard
+% % \end{itemize}
+%         \paragraph{Decision Tree}
+%         \begin{table}[H]
+%         \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
+%         \toprule
+%         \hfil\bfseries Pros
+%         &
+%         \hfil\bfseries Cons
+%         \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
+%         %% PROS, seperated by empty line or \par
+%         Very unstable\par
+%         Suitable to use bagging\par
+%         &
+%         %% CONS, seperated by empty line or \par
+%         Needs a lot of hyperparameters\par
+%         It is not well implemented in scikit-learn\par
+%         \\\bottomrule
+%         \end{tabularx}
+%         \caption{Pros and cons of Decision Tree}
+%         \end{table}
+% % Pros:
+% % \begin{itemize}
+% %     \item Very Instable
+% %     \item Suitable to use with bagging
+% % \end{itemize}
+% % Cons:
+% % \begin{itemize}
+% %     \item So many hyper-parameters
+% %     \item Not well implemented in scikit-learn
+% % \end{itemize}
+%
+%         \subsubsection{Chosen Option}
+%         Decision Tree, Logistic Regression and Linear SVM.
+%         \subsubsection{Reasons to chose that option}
 
 
 \section{Knowledge Integration}
-\begin{table}
+
+This project is totally biased towards Machine Learning, so it has required
+knowledge from many subjects related to it. It addition, I have required
+programming skills to write and assemble all the code. The following subjects
+have helped me to develop the project.
+\begin{table}[H]
 \begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
 \toprule
-\hfil\bfseries APA
+\hfil\bfseries APA - Machine Learning
 \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
-All the Machine Learning theory\par
+Almost all the knowledge for this project comes from this subject\par
+% All the Machine Learning theory\par
 \\\bottomrule
-\hfil\bfseries Programming
+\hfil\bfseries PRO1 and PRO2 - Programming
 \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
-Skills to develop a very large program\par
+For obvious reasons: programming skills were required for this project\par
+% Skills to develop a very large program\par
 \\\bottomrule
-\hfil\bfseries Data Mining
+\hfil\bfseries IES - Introduction to Software Engineering
+\\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
+When a program becomes very large, it is needed some kind of architecture and
+program desing to avoid bugs and have clean code\par
+\\\bottomrule
+\hfil\bfseries MD - Data Mining
 \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
 Theory on Decision Trees and Random Forest\par
 Theory on PCA\par
-Development tools like Jupyter Notebook
+Development tools like Jupyter Notebook\par
 \\\bottomrule
-\hfil\bfseries Probability and Statistics
+\hfil\bfseries PE - Probability and Statistics
 \\\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
-All the probabilistic concepts\par
+The foundations of Machine Learning are based on this science, and it uses a lot
+of methods from it\par
+% All the probabilistic concepts\par
 \\\bottomrule
 \end{tabularx}
 \end{table}
@@ -1114,28 +1183,28 @@ All the probabilistic concepts\par
 
 
 
-    Las cosas que he ido haciendo, a medida que las he hecho, las entendía.
-    No he hecho nada sin saber por qué lo hago
-
-    He propuesto algunas cosillas
-    Pero en general, he tirado del carro
-
-    Cuando he tenido algún error o bug en el código, he sabido solucionarlo
-
-    He mantenido el contacto con el director a menudo
+    % Las cosas que he ido haciendo, a medida que las he hecho, las entendía.
+    % No he hecho nada sin saber por qué lo hago
+    %
+    % He propuesto algunas cosillas
+    % Pero en general, he tirado del carro
+    %
+    % Cuando he tenido algún error o bug en el código, he sabido solucionarlo
+    %
+    % He mantenido el contacto con el director a menudo
 
 
     \subsection{Meetings with director}
 
-    I started to do this project without fixing any periodical meeting with
+    I started to do this project without setting any periodical meeting with
     the director of the project. As a result of this, it was difficult for me to
-    force myself to work time.
+    force myself to work on time.
 
     After realizing of that, I changed strategy and tried hard to meet him each
     week.
 
     I distracted again for a couple of times and let the time pass without
-    working on time.
+    working as expected.
     % Al princinpio del trabajo pasaba bastante, y no quedaba
     %
     % Debería saber que si no me fijo un día para quedar no haré nada, y al
@@ -1157,49 +1226,69 @@ All the probabilistic concepts\par
     % Lo que había que hacer de una semana para otra lo he ido haciendo bien.
 
     \subsection{Rigour in scientific procedures}
-    In general,
-    Sí, ha habido rigor en el trabajo que he hecho. Sólo se me ocurre una cosa
-    que quizá no ha ido del todo bien: muy a menudo he usado valores por
-    defecto sin preguntarme si esos serían los adecuados.
-    Quizá debería haber hecho más cross-validation y no tanto prueba ciega.
+    In general, I think I have been very rigorous in the methods and procedures
+    that I have used during the project. I have been careful to read all the
+    documentation available to check that what I was doing had the expected
+    behaviour, and when that was not possible, I checked directly the code to
+    understand each operation.
 
-    Pero por lo demás, creo que todo ha sido correcto. He intentado no reinventar
-    la rueda y usar código ya escrito para no cometer ningún error absurdo.
+    I have also read many scientific books in order to confirm and increase the
+    knowledge that I had over a field, and I have been careful to consult each
+    step with the director when I was not sure.
 
-    He leido con detenimiento toda la documentación para asegurarme que hace lo
-    que creo que hace
+    The code that I write is very clean, and I have tried not to use any
+    personal recipe, but the standard and well known methods.
 
-    Cuando he tenido alguna duda sobre el funcionamiento de una función escrita
-    por otro, he evaluado yo mismo el código hasta entender lo que hacía.
+    The only point I can think of where I may not have been rigorous is to
+    tend to use the default values of the functions I call in the code for
+    some hyper-parameters. It would have been more correct to perform some kind
+    of cross-validation.
 
-    No he usado recetas propias. Siempre he hecho lo que el profesor me ha
-    recomendado o lo que he visto recomendado en los libros científicos.
-
-    No he hecho chapuzas. Lo que he hecho, ha estado bien hecho.
-
-    Y creo que ya está. Eso es trabajar con rigor.
+    % Sí, ha habido rigor en el trabajo que he hecho. Sólo se me ocurre una cosa
+    % que quizá no ha ido del todo bien: muy a menudo he usado valores por
+    % defecto sin preguntarme si esos serían los adecuados.
+    % Quizá debería haber hecho más cross-validation y no tanto prueba ciega.
+    %
+    % Pero por lo demás, creo que todo ha sido correcto. He intentado no reinventar
+    % la rueda y usar código ya escrito para no cometer ningún error absurdo.
+    %
+    % He leido con detenimiento toda la documentación para asegurarme que hace lo
+    % que creo que hace
+    %
+    % Cuando he tenido alguna duda sobre el funcionamiento de una función escrita
+    % por otro, he evaluado yo mismo el código hasta entender lo que hacía.
+    %
+    % No he usado recetas propias. Siempre he hecho lo que el profesor me ha
+    % recomendado o lo que he visto recomendado en los libros científicos.
+    %
+    % No he hecho chapuzas. Lo que he hecho, ha estado bien hecho.
+    %
+    % Y creo que ya está. Eso es trabajar con rigor.
     % El profesor me ha tenido que hacer algunas indicaciones sobre cosas que
     % estaba haciendo mal
-    \subsection{Workflow}
+    % \subsection{Workflow}
 
 \section{Laws and regulations}
-    \subsection{My responsability}
+    \subsection{My responsibility}
     Software I have used:
     \begin{itemize}
-        \item \textbf{Python Programming Language}: very permisive licence
-        compatible with GPL
-        \item \textbf{Library Scikit-learn}: uses 3-Clause BSD Licence
-        \item \textbf{Jupyter Notebook}: uses 3-Clause BSD Licence
-        \item \textbf{Python modules}: Numpy, Pandas, Matplotlib, etc. Permisive
-        licences
+        \item \textbf{Python Programming Language}: very permissive license
+        compatible with GPL\cite{python_licence}
+        \item \textbf{Library Scikit-learn}: uses 3-Clause BSD License\cite{scikit_license}
+        \item \textbf{Jupyter Notebook}: uses 3-Clause BSD Licence\cite{jupyter_license}
+        \item \textbf{Python modules}: Numpy, Pandas, Matplotlib, etc. Permissive
+        licenses
     \end{itemize}
     As all the software I use is Open Source, there are very little restrictions
-    on its usage. The only important one is the name of a product for a modification
+    on its usage. The only important one is not to use the name of a product for a modification
     I make on their code. I won't.
-    \subsection{Others responsability}
+    \subsection{Others responsibility}
     All the code for this project is publicly available in a GitHub's repository.
-    I've licenced it with the MIT licence, which is Open Source, so I give
+    I've licensed it with the MIT license, which is Open Source, so I give
     permission to anybody to do pretty much anything they want.
+
+% \section{References}
+
 
 
 % \section{Laws and regulations}
@@ -1210,13 +1299,13 @@ All the probabilistic concepts\par
 % Everything I use is:
 %
 % \paragraph{Python programming language}
-% The whole code of the project is Python. It uses a very permisive licence
+% The whole code of the project is Python. It uses a very permissive license
 % compatible with GPL (General Public Licence)
 % \paragraph{Machine Learning Library Scikit-Learn}
-% I use a lot of code of this library. It uses the 3-Clause BSD Licence, which is
-% very permisive
+% I use a lot of code of this library. It uses the 3-Clause BSD License, which is
+% very permissive
 % \paragraph{Jupyter Notebook}
-% It is the interface I use  to run my code. It also uses the 3-Caluse BSD Licence.
+% It is the interface I use  to run my code. It also uses the 3-Clause BSD License.
 % \paragraph{Python Modules}
 % Such as Matplotlib, Numpy, Pandas, etc. All of them use a permisive licence.
 %
@@ -1256,7 +1345,62 @@ All the probabilistic concepts\par
 % En qué marco legal esta mi trabajo, o bien justificar que el proyecto no está
 % afectado por ninguna regulación.
 
+\begin{thebibliography}{20}
 
+% \bibitem{lamport94}
+%   Leslie Lamport,
+%   \textit{\LaTeX: a document preparation system},
+%   Addison Wesley, Massachusetts,
+%   2nd edition,
+%   1994.
+
+\bibitem{breiman94}
+Leo Breiman,
+\textit{Bagging Predictors},
+Department of Statistics, University of California at Berkeley
+1994.
+
+\bibitem{rahimi07}
+Ali Rahimi and Benjamin Recht,
+\textit{Random Features for Large-Scale Kernel Machines},
+Advances in Neural Information Processing Systems,
+2007.
+
+\bibitem{zhangs17}
+Shuai Zhang, Jianxin Li, Pengtao Xie, Yingchun Zhang, Minglai Shao, Haoyi Zhou, Mengyi Yan,
+\textit{Stacked Kernel Network},
+Beihang University, Carnegie Mellon University
+2017.
+
+\bibitem{alphago16}
+David Silver, Julian Schrittwieser, Karen Simonyan, Ioannis Antonoglou, Aja Huang, Arthur
+Guez, Thomas Hubert, Lucas Baker, Matthew Lai, Adrian Bolton, Yutian Chen, Timothy
+Lillicrap, Fan Hui, Laurent Sifre, George van den Driessche, Thore Graepel, Demis Hassabis.
+\textit{Mastering the Game of Go without Human Knowledge},
+DeepMind,
+2016.
+
+\bibitem{jiwan14}
+Ji Wan, Dayong Wang, Steven Chu Hong Hoi, Pengcheng Wu, Jianke Zhu, Yongdong Zhang, Jintao Li,
+\textit{Deep Learning for Content-Based Image Retrieval: A Comprehensive Study},
+2014.
+
+\bibitem{python}
+https://www.python.org
+
+\bibitem{r}
+https://www.r-project.org
+
+\bibitem{python_licence}
+https://docs.python.org/3/license.html
+
+\bibitem{scikit_license}
+https://github.com/scikit-learn/scikit-learn/blob/master/COPYING
+
+\bibitem{jupyter_license}
+https://github.com/jupyter/jupyter/blob/master/LICENSE
+
+\end{thebibliography}
 
 
 \end{document}
