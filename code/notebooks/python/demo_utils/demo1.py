@@ -1,6 +1,6 @@
 from demo_utils.generic_demo import Demo
 # import ipywidgets as widgets
-from demo_utils.general import SUPPORTED_DATASETS
+# from demo_utils.general import SUPPORTED_DATASETS
 from demo_utils.general import get_data
 # from demo_utils.learning import get_model_scores
 from demo_utils.learning import get_model
@@ -9,9 +9,11 @@ from demo_utils.learning import get_non_sampling_model_scores
 
 
 from ipywidgets import Button
-from ipywidgets import Dropdown
-from ipywidgets import RadioButtons
+# from ipywidgets import Dropdown
+# from ipywidgets import RadioButtons
 from ipywidgets import VBox
+
+# TODO cambiar nombre dataset_selector por dts_selector
 
 
 class Demo1(Demo):
@@ -24,12 +26,14 @@ class Demo1(Demo):
     def __init__(self):
             self.run_bt = Button(description='Demo1', button_style='info',
                                  tooltip=self.desc)
-            self.dataset_selector = Dropdown(options=SUPPORTED_DATASETS,
-                                             value=SUPPORTED_DATASETS[0],
-                                             description='Dataset:')
-            self.size_selector = RadioButtons(
-                options=[1000, 2000, 5000, 10000],
-                value=1000, description='Size')
+            # self.dataset_selector = Dropdown(options=SUPPORTED_DATASETS,
+            #                                  value=SUPPORTED_DATASETS[0],
+            #                                  description='Dataset:')
+            self.dataset_selector = self.get_default_dts_selector()
+            # self.size_selector = RadioButtons(
+            #     options=[1000, 2000, 5000, 10000],
+            #     value=1000, description='Size')
+            self.size_selector = self.get_default_size_selector()
             self.gui = VBox([self.size_selector, self.dataset_selector,
                              self.run_bt])
             super().__init__()

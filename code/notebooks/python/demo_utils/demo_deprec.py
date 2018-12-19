@@ -1,67 +1,46 @@
 from demo_utils.generic_demo import Demo
 # from demo_utils.general import SUPPORTED_DATASETS
-# from demo_utils.learning import get_model
-from demo_utils.learning import get_model2
+from demo_utils.learning import get_model
 from demo_utils.learning import get_non_sampling_model_scores
 from demo_utils.learning import get_sampling_model_scores
 from demo_utils.general import get_data
 
 import numpy as np
 from ipywidgets import Button
-# from ipywidgets import Dropdown
-# from ipywidgets import RadioButtons
-# from ipywidgets import IntRangeSlider
+from ipywidgets import Dropdown
+from ipywidgets import RadioButtons
+from ipywidgets import IntRangeSlider
 from ipywidgets import VBox
 from ipywidgets import HBox
 from ipywidgets import Label
 from ipywidgets import Layout
-# from ipywidgets import IntSlider
-# from ipywidgets import Checkbox
-
-# TODO una demo para ver cómo no sobreajustar DT es peor
-
-# TODO una demo para ver el orden adecuado para pca y sampler
-
-# TODO solucionar exportar que saque gráficas
-
-# TODO la información sobre una ejecución (run_specific) hay que perfilarla un
-# poco,
-
-# TODO si sustituyo demo0 por este, poner los todos
-
-# TODO poner un botón a cada modelo para quitar solamente ese
-
-# TODO que las leyendas se pongan fuera de la gráfica, abajo
-
-# TODO poner nombres a cada eje de las gráficas
-
-# TODO sustituir la demo0 por ésta
-
-# TODO quizá se pueden añadir más modelos
-
-# TODO poner quizá un acordeón con opciones avanzadas como la gamma y a C
+from ipywidgets import IntSlider
+from ipywidgets import Checkbox
 
 
-class Demo0(Demo):
+class Demo_deprec(Demo):
     desc = """# Una demo genérica"""
 
     def __init__(self):
-        self.run_bt = Button(description='Demo0', button_style='info')
+        self.run_bt = Button(description='Demo_deprec', button_style='info')
         self.mod_add_bt = Button(description='Add model',
                                  button_style='info')
         self.mod_remove_bt = Button(description='Remove model',
                                     button_style='warning')
+        # self.dts_selector = Dropdown(options=SUPPORTED_DATASETS,
+        #                              value=SUPPORTED_DATASETS[0],
+        #                              description='Dataset:')
         self.dts_selector = self.get_default_dts_selector()
-        self.dts_selector.description = 'Dataset:'
-        self.size_selector = self.get_default_size_selector()
-        self.features_selector = self.get_default_features_selector()
-        self.features_selector.layout = Layout(width='950px')
+        self.size_selector = RadioButtons(options=[1000, 2000, 5000, 10000],
+                                          value=1000, description='Size')
+        self.features_selector = IntRangeSlider(value=[30, 100], min=30,
+                                                max=2000, step=1, layout=Layout(width='950px'))
+
         self.model_name_column = VBox([Label(value='Model')])
         self.sampler_name_column = VBox([Label(value='Sampler')])
         self.box_type_column = VBox([Label(value='Box Type')])
         self.n_estim_column = VBox([Label(value='Number Estimators')])
         self.pca_column = VBox([Label(value='PCA?')])
-        self.pca_order_column = VBox([Label(value='PCA Order')])
 
         self.models_bar = HBox([
             self.model_name_column,
@@ -69,7 +48,6 @@ class Demo0(Demo):
             self.box_type_column,
             self.n_estim_column,
             self.pca_column,
-            self.pca_order_column,
         ], layout=Layout(border='3px solid black'))
 
         self.gui = VBox([
@@ -101,11 +79,9 @@ class Demo0(Demo):
         box_type = self.box_type_column.children[i].value
         n_estim = self.n_estim_column.children[i].value
         pca = self.pca_column.children[i].value
-        pca_first = self.pca_order_column.children[i].value
 
         if sampler_name == 'None':
             sampler_name = 'identity'
-        # TODO quizá habrá que cambiar los otros
         if box_type == 'None':
             box_type = 'none'
 
@@ -118,7 +94,6 @@ class Demo0(Demo):
             'box_type': box_type,
             'n_estim': n_estim,
             'pca': pca,
-            'pca_first': pca_first,
         }
         return ret_dict
 
@@ -142,7 +117,7 @@ class Demo0(Demo):
         }
         return ret_dict
 
-    def get_label(self, model_name, sampler_name, box_type, n_estim, pca, pca_first):
+    def get_label(self, model_name, sampler_name, box_type, n_estim, pca):
         '''
         Parameters
         ----------
@@ -154,9 +129,6 @@ class Demo0(Demo):
             One of ['black', 'grey', 'none']
         n_estim : int or None
         pca : bool
-            Weather to perform pca
-        pca_first : bool
-            Weather pca or model is first
         '''
         model_name += ' '
         if sampler_name == 'identity':
@@ -175,16 +147,11 @@ class Demo0(Demo):
             n_estim = str(n_estim) + ' estims. '
 
         if pca:
-            if pca_first:
-                pca = 'PCA (first)'
-            else:
-                pca = 'PCA (last)'
-            # pca = 'PCA '
+            pca = 'PCA '
         else:
             pca = ''
 
         ret_str = model_name + sampler_name + box_type + n_estim + pca
-        # ret_str += str(pca_first)
         return ret_str
 
     def run_demo(self, dts_name, dts_size, features_range, models):
@@ -223,16 +190,13 @@ class Demo0(Demo):
             box_type = m['box_type']
             n_estim = m['n_estim']
             pca = m['pca']
-            pca_first = m['pca_first']
             if box_type == 'none':
                 n_estim = None
-            # TODO llama a model2
-            clf = get_model2(model_name=model_name,
-                             sampler_name=sampler_name,
-                             pca_bool=pca,
-                             pca_first=pca_first,
-                             n_estim=n_estim,
-                             box_type=box_type)
+            clf = get_model(model_name=model_name,
+                            sampler_name=sampler_name,
+                            pca_bool=pca,
+                            n_estim=n_estim,
+                            box_type=box_type)
             n_splits_features = 30
             features = list(range(*features_range))
             if (features_range[1] - features_range[0]) > n_splits_features:
@@ -248,7 +212,7 @@ class Demo0(Demo):
                 train_score, test_score =\
                     get_non_sampling_model_scores(clf, dataset)
                 lab = self.get_label(model_name, sampler_name, box_type,
-                                     n_estim, pca, pca_first)
+                                     n_estim, pca)
                 train_score = {
                     'absi': features_range,
                     'ord': [train_score, train_score],
@@ -264,7 +228,7 @@ class Demo0(Demo):
                 train_score, test_score =\
                     get_sampling_model_scores(clf, dataset, features)
                 lab = self.get_label(model_name, sampler_name, box_type,
-                                     n_estim, pca, pca_first)
+                                     n_estim, pca)
                 train_score['label'] = lab
                 test_score['label'] = lab
 
@@ -274,32 +238,26 @@ class Demo0(Demo):
         return train_scores, test_scores
 
     def insert_model_bar(self, e=None):
-        # just for not repeating
-        DD_lay = Layout(width='90px', margin='8px 2px 8px 2px')
+        la = Layout(width='90px')
 
-        model_selector = self.get_default_model_selector()
-        model_selector.layout = DD_lay
-        sampler_selector = self.get_default_sampler_selector()
-        sampler_selector.layout = DD_lay
-        box_type_selector = self.get_default_box_type_selector()
-        box_type_selector.layout = DD_lay
-        n_estimators_selector = self.get_default_n_estimators_selector()
-        n_estimators_selector.layout = Layout(width='300px',
-                                              visibility='hidden',
-                                              margin='8px 2px 8px 2px')
-        # n_estimators_selector.disabled = True
-        pca_checkbox = self.get_default_pca_checkbox()
-        pca_checkbox.layout = Layout(width='50px', margin='8px 2px 8px 2px')
-        pca_order_selector = self.get_default_pca_order_selector()
-        pca_order_selector.layout = Layout(width='150px', visibility='hidden')
-        # pca_order_selector.disabled = True
+        model_selector = Dropdown(
+            options=['dt', 'logit', 'linear_svc'], value='dt', layout=la)
+        sampler_selector = Dropdown(
+            options=['None', 'rbf', 'nystroem'], value='None', layout=la)
+        box_type_selector = Dropdown(
+            options=['None', 'black', 'grey'], value='None', layout=la)
+        n_estimators_selector = IntSlider(
+            value=30, min=2, max=200,
+            step=1,
+            disabled=True,
+            layout=Layout(width='300px', visibility='hidden'))
+        pca_checkbox = Checkbox(value=False)
 
         self.model_name_column.children += (model_selector,)
         self.sampler_name_column.children += (sampler_selector,)
         self.box_type_column.children += (box_type_selector,)
         self.n_estim_column.children += (n_estimators_selector,)
         self.pca_column.children += (pca_checkbox, )
-        self.pca_order_column.children += (pca_order_selector, )
 
         def box_type_changed(*args):
             if box_type_selector.value == 'None':
@@ -311,16 +269,6 @@ class Demo0(Demo):
 
         box_type_selector.observe(box_type_changed, 'value')
         sampler_selector.observe(self.sampler_changed, 'value')
-
-        def pca_changed(*args):
-            if pca_checkbox.value:
-                pca_order_selector.disabled = False
-                pca_order_selector.layout.visibility = 'visible'
-            else:
-                pca_order_selector.disabled = True
-                pca_order_selector.layout.visibility = 'hidden'
-
-        pca_checkbox.observe(pca_changed, 'value')
 
     def sampler_changed(self, *args):
         '''
@@ -343,8 +291,7 @@ class Demo0(Demo):
 
     def remove_model_bar(self, e=None):
         if len(self.models_bar.children[0].children) > 2:
-            # TODO este hardcoding quizá se puede evitar
-            for i in range(6):
+            for i in range(5):
                 self.models_bar.children[i].children =\
                     self.models_bar.children[i].children[:-1]
             self.sampler_changed()

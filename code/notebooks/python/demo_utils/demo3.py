@@ -9,11 +9,13 @@ import numpy as np
 
 from ipywidgets import Button
 from ipywidgets import Dropdown
-from ipywidgets import IntRangeSlider
+# from ipywidgets import IntRangeSlider
 from ipywidgets import VBox
-from ipywidgets import IntSlider
-from ipywidgets import Checkbox
+# from ipywidgets import IntSlider
+# from ipywidgets import Checkbox
 # from ipywidgets import Layout
+
+# TODO poner widget para cambiar orden de PCA
 
 
 class Demo3(Demo):
@@ -26,23 +28,35 @@ class Demo3(Demo):
         self.n_ins = 1000
         self.run_bt = Button(description='Demo3', button_style='info')
 
-        self.dataset_selector = Dropdown(options=SUPPORTED_DATASETS,
-                                         value=SUPPORTED_DATASETS[0],
-                                         description='Dataset:')
-        self.model_selector = Dropdown(
-            options=['dt', 'logit', 'linear_svc'], value='dt',
-            description='Model')
+        # self.dataset_selector = Dropdown(options=SUPPORTED_DATASETS,
+        #                                  value=SUPPORTED_DATASETS[0],
+        #                                  description='Dataset:')
+        self.dataset_selector = self.get_default_dts_selector()
+        self.dataset_selector.description = 'Dataset:'
+        # self.model_selector = Dropdown(
+        #     options=['dt', 'logit', 'linear_svc'], value='dt',
+        #     description='Model')
+        self.model_selector = self.get_default_model_selector()
+        self.model_selector.description = 'Model'
         self.sampler_selector = Dropdown(
             options=['rbf', 'nystroem'], value='rbf', description='Sampler')
-        self.features_selector = IntRangeSlider(value=[30, 100], min=30,
-                                                max=400, step=10,
-                                                description='Features')
-        self.box_type_selector = Dropdown(options=['None', 'black', 'grey'],
-                                          value='None',
-                                          description='Bagging')
-        self.n_estimators_selector = IntSlider(value=30, min=2, max=200,
-                                               step=1, description='N. estim.')
-        self.pca_checkbox = Checkbox(value=False, description='Perform PCA?')
+        # self.features_selector = IntRangeSlider(value=[30, 100], min=30,
+        #                                         max=400, step=10,
+        #                                         description='Features')
+        self.features_selector = self.get_default_features_selector()
+        self.features_selector.description = 'Features'
+        # self.box_type_selector = Dropdown(options=['None', 'black', 'grey'],
+        #                                   value='None',
+        #                                   description='Bagging')
+        self.box_type_selector = self.get_default_box_type_selector()
+        self.box_type_selector.description = 'Bagging'
+        # self.n_estimators_selector = IntSlider(value=30, min=2, max=200,
+        #                                        step=1, description='N. estim.')
+        self.n_estimators_selector = self.get_default_n_estimators_selector()
+        self.n_estimators_selector.description = 'N. estim.'
+        # self.pca_checkbox = Checkbox(value=False, description='Perform PCA?')
+        self.pca_checkbox = self.get_default_pca_checkbox()
+        self.pca_checkbox.description = 'Perform PCA?'
         self.g = VBox([
             self.dataset_selector,
             self.model_selector,

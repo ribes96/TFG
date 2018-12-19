@@ -7,13 +7,13 @@ from demo_utils.learning import get_sampling_model_scores
 
 from ipywidgets import Button
 from ipywidgets import Dropdown
-from ipywidgets import RadioButtons
-from ipywidgets import IntRangeSlider
+# from ipywidgets import RadioButtons
+# from ipywidgets import IntRangeSlider
 from ipywidgets import VBox
 # from ipywidgets import HBox
 # from ipywidgets import Label
 # from ipywidgets import Layout
-from ipywidgets import IntSlider
+# from ipywidgets import IntSlider
 # from ipywidgets import Checkbox
 
 import numpy as np
@@ -25,6 +25,13 @@ import numpy as np
 
 # TODO que desaparezcan n_estim dependiendo de bagging
 
+# TODO que use la nueva versión de get_model, que puede especificar el orden
+# del pca
+
+# TODO hacer que si el bagging es None no se muestre la barra de n_estim
+
+# TODO bagging ha pasado a ser un mal nombre para el box_type
+
 class Demo5(Demo):
     desc = '''# Orden adecuado entre Sampling y PCA
 Para ver qué es mejor, primero hacer sampling y luego hacer PCA, o al revés
@@ -32,23 +39,35 @@ Para ver qué es mejor, primero hacer sampling y luego hacer PCA, o al revés
 
     def __init__(self):
         self.run_bt = Button(description='Demo5', button_style='info')
-        self.dts_selector = Dropdown(options=SUPPORTED_DATASETS,
-                                     value=SUPPORTED_DATASETS[0],
-                                     description='Dataset:')
-        self.size_selector = RadioButtons(options=[1000, 2000, 5000, 10000],
-                                          value=1000, description='Size')
-        self.model_selector = Dropdown(options=['dt', 'logit', 'linear_svc'],
-                                       value='dt', description='Model')
+        # self.dts_selector = Dropdown(options=SUPPORTED_DATASETS,
+        #                              value=SUPPORTED_DATASETS[0],
+        #                              description='Dataset:')
+        self.dts_selector = self.get_default_dts_selector()
+        self.dts_selector.description = 'Dataset:'
+        # self.size_selector = RadioButtons(options=[1000, 2000, 5000, 10000],
+        #                                   value=1000, description='Size')
+        self.size_selector = self.get_default_size_selector()
+        self.size_selector.description = 'Size'
+        # self.model_selector = Dropdown(options=['dt', 'logit', 'linear_svc'],
+        #                                value='dt', description='Model')
+        self.model_selector = self.get_default_model_selector()
+        self.model_selector.description = 'Model'
         self.sampler_selector = Dropdown(
             options=['rbf', 'nystroem'], value='rbf', description='Sampler')
-        self.features_selector = IntRangeSlider(value=[30, 100], min=30,
-                                                max=400, step=10,
-                                                description='Features')
-        self.box_type_selector = Dropdown(options=['None', 'black', 'grey'],
-                                          value='None',
-                                          description='Bagging')
-        self.n_estimators_selector = IntSlider(value=30, min=2, max=200,
-                                               step=1, description='N. estim.')
+        # self.features_selector = IntRangeSlider(value=[30, 100], min=30,
+        #                                         max=400, step=10,
+        #                                         description='Features')
+        self.features_selector = self.get_default_features_selector()
+        self.features_selector.description = 'Features'
+        # self.box_type_selector = Dropdown(options=['None', 'black', 'grey'],
+        #                                   value='None',
+        #                                   description='Bagging')
+        self.box_type_selector = self.get_default_box_type_selector()
+        self.box_type_selector.description = 'Bagging'
+        # self.n_estimators_selector = IntSlider(value=30, min=2, max=200,
+        #                                        step=1, description='N. estim.')
+        self.n_estimators_selector = self.get_default_n_estimators_selector()
+        self.n_estimators_selector.description = 'N. estim.'
         self.gui = VBox([
             self.dts_selector,
             self.model_selector,

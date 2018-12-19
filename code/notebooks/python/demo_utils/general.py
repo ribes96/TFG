@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+# TODO hay 4 funciones para sacar gráficas. quizá es demasiado
+
 SUPPORTED_DATASETS = [
     "segment",
     "covertype",
@@ -103,8 +105,14 @@ def get_sampling_score_graph_from_scores(train_scores, test_scores):
     for te, tr in zip(test_scores, train_scores):
         test_sp.plot(te['absi'], te['ord'], label=te['label'])
         train_sp.plot(tr['absi'], tr['ord'], label=tr['label'])
-    test_sp.legend()
-    train_sp.legend()
+    test_sp.legend(loc=(0, 1.01))
+    train_sp.legend(loc=(0, 1.01))
+
+    train_sp.set_xlabel('N. features')
+    test_sp.set_xlabel('N. features')
+    # train_sp.set_ylabel('Error')
+    test_sp.set_ylabel('Error')
+
     test_sp.grid(True)
     train_sp.grid(True)
     plt.close()
@@ -223,8 +231,18 @@ def get_sampling_error_graph_from_scores(train_scores, test_scores):
         train_error = [1 - i for i in tr['ord']]
         test_sp.plot(te['absi'], test_error, label=te['label'])
         train_sp.plot(tr['absi'], train_error, label=tr['label'])
-    test_sp.legend()
-    train_sp.legend()
+        # TODO hacer más alegante
+        if 'oob' in tr:
+            oob_error = [1 - i for i in tr['oob']]
+            train_sp.plot(tr['absi'], oob_error, '--', label=tr['label'] + '(oob)')
+    test_sp.legend(loc=(0, 1.01))
+    train_sp.legend(loc=(0, 1.01))
+
+    train_sp.set_xlabel('N. features')
+    test_sp.set_xlabel('N. features')
+    # train_sp.set_ylabel('Error')
+    test_sp.set_ylabel('Error')
+
     test_sp.grid(True)
     train_sp.grid(True)
     plt.close()
