@@ -1,0 +1,196 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+% \usepackage[spanish]{babel}
+\usepackage[english]{babel}
+
+\usepackage{biblatex}
+\addbibresource{sample.bib}
+\usepackage{csquotes}
+\usepackage{authblk}
+
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{eurosym}
+% \restylefloat{table}
+
+% TODO no sé si algunos nombres se traducen
+\title{Using Random Fourier Features with Random Forest}
+\author{Albert Ribes}
+% TODO poner la fecha adecuada
+\date{Fecha de defensa}
+\affil{Director: Lluís A. Belanche Muñoz}
+\affil{Computer Science}
+\affil{Grau en Enginyeria Informàtica}
+\affil{Computació}
+\affil{FACULTAT D’INFORMÀTICA DE BARCELONA (FIB)}
+\affil{UNIVERSITAT POLITÈCNICA DE CATALUNYA (UPC) -- BarcelonaTech}
+% Se deben incluir estos campos
+% a) Títol
+% b) Autor
+% c) Data de defensa
+% d) Director i Departament del Director
+% e) Titulació
+% f) Especialitat
+% g) Centre: FACULTAT D’INFORMÀTICA DE BARCELONA (FIB)
+% h) Universitat: UNIVERSITAT POLITÈCNICA DE CATALUNYA (UPC) – BarcelonaTech
+
+\begin{document}
+\maketitle
+\tableofcontents
+% \newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%% Content starts here
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Ideas generales}
+El guión que me propuso LLuís es:
+\begin{enumerate}
+    \item Problema que ataco
+    \item Por qué es importante
+    \item Qué propongo en mi TFG
+    \item Estado del arte en el problema que ataco
+    \item Nociones generales del tema
+    \begin{itemize}
+        \item Machine Learning
+        \item Árboles
+        \item Logit
+        \item RFF
+        \item Nystroem
+        \item Bootstrap
+        \item Boosting
+    \end{itemize}
+    \item El trabajo propiamente dicho (explicar lo que voy a hacer)
+    \item Experimentos
+    \item Conclusiones y Trabajo futuro
+    \item Referencias
+    \item Apéndices
+\end{enumerate}
+
+\section{Introduction}
+    \subsection{Problem to solve}
+Todavía no se consigue suficiente precisión con el Machine Learning
+    \subsection{Why it is important to solve this problem}
+Con precisión más alta se podría aplicar el machine learning en otros campos
+    \subsection{Project proposal}
+Incrementar el accuracy que se puede conseguir con algunos problemas mezclando
+la técnica del bagging (y quizá del boosting) con el tema los RFF
+
+Actualmente el bagging solo se usa con Decision Tree porque es muy inestable.
+Con lo que propongo aquí, podría ser factible usarlo con otros algoritmos más
+estables
+
+\section{Background}
+Más o menos, cada uno debería ocupar entre media y una página
+    \subsection{Machine Learning}
+    \subsection{Classification and Regression}
+    \subsection{Review de los principales modelos que existen}
+        \subsubsection{Decision Tree}
+        \subsubsection{Logistic Regression}
+        \subsubsection{SVM}
+    \subsection{Las técnicas ensembling}
+        \subsubsection{Bagging}
+\begin{itemize}
+    \item Inventado por Leo Breiman
+    \item Pretende reducir el sesgo
+\end{itemize}
+        \subsubsection{Boosting}
+\begin{itemize}
+    \item Adaboost (adaptive boosting)
+    \item El siguiente estimador es más probable que contenga los elementos no
+    no se han predicho bien en el anterior
+    \item Se trata de ir modificando los pesos que tiene cada una de las instancias
+    \item El entrenamiento de los modelos es secuencial, a diferencia del bagging
+    \item Enterarme de quien lo inventó, y para qué ámbitos es útil
+\end{itemize}
+    \subsection{El bootstrap}
+    \begin{itemize}
+\item En bagging es bueno que los estimadores estén poco relacionados
+entre ellos
+\item Idealmente, usaríamos un dataset distinto para cada uno de los
+estimadores, pero eso no siempre es posible
+\item Una alternativa es usar un resampling con repetición sobre cada
+uno de los estimadores para tener datasets un poco distintos entre ellos.
+\item Enterarme de la cantidad de elementos distintos que se espera que queden
+en el subconjunto, y quizá hablar de la cantidad de aleatoriedad
+    \end{itemize}
+    \subsection{Las funciones kernel}
+    \subsection{Las Random Fourier Features}
+    \subsection{Nystroem}
+    \subsection{PCA}
+    \subsection{Cross-validation}
+
+\section{Workflow of the project}
+  \subsection{La idea general un poco desarroyada}
+  \subsection{State of the art con las RFF}
+
+
+
+\section{Experimental results}
+\section{Conclussion}
+De momento, parece que algunos problemas sí que se benefician de esto, mientas
+que otros no lo hacen
+\section{Future work}
+\begin{itemize}
+\item El trabajo se ha centrado en problemas de clasificación, pero no hay
+ningún motivo para que no se pueda aplicar el regresión. Se ha omitodo por
+simplificar
+\item Aquella teoría de que quizá se puede regular la cantidad de aleatoriedad
+que añade el bootstrap, y quizá inventar un bootstrap con un parámetro para
+regular la cantidad de aleatoriedad
+\item Pensar en aquella teoría de que quizá se puede inventar un procedimiento
+para, dato un problema determinado con sus datos, sacar un número que sea
+representativo de la cantidad promedio de ruido que tiene. Puesto que quizá
+es útil para este proyecto conocer la cantidad de aleatoriedad que tienen
+los datos, para que se pueda regular
+\end{itemize}
+\section{Sustainability Report}
+    \input{sustainability_report}
+
+% Aquí empieza el índice que tenía en la fita de seguiment
+% \section{Context}
+%     \subsection{General Framework}
+%     \subsection{Into the specifics}
+%     \subsection{State of the Art}
+%     \subsection{Problem to solve}
+%
+% \section{Planning}
+%     \subsection{Original Planning}
+%     \subsection{Problems encountered with original planning}
+%     \subsection{Proposed new planning}
+%
+% \section{Methodology}
+%     \subsection{Original Proposed Methodology}
+%     \subsection{Problems encountered with original methodology}
+%     \subsection{New methodology}
+%
+% \section{Alternatives Analysis}
+%     \subsection{Language for development}
+%     \subsection{Running environment}
+%     \subsection{Machine Learning Algorithms}
+%
+% \section{Knowledge Integration}
+%
+% \section{Implication and Decision Making}
+%     \subsection{Meetings with director}
+%     \subsection{Goals achievement}
+%     \subsection{Rigour in scientific procedures}
+%
+% \section{Laws and regulations}
+%     \subsection{My responsibility}
+%     \subsection{Others responsibility}
+%     Esto es algo que hizo \cite{dirac} y también \cite{einstein}
+
+
+
+
+
+
+
+
+\printbibliography
+\end{document}

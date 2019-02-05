@@ -1,0 +1,34 @@
+========================
+========================
+Guión de experimentación
+========================
+========================
+
+- Parece que el error que comete RFF es más pequeño cuantas más instancias
+hay, y también cuantas más features hay. Hasta ahora solo he probado de
+incrementar la cantidad de features, pero siempre he probado con el mismo
+tamaño del dataset. Puede ser interesante
+
+- Es bueno ver, para cada tipo de problema, el tema del pca. Si es bueno que
+esté, y en este caso, si debería ir antes o después del sampling
+
+- Antes de hacer nada, habría que probar cada problema con los modelos
+originales para ver cómo de difícil son para ellos
+
+- Creo que es bueno explorar por separado. Por un lado RFF, por otro Nystroem
+
+- Parece que el eigen-gap es importante. Si unos pocos eigen-values suman casi
+todo, entonces el nystroem sabe coger los que son importantes, mientras que RFF
+no
+
+- Los hiper-parámetros por defecto. Por ejemplo, dt está sobreajustando al
+máximo. Primero hay que ver qué parámetros hay que usar
+
+
+
+
+
+La experimentación se hará respecto a un dataset
+Primero hay que ver cómo se comporta con un modelo simple determinado
+Pero para eso primero hay que mirar los hiper-parámetros que son adecuados
+Logit apenas tiene

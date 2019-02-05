@@ -15,6 +15,8 @@ from ipywidgets import VBox
 
 # TODO cambiar nombre dataset_selector por dts_selector
 
+# TODO esta demo no aporta nada, se puede emular con Demo0. Eliminarla
+
 
 class Demo1(Demo):
     desc = """# Modelos básicos

@@ -1,5 +1,5 @@
 from demo_utils.generic_demo import Demo
-from demo_utils.general import SUPPORTED_DATASETS
+# from demo_utils.general import SUPPORTED_DATASETS
 from demo_utils.general import get_data
 from demo_utils.learning import get_model
 from demo_utils.learning import get_model_first_pca
@@ -176,6 +176,8 @@ Para ver qué es mejor, primero hacer sampling y luego hacer PCA, o al revés
         '''
         dataset = get_data(dts_name, n_ins=dts_size)
         model_first_sampler = get_model(pca_bool=True, **model_data)
+        # TODO Esta función ya no existe, llamar a la genérica con el
+        # parámetro indicador del orden
         model_first_pca = get_model_first_pca(pca_bool=True, **model_data)
 
         first_sampler_train_score, first_sampler_test_score =\
