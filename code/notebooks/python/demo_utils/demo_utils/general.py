@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from sklearn.metrics.pairwise import euclidean_distances
 
 # TODO hay 4 funciones para sacar gráficas. quizá es demasiado
 
@@ -252,8 +253,30 @@ def get_sampling_error_graph_from_scores(train_scores, test_scores):
     plt.close()
     return fig
 
+
 def sigest(data):
     '''
     Returns an estimation for sigma of a RBF kernel given the data
     '''
-    
+
+    dist = euclidean_distances(data, data, squared=True)
+    q = np.quantile(dist, [0.1, 0.9])
+    m = np.mean(q)
+
+    # Cojer únicamente la mitad superior
+    upper_indices = np.triu_indices_from(arr=dist, k=1)
+    dist_upper = dist[upper_indices]
+    q_upper = np.quantile(dist_upper, [0.1, 0.9])
+    m_upper = np.mean(q_upper)
+
+    return m_upper
+
+
+def gamest(data):
+    '''
+    Returns an estimation for gamma of a RBF kernel given the data
+    '''
+    # gamma = 1 / 2sigma^2
+    sigma_estim = sigest(data)
+    gamma_estim = np.reciprocal(2*np.square(sigma_estim))
+    return gamma_estim
