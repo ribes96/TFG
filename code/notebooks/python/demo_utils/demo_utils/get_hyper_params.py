@@ -36,6 +36,16 @@ from demo_utils.new_hyper_params.satellite.black_bag import get_satellite_black_
 from demo_utils.new_hyper_params.segment.black_bag import get_segment_black_bag_dic
 from demo_utils.new_hyper_params.vowel.black_bag import get_vowel_black_bag_dic
 
+
+from demo_utils.new_hyper_params.covertype.none_sigest import get_covertype_none_sigest_dic
+from demo_utils.new_hyper_params.digits.none_sigest import get_digits_none_sigest_dic
+from demo_utils.new_hyper_params.fall_detection.none_sigest import get_fall_detection_none_sigest_dic
+from demo_utils.new_hyper_params.mnist.none_sigest import get_mnist_none_sigest_dic
+from demo_utils.new_hyper_params.pen_digits.none_sigest import get_pen_digits_none_sigest_dic
+from demo_utils.new_hyper_params.satellite.none_sigest import get_satellite_none_sigest_dic
+from demo_utils.new_hyper_params.segment.none_sigest import get_segment_none_sigest_dic
+from demo_utils.new_hyper_params.vowel.none_sigest import get_vowel_none_sigest_dic
+
 dic_box_funcs = {
     ('covertype', 'none'): get_covertype_none_dic,
     ('digits', 'none'): get_digits_none_dic,
@@ -72,78 +82,87 @@ dic_box_funcs = {
     ('satellite', 'black_bag'): get_satellite_black_bag_dic,
     ('segment', 'black_bag'): get_segment_black_bag_dic,
     ('vowel', 'black_bag'): get_vowel_black_bag_dic,
+
+    ('covertype', 'none_sigest'): get_covertype_none_sigest_dic,
+    ('digits', 'none_sigest'): get_digits_none_sigest_dic,
+    ('fall_detection', 'none_sigest'): get_fall_detection_none_sigest_dic,
+    ('mnist', 'none_sigest'): get_mnist_none_sigest_dic,
+    ('pen_digits', 'none_sigest'): get_pen_digits_none_sigest_dic,
+    ('satellite', 'none_sigest'): get_satellite_none_sigest_dic,
+    ('segment', 'none_sigest'): get_segment_none_sigest_dic,
+    ('vowel', 'none_sigest'): get_vowel_none_sigest_dic,
 }
 
 
-
 def get_func_call(dts_name, box_name):
-    if (dts_name, box_name) == ('covertype', 'none'):
-        return get_covertype_none_dic
-    if (dts_name, box_name) == ('digits', 'none'):
-        return get_digits_none_dic
-    if (dts_name, box_name) == ('fall_detection', 'none'):
-        return get_fall_detection_none_dic
-    if (dts_name, box_name) == ('mnist', 'none'):
-        return get_mnist_none_dic
-    if (dts_name, box_name) == ('pen_digits', 'none'):
-        return get_pen_digits_none_dic
-    if (dts_name, box_name) == ('satellite', 'none'):
-        return get_satellite_none_dic
-    if (dts_name, box_name) == ('segment', 'none'):
-        return get_segment_none_dic
-    if (dts_name, box_name) == ('vowel', 'none'):
-        return get_vowel_none_dic
-
-    if (dts_name, box_name) == ('covertype', 'grey_ens'):
-        return get_covertype_grey_ens_dic
-    if (dts_name, box_name) == ('digits', 'grey_ens'):
-        return get_digits_grey_ens_dic
-    if (dts_name, box_name) == ('fall_detection', 'grey_ens'):
-        return get_fall_detection_grey_ens_dic
-    if (dts_name, box_name) == ('mnist', 'grey_ens'):
-        return get_mnist_grey_ens_dic
-    if (dts_name, box_name) == ('pen_digits', 'grey_ens'):
-        return get_pen_digits_grey_ens_dic
-    if (dts_name, box_name) == ('satellite', 'grey_ens'):
-        return get_satellite_grey_ens_dic
-    if (dts_name, box_name) == ('segment', 'grey_ens'):
-        return get_segment_grey_ens_dic
-    if (dts_name, box_name) == ('vowel', 'grey_ens'):
-        return get_vowel_grey_ens_dic
-
-    if (dts_name, box_name) == ('covertype', 'grey_bag'):
-        return get_covertype_grey_bag_dic
-    if (dts_name, box_name) == ('digits', 'grey_bag'):
-        return get_digits_grey_bag_dic
-    if (dts_name, box_name) == ('fall_detection', 'grey_bag'):
-        return get_fall_detection_grey_bag_dic
-    if (dts_name, box_name) == ('mnist', 'grey_bag'):
-        return get_mnist_grey_bag_dic
-    if (dts_name, box_name) == ('pen_digits', 'grey_bag'):
-        return get_pen_digits_grey_bag_dic
-    if (dts_name, box_name) == ('satellite', 'grey_bag'):
-        return get_satellite_grey_bag_dic
-    if (dts_name, box_name) == ('segment', 'grey_bag'):
-        return get_segment_grey_bag_dic
-    if (dts_name, box_name) == ('vowel', 'grey_bag'):
-        return get_vowel_grey_bag_dic
-
-    if (dts_name, box_name) == ('covertype', 'black_bag'):
-        return get_covertype_black_bag_dic
-    if (dts_name, box_name) == ('digits', 'black_bag'):
-        return get_digits_black_bag_dic
-    if (dts_name, box_name) == ('fall_detection', 'black_bag'):
-        return get_fall_detection_black_bag_dic
-    if (dts_name, box_name) == ('mnist', 'black_bag'):
-        return get_mnist_black_bag_dic
-    if (dts_name, box_name) == ('pen_digits', 'black_bag'):
-        return get_pen_digits_black_bag_dic
-    if (dts_name, box_name) == ('satellite', 'black_bag'):
-        return get_satellite_black_bag_dic
-    if (dts_name, box_name) == ('segment', 'black_bag'):
-        return get_segment_black_bag_dic
-    if (dts_name, box_name) == ('vowel', 'black_bag'):
-        return get_vowel_black_bag_dic
+    return dic_box_funcs[(dts_name, box_name)]
+    # if (dts_name, box_name) == ('covertype', 'none'):
+    #     return get_covertype_none_dic
+    # if (dts_name, box_name) == ('digits', 'none'):
+    #     return get_digits_none_dic
+    # if (dts_name, box_name) == ('fall_detection', 'none'):
+    #     return get_fall_detection_none_dic
+    # if (dts_name, box_name) == ('mnist', 'none'):
+    #     return get_mnist_none_dic
+    # if (dts_name, box_name) == ('pen_digits', 'none'):
+    #     return get_pen_digits_none_dic
+    # if (dts_name, box_name) == ('satellite', 'none'):
+    #     return get_satellite_none_dic
+    # if (dts_name, box_name) == ('segment', 'none'):
+    #     return get_segment_none_dic
+    # if (dts_name, box_name) == ('vowel', 'none'):
+    #     return get_vowel_none_dic
+    #
+    # if (dts_name, box_name) == ('covertype', 'grey_ens'):
+    #     return get_covertype_grey_ens_dic
+    # if (dts_name, box_name) == ('digits', 'grey_ens'):
+    #     return get_digits_grey_ens_dic
+    # if (dts_name, box_name) == ('fall_detection', 'grey_ens'):
+    #     return get_fall_detection_grey_ens_dic
+    # if (dts_name, box_name) == ('mnist', 'grey_ens'):
+    #     return get_mnist_grey_ens_dic
+    # if (dts_name, box_name) == ('pen_digits', 'grey_ens'):
+    #     return get_pen_digits_grey_ens_dic
+    # if (dts_name, box_name) == ('satellite', 'grey_ens'):
+    #     return get_satellite_grey_ens_dic
+    # if (dts_name, box_name) == ('segment', 'grey_ens'):
+    #     return get_segment_grey_ens_dic
+    # if (dts_name, box_name) == ('vowel', 'grey_ens'):
+    #     return get_vowel_grey_ens_dic
+    #
+    # if (dts_name, box_name) == ('covertype', 'grey_bag'):
+    #     return get_covertype_grey_bag_dic
+    # if (dts_name, box_name) == ('digits', 'grey_bag'):
+    #     return get_digits_grey_bag_dic
+    # if (dts_name, box_name) == ('fall_detection', 'grey_bag'):
+    #     return get_fall_detection_grey_bag_dic
+    # if (dts_name, box_name) == ('mnist', 'grey_bag'):
+    #     return get_mnist_grey_bag_dic
+    # if (dts_name, box_name) == ('pen_digits', 'grey_bag'):
+    #     return get_pen_digits_grey_bag_dic
+    # if (dts_name, box_name) == ('satellite', 'grey_bag'):
+    #     return get_satellite_grey_bag_dic
+    # if (dts_name, box_name) == ('segment', 'grey_bag'):
+    #     return get_segment_grey_bag_dic
+    # if (dts_name, box_name) == ('vowel', 'grey_bag'):
+    #     return get_vowel_grey_bag_dic
+    #
+    # if (dts_name, box_name) == ('covertype', 'black_bag'):
+    #     return get_covertype_black_bag_dic
+    # if (dts_name, box_name) == ('digits', 'black_bag'):
+    #     return get_digits_black_bag_dic
+    # if (dts_name, box_name) == ('fall_detection', 'black_bag'):
+    #     return get_fall_detection_black_bag_dic
+    # if (dts_name, box_name) == ('mnist', 'black_bag'):
+    #     return get_mnist_black_bag_dic
+    # if (dts_name, box_name) == ('pen_digits', 'black_bag'):
+    #     return get_pen_digits_black_bag_dic
+    # if (dts_name, box_name) == ('satellite', 'black_bag'):
+    #     return get_satellite_black_bag_dic
+    # if (dts_name, box_name) == ('segment', 'black_bag'):
+    #     return get_segment_black_bag_dic
+    # if (dts_name, box_name) == ('vowel', 'black_bag'):
+    #     return get_vowel_black_bag_dic
 
 
 def get_hyper_params(dts_name, box_name, model_name, sampler_name):

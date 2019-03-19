@@ -1,3 +1,4 @@
+
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 % \usepackage[spanish]{babel}
@@ -6,6 +7,9 @@
 \usepackage{tabularx}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{multirow}
+\usepackage{amssymb}
+
 
 
 
@@ -59,7 +63,7 @@
     data (such as random noise, lack of information, mistakes in data
     collection, etc.) or by limitations in the mathematical model behind the
     algorithm, such as having a lot of bias or variance. One way to reduce this
-    last problem in to use some kind of ensemble of predictors.
+    last problem is to use some kind of ensemble of predictors.
 
     Bagging\cite{breiman94} is an ensemble technique which has shown very good results for
     some algorithms. It is known to substantially reduce the variance of a model when each of the estimators has very little correlation with the others. It
@@ -67,7 +71,24 @@
     replacement), but for most of the models this is not enough. This is why it is rarely used for any model but the Decision Tree. The instability in this
     algorithm helps each of the estimators to have low correlation.
 
-    There exists a mapping to transform data from a given space to a different one which is called Random Fourier Features\cite{rahimi07}. It can approximate any
+    % Una función kernel es una función $\mathbb{R}^n \mapsto \mathbb{R}$ entre
+    % dos vectores que equivale al producto escalar de una cierta transformación
+    % de los vectores: $\kappa(x,y) = \phi(x)\phi(y)$. Se utiliza principalmente
+    % en las Support Vector Machine mover los datos a un espacio vectorial distinto
+    % en el que se espera que sean linealmente separables por un híper-plano.
+
+    A kernel function \cite{kernels} is a function $\mathbb{R}^n \mapsto \mathbb{R}$ between
+    two vectors (or a different structure)  which is equivalent to the dot
+    product of some transformation of the vectors:
+    $\kappa(x,y) = \phi(x)\phi(y)$.
+    It is primarily used with Support Vector Machines to ``move'' the data to
+    a different vectorial space where data is expected to be linearly separable.
+    It allows to solve non-linear problems with a linear method. The implicit
+    function $\phi(\cdot)$ could have infinite dimensionality, so it is not always
+    possible to use it explicitly.
+
+    There exists a mapping to transform data from a given space to a different
+    one which is called Random Fourier Features\cite{rahimi07}. It can approximate any
     shift-invariant kernel function with a randomized mapping, and has successfully
     been used to decrease the error rate of a Neural Network\cite{zhangs17}.
 
@@ -91,26 +112,77 @@
     % \end{itemize}
     \subsection{State of the Art}
 
-    It is hard to define the state of the art in Machine Learning since it still
-    does not exist a certain algorithm able to solve any kind of problem.
-    Nevertheless, there are some general methods used to achieve the highest
-    scores.
+    Support Vector Machines \cite{vapnik_svm} were quite popular a few years ago. With the use of
+    the kernel trick, they proved to have a big ability to learn and generalize
+    with complex problems.
 
-    Deep Learning has proven to give very good results when you feed the network
-    with huge amounts of data. It has been used to master some difficult games\cite{alphago16}
-    and for image processing\cite{jiwan14}, among others.
+    However, it was soon
+    % checked
+    obvious
+    that the computational cost of training a
+    Support Vector Machine was not acceptable since it is cubic with the
+    number of instances. With time, they lost popularity.
 
+    The new big wave is led by Deep Learning. It has showed a huge
+    capability to discover hidden structures and patterns and also to generalize.
+    It scales better to big datasets, but it still is very expensive to train
+    a Deep Neural Network. It has succesfully been used for unsupervised
+    Learning \cite{alphago16}.
 
-    Support Vector Machines are also showing very good results using the
-    kernel trick\cite{rahimi07}.
-    % Support Vector Machine are also very used with the kernel trick ......
+    Random Fourier Features have showed to be a good way to approximate a kernel
+    function without losing too much accuracy, but they haven't been used too
+    much. A recent study used them in conjuntion with Deep Neural Networks in order to
+    learn a hierarchy of layers of nonlinear features, showing very good
+    results \cite{zhangs17}.
 
-    But what is really carrying Machine Learning to another level is the possibility
-    of building computation mega-clusters to train models in a way that some time
-    ago would have required many years of training.
+    In short, we can say there is a battery of good techniques which are used on
+    their own to solve specific problems, but there is very little effort to
+    combine them together to produce a better model. This is what we will try
+    to do in this project.
 
-    Nevertheless, we are still not proud of the levels of accuracy we can achieve,
-    and a lot of research is being done trying to increase it.
+    % Las SVM tuvieron un cierto boom hace unos años, puesto que tenían mucha
+    % capacidad para aprender.
+    %
+    % Con el tiempo, se fue comprobando como las SVM no eran escalables a una
+    % gran cantidad de datos, puesto que tienen un coste cúbico con la cantidad de
+    % estos.
+    %
+    % Se han ido dejando de lado, y ahora lo que está más de moda es el deep
+    % learning. Tienen una gran capacidad para aprender, y el coste que tiene no
+    % depende tanto de la cantidad de datos que se tiene. Sin embargo, sigue siendo
+    % un método muy costoso.
+    %
+    % Últimamente se han usado las RFF junto con las Redes Profundas (Deep Learning)
+    % para tener varias capas de aprendizaje no lineal
+    %
+    % Hablar también sobre los kernels. Los kernels todavía son muy útiles para
+    % convertir un problema no lineal en uno lineal, pero solo cuando el problema
+    % no es demsiado grande. Cuando es grande ya no es posible usarlo
+    %
+    % Lo que podemos ver es que hay una batería de técnicas que todavía se van
+    % usando un poco, pero cada una por su lado. Nadie las ha cogido todas juntas
+    % y se ha propuesto hacer algo con ellas. Eso es lo que yo me propongo.
+    %
+    % It is hard to define the state of the art in Machine Learning since it still
+    % does not exist a certain algorithm able to solve any kind of problem.
+    % Nevertheless, there are some general methods used to achieve the highest
+    % scores.
+    %
+    % Deep Learning has proven to give very good results when you feed the network
+    % with huge amounts of data. It has been used to master some difficult games\cite{alphago16}
+    % and for image processing\cite{jiwan14}, among others.
+    %
+    %
+    % Support Vector Machines are also showing very good results using the
+    % kernel trick\cite{rahimi07}.
+    % % Support Vector Machine are also very used with the kernel trick ......
+    %
+    % But what is really carrying Machine Learning to another level is the possibility
+    % of building computation mega-clusters to train models in a way that some time
+    % ago would have required many years of training.
+    %
+    % Nevertheless, we are still not proud of the levels of accuracy we can achieve,
+    % and a lot of research is being done trying to increase it.
 
     % \begin{itemize}
     %     \item Todavía no hay un algoritmo que sea capaz de resolver todos los
@@ -127,21 +199,57 @@
     %     \item Deep Learning
     % \end{itemize}
     \subsection{Problem to solve}
-    The problem is always the same: we want to achieve higher accuracy while
-    solving our problems. The proposed solutions to try to solve this problem
-    are:
 
-    \begin{itemize}
-        \item \textbf{Increase the computation time}: either by using very
-        powerful supercomputers or by using more time.
-        \item \textbf{Use better datasets}: the larger and complete a dataset
-        is, the better the accuracy will be.
-        \item \textbf{Improve current algorithms or create new ones}: by making
-        scientific studies
-    \end{itemize}
+    % Machine Learning busca ser capaz de aprender bien y de hacerlo rápido.
+    % normalmente son opuestos: intentar aprender mejor es a costa de dedicarle
+    % más tiempo y recursos; y si quieres hacerlo rápido, no puedes esperar una
+    % gran precisión.
+    % Ante esta situación, al final se trata de encontrar una buena ratio,
+    % encontrar un término medio que nos satisfaga un poco. Para conseguirlo se
+    % trabaja desde dos ámbitos distintos: por un lado, se intenta tener datasets
+    % mejores, con la información más relevante, más completa, más limpia, o
+    % sencillamente con mayor información, con datasets más grandes.
+    %
+    % Por otro lado, se intenta hacer modelos que tengan una ratio mejor y que sean
+    % capaces de generalizar mejor.
+    %
+    % Lo que nosotros nos proponemos es esto segundo: encontrar un modelo que tenga
+    % una mejor proporción entre tiempo de aprendizaje y precisión obtenida.
 
-    In this project I try to increase the accuracy with the third method. It has
-    the advantage of being the cheaper in the long term and more affordable.
+    Machine Learning has two main objectives: be able to learn, and to do it fast.
+    But most of the times trying to increase one will be with a cost
+    of decreasing the other. The problem is to find a good equilibrium
+    between these objectives.
+
+    There are two main ways to cope with this. The first one is to
+    try to produce better datasets. A good dataset will contain more relevant
+    information, more precise, cleaner of unknown values or simply with more
+    instances.
+
+    The other way is to try to produce mathematical models which are able to
+    generalize better or which require less computation
+     % time to achieve the sameaccuracy.
+     time to learn well.
+
+    In this project we work on this second method: we try to decrease the
+    computational time of training a model without decreasing too much the
+    accuracy.
+
+    % The problem is always the same: we want to achieve higher accuracy while
+    % solving our problems. The proposed solutions to try to solve this problem
+    % are:
+    %
+    % \begin{itemize}
+    %     \item \textbf{Increase the computation time}: either by using very
+    %     powerful supercomputers or by using more time.
+    %     \item \textbf{Use better datasets}: the larger and complete a dataset
+    %     is, the higher the accuracy will be.
+    %     \item \textbf{Improve current algorithms or create new ones}: by making
+    %     scientific studies
+    % \end{itemize}
+    %
+    % In this project I try to increase the accuracy with the third method. It has
+    % the advantage of being the cheaper in the long term and more affordable.
 
     % El problema sigue siendo el accuracy. Todavía no se obtiene todo el que
     % sería deseable
@@ -373,11 +481,13 @@
 
     In the original planning of this project the scope was
     expected to be limited to the study of Random Fourier Features with the
-    Random Forest algorithm. After checking that accuracy could not be increased
-    to this model, it was changed to cover also other models, such as Logistic
-    Regression and Support Vector Machine with Linear Kernel.
+    Random Forest algorithm. After checking that
+    % accuracy could not be increased to this model,
+    performance could not be improved with this model,
+    it was changed to cover also other models, such as Logistic
+    Regression and Support Vector Machines.
 
-    Furthermore, it was expected to deliver it on June 2018, and that was not
+    Furthermore, I expected to deliver it on June 2018, and that was not
     possible.
 
     The expected planning was:
@@ -428,50 +538,74 @@
     % \end{itemize}
     \subsection{Proposed new planning}
     % TODO la fecha de entrega
-    % La fecha de entrega
+    % La fecha de entrega 16/4/2019
+
+    \input{tareas_pendientes}
 
     As the contents of the project have changed from the original planning,
-    It is needed to define a new set of tasks to finish the work. The ones which
-    still need to be done are:
+    it is needed to define a new set of tasks to finish the work. The ones which
+    still need to be done are showed in Table \ref{tasks_table}.
+
+    \begin{table}[]
+     \begin{tabular}{|l|l|l|}
+      \hline
+      \multicolumn{2}{|c|}{\textbf{Task}}               & \textbf{Time (h)}                             \\ \hline
+      % \multicolumn{2}{|l|}{Terminar la memoria}         & 1                                     \\ \hline
+      \multirow{4}{*}{Accuracy Tests}                   & Datasets comparison             & 5           \\ \cline{2-3}
+                                                        & Black Box vs. White Box         & 10          \\ \cline{2-3}
+                                                        & RBF-SVM vs. Best defined model  & 5           \\ \cline{2-3}
+                                                        & Bag vs. Ensemble                & 10          \\ \hline
+      \multirow{2}{*}{Timing Tests}                     & RBF-SVM vs. Defined models      & 8           \\ \cline{2-3}
+      % & Random Forest vs. DT best model & 7           \\ \cline{2-3}
+                                                        & Random Forest vs. DT best model & 7           \\ \hline
+      \multicolumn{2}{|l|}{Finish the project document} & 50                                            \\ \hline
+      \multicolumn{2}{|l|}{Unexpected extras}           & 15                                            \\ \hline
+      \multicolumn{2}{|l|}{}                            &                                               \\ \hline
+      % \textbf{Total}                                    &                                 & \textbf{10} \\ \hline
+      \multicolumn{2}{|l|}{\textbf{Total}}              & \textbf{110}                                           \\ \hline
+     \end{tabular}
+    \caption{Remaining tasks}
+    \label{tasks_table}
+    \end{table}
 
     % Enterarme de las fechas para las que tengo que ir entregando cosas
     % Ahora mismo, lo que me queda por hacer es:
-    \begin{table}[H]
-% \begin{tabular}{|l|l|}
-% \begin{tabular}{|p{8cm}|p{2cm}|}
-\begin{tabular}{|p{0.8\linewidth}|p{0.2\linewidth}|}
-\hline
-\textbf{Task} & \textbf{Time (h)} \\ \hline
-% Escribir trabajo & 50\\\hline
-Write the project document & 50\\\hline
-% Probar de hacer un ensemble simple de DT y ver si funciona & 5\\ \hline
-Test using DT with an ensemble without bootstrap& 5\\ \hline
-% Una demo que muestre paso por paso que DT no se beneficia de las RFF& 15\\ \hline
-Write a demo with all experiments carried out showing that DT does
-not benefit from using RFF & 15\\ \hline
-% Resolver que MNIST da problemas con nystroem& 10\\ \hline
-Solve some problems that Nystroem is giving with some datasets& 10\\ \hline
-% Hacer un estudio más detallado sobre por qué algunos problemas sí que
-% mejoran con RFF mientras que otros se quedan igual y otros empeoran& 20\\ \hline
-Some testing on why I find different behaviours with different
-datasets& 20\\ \hline
-Run experiments on usage of PCA and ordering& 10\\ \hline
-% Soluionar bugs de la interfaz gráfica& 10\\ \hline
-Debug details of graphical interface& 10\\ \hline
-% Ejecutar los experimentos sobre logit& 10\\ \hline
-Run experiments using Logistic Regression& 10\\ \hline
-% Ejecutar los experimentos sobre linear SVM& 10\\ \hline
-Run experiments using a SVM with a Linear Kernel& 10\\ \hline
-% Quizá, encontrar más datasets& 10\\ \hline
-(Optional) Find and use more datasets& 10\\ \hline
-% Posibles extras& 20\\ \hline
-Unexpected extras& 20\\ \hline
-
-& \\ \hline
-\textbf{Total}& \textbf{170}\\ \hline
-
-\end{tabular}
-\end{table}
+%     \begin{table}[H]
+% % \begin{tabular}{|l|l|}
+% % \begin{tabular}{|p{8cm}|p{2cm}|}
+% \begin{tabular}{|p{0.8\linewidth}|p{0.2\linewidth}|}
+% \hline
+% \textbf{Task} & \textbf{Time (h)} \\ \hline
+% % Escribir trabajo & 50\\\hline
+% Write the project document & 50\\\hline
+% % Probar de hacer un ensemble simple de DT y ver si funciona & 5\\ \hline
+% Test using DT with an ensemble without bootstrap& 5\\ \hline
+% % Una demo que muestre paso por paso que DT no se beneficia de las RFF& 15\\ \hline
+% Write a demo with all experiments carried out showing that DT does
+% not benefit from using RFF & 15\\ \hline
+% % Resolver que MNIST da problemas con nystroem& 10\\ \hline
+% Solve some problems that Nystroem is giving with some datasets& 10\\ \hline
+% % Hacer un estudio más detallado sobre por qué algunos problemas sí que
+% % mejoran con RFF mientras que otros se quedan igual y otros empeoran& 20\\ \hline
+% Some testing on why I find different behaviours with different
+% datasets& 20\\ \hline
+% Run experiments on usage of PCA and ordering& 10\\ \hline
+% % Soluionar bugs de la interfaz gráfica& 10\\ \hline
+% Debug details of graphical interface& 10\\ \hline
+% % Ejecutar los experimentos sobre logit& 10\\ \hline
+% Run experiments using Logistic Regression& 10\\ \hline
+% % Ejecutar los experimentos sobre linear SVM& 10\\ \hline
+% Run experiments using a SVM with a Linear Kernel& 10\\ \hline
+% % Quizá, encontrar más datasets& 10\\ \hline
+% (Optional) Find and use more datasets& 10\\ \hline
+% % Posibles extras& 20\\ \hline
+% Unexpected extras& 20\\ \hline
+%
+% & \\ \hline
+% \textbf{Total}& \textbf{170}\\ \hline
+%
+% \end{tabular}
+% \end{table}
     % \begin{itemize}
     %     \item Terminar de hacer unos cuantos experimentos para poder decir que
     %     lo he probado todo con Random Forest
@@ -563,7 +697,7 @@ Unexpected extras& 20\\ \hline
     \subsection{Original Proposed Methodology}
     The original proposed methodology was to define a set of tasks which should
     be done by the end of the project and a correct arrangement of them to
-    assure all of them can be done.
+    ensure all of them can be done.
     \subsection{Problems encountered with original methodology}
     The problems encountered with the original methodology are similar to the
     ones in the planning.
@@ -699,7 +833,7 @@ Unexpected extras& 20\\ \hline
         %% CONS, separated by empty line or \par
         Not intuitive for a programmer coming from another language\par
         Very slow\par
-        Very ugly graphs\par
+        % Very ugly graphs\par
         The majority of the community comes from statistics\par
         Many different modules to do the same thing\par
         There isn't a standardized interface for calling functions\par
@@ -1366,6 +1500,11 @@ Ali Rahimi and Benjamin Recht,
 Advances in Neural Information Processing Systems,
 2007.
 
+\bibitem{vapnik_svm}
+Vladimir Vapnik,
+\textit{Support-Vector Networks}
+1995
+
 \bibitem{zhangs17}
 Shuai Zhang, Jianxin Li, Pengtao Xie, Yingchun Zhang, Minglai Shao, Haoyi Zhou, Mengyi Yan,
 \textit{Stacked Kernel Network},
@@ -1384,6 +1523,11 @@ DeepMind,
 Ji Wan, Dayong Wang, Steven Chu Hong Hoi, Pengcheng Wu, Jianke Zhu, Yongdong Zhang, Jintao Li,
 \textit{Deep Learning for Content-Based Image Retrieval: A Comprehensive Study},
 2014.
+
+\bibitem{kernels}
+Thomas Hofmann, Bernhard Schölkopf, Alexander J. Smola
+\textit{Kernel Methods in Machine Learning}
+2008
 
 \bibitem{python}
 https://www.python.org
