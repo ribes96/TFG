@@ -1,0 +1,195 @@
+Más o menos, cada uno debería ocupar entre media y una página
+\subsection{Machine Learning}
+\subsection{Classification and Regression}
+\subsection{Review de los principales modelos que existen}
+\subsubsection{Decision Tree}
+\subsubsection{Logistic Regression}
+\subsubsection{SVM}
+\subsection{Las técnicas ensembling}
+\subsubsection{Bagging}
+\begin{itemize}
+ \item Inventado por Leo Breiman
+ \item Pretende reducir el sesgo
+\end{itemize}
+\subsubsection{Boosting}
+\begin{itemize}
+ \item Adaboost (adaptive boosting)
+ \item El siguiente estimador es más probable que contenga los elementos no
+       no se han predicho bien en el anterior
+ \item Se trata de ir modificando los pesos que tiene cada una de las instancias
+ \item El entrenamiento de los modelos es secuencial, a diferencia del bagging
+ \item Enterarme de quien lo inventó, y para qué ámbitos es útil
+\end{itemize}
+\subsection{El bootstrap}
+\begin{itemize}
+ \item En bagging es bueno que los estimadores estén poco relacionados
+       entre ellos
+ \item Idealmente, usaríamos un dataset distinto para cada uno de los
+       estimadores, pero eso no siempre es posible
+ \item Una alternativa es usar un resampling con repetición sobre cada
+       uno de los estimadores para tener datasets un poco distintos entre ellos.
+ \item Enterarme de la cantidad de elementos distintos que se espera que queden
+       en el subconjunto, y quizá hablar de la cantidad de aleatoriedad
+\end{itemize}
+\subsection{Las funciones kernel}
+Las SVM encuentran un híper-plano que separa las instancias de un problema
+determinado en dos subconjuntos del espacio, y en el que cada subconjunto se
+identifica con las clases que se quieren discriminar. Este híper-plano
+busca maximizar la distancia mínima entre él mismo y las instancias (los vectores)
+de cada una de las clases. Para hacerlo, convierte el problema en uno de
+optimización.
+
+Tenemos un conjunto de datos $D = \{\bm{\chi}, \bm{y}\}$, donde $\bm{\chi} = \{\bm{x}_1, \ldots \bm{x}_n\}$, $\bm{x}_i \in \reals^d$, $\bm{y} = \{-1, +1\}^n$
+
+Se requiere encontrar $\bm{\alpha} \in \reals^n$ que maximice:
+
+\begin{equation}
+ \sum_i\alpha_i - \frac{1}{2}\sum_i\sum_j\alpha_i\alpha_jy_iy_j\bm{x}_i^T\bm{x}_j
+\end{equation}
+
+% \begin{equation}
+%   \sum_t\alpha^t - \frac{1}{2}\sum_t\sum_s\alpha^t\alpha^sr^tr^s\bm{\upphi}(\bm{x}^t)^T\bm{\upphi}(\bm{x}^s)
+% \end{equation}
+% sujeto a
+%
+% \begin{equation}
+%   \sum_t\alpha^tr^t = 0 \textrm{ y } 0 \leq \alpha^t \leq C, \forall t
+% \end{equation}
+
+Pero este procedimiento solamente es efectivo si se da el caso que todas las
+instancias de $\bm{\chi}$ son linealmente separables por un híper-plano en cada
+una de las dos clases.
+
+Este no siempre es el caso, y por eso se suele realizar una transformación de los
+datos, que los lleven de un subespacio a otro, que normalmente tiene más dimensiones
+que el original y que se espera que sí permita separar linealmente los datos.
+
+Entonces, si se define una función de transformación de espacio
+$z(\bm{x}) : \reals^d \rightarrow \reals^D$, la función a optimizar sería:
+
+\begin{equation}
+ \sum_i\alpha_i - \frac{1}{2}\sum_i\sum_j\alpha_i\alpha_jy_iy_jz(\bm{x}_i)^Tz(\bm{x}_j)
+\end{equation}
+
+Estos cálculos únicamente trabajan con el producto escalar de los vectores, nunca
+con ellos directamente. Es por eso que si existiera una función:
+
+\begin{equation}
+ \kappa(\vx, \vy) = z(\vx)^Tz(\vy)
+\end{equation}
+
+Se podría optimizar la función
+
+\begin{equation}
+ \sum_i\alpha_i - \frac{1}{2}\sum_i\sum_j\alpha_i\alpha_jy_iy_j\kappa(\bm{x}_i, \bm{x}_j)
+\end{equation}
+
+sin tener jamás que calcular el producto escalar de los vectores. De hecho, la
+dimensionalidad del nuevo espacio vectorial podría ser infinita sin ningún problema.
+Lo único necesario sería que en ese nuevo espacio, que no tenemos por qué conocer,
+los vectores fueran linealmente separables.
+
+Pues estas funcions $\kappa$ existen, y se suelen llamar funciones kernel. Se usan
+especialmente con las SVM, pero se podrían usar en cualquier otro campo.
+
+Algunas de las que existen son el kernel lineal (
+$\kappa(\vx, \vy) = \vx^T\vy + c$
+), el polinómico (
+$\kappa(\vx, \vy) = (\vx^T\vy + c)^d$
+), el gausiano o RBF (
+$\kappa(\vx, \vy) = exp(-\frac{\norm{\vx - \vy}^2}{2\sigma^2})$
+), etc.
+
+\subsubsection{El kernel RBF}
+
+El kernel RBF es una familia de funciones kernel. El nombre viene de
+\textit{Radial Basis Function}. Esta familia de funciones tiene un parámetro
+$\sigma$, y son estas:
+
+\begin{equation}
+ \kappa({\vx, \vy}; \sigma) = e^{-\frac{\norm{\vx - \vy}}{2\sigma^2}}
+\end{equation}
+
+A veces también lo expresan con una gamma ($\gamma$), con la equivalencia
+$\gamma = \frac{1}{2\sigma^2}$:
+
+\begin{equation}
+ \kappa({\vx, \vy}; \gamma) = e^{-\gamma\norm{\vx - \vy}}
+\end{equation}
+
+Tiene una cierta noción de similaridad entre los dos vectores: cuanto más
+distintos son (cuanto mayor es la norma de su diferencia) más se aproxima a 0,
+y si son iguales es 1.
+
+% Tiene una cierta noción de similaridad entre los dos vectores: cuanto más
+% parecidos son (cuanto menor es la norma de su diferencia) más se aproxima a 1, y
+% cuanto más distintos, más cerca de 0.
+
+Se sabe que el feature space de este kernel tiene dimensionalidad infinita, y
+es de los kernel más utilizados.
+
+(Me gustaría enterarme si siempre siempre siempre es dimensionalidad infinita,
+con cualquier valor de gamma).
+
+Un valor de $\sigma$ muy pequeño (muy cercano a 0) produce más sobre-ajuste,
+mientras que un valor más grande lo disminuye.
+
+
+\subsection{Las Random Fourier Features}
+
+\begin{equation}
+  \kernel(\lambda) \approx \langle\phi(\vx), \phi(\vy)\rangle
+\end{equation}
+
+\begin{equation}
+  \omega_i \sim \kappa(\omega)
+\end{equation}
+
+\begin{equation}
+  \phi(x) = \frac{1}{\sqrt{D}}\left[ e^{-i\omega^\transp_1x}, \ldots, e^{-i\omega^\transp_Dx} \right]^\transp
+\end{equation}
+Es una ténica que permite aproximar el feature space de un kernel. Sea $\kappa$
+un kernel, tal que
+
+\begin{equation}
+ \kappa(\vx, \vy) = z(\vx)^Tz(\vy)
+\end{equation}
+
+(Creo que no permite aproximar todos los kernel, solo los que cumplen una condición)
+
+Donde
+$z(\vx) : \reals^d \rightarrow \reals^D$.
+En el caso particular del
+kernel RBF,
+$z(\vx) : \reals^d \rightarrow \reals^\infty$
+
+Las Random Fourier Features permiten generar una función $f(\vx)$ que aproxima $z(\vx)$
+con una dimensionalidad arbitraria, de manera que
+$f(\vx)f(\vy) \approx \kappa(\vx, \vy)$
+
+Como el subespacio de $z(\vx)$ es de dimensionalidad infinita para algunos kernels
+como el RBF, $f(\vx)$ coje un subconjunto aleatorio de todas esas dimensiones,
+según la cantidad que se haya especificado. Esto permite generar varias imágenes
+aleatorias de distintas aproximaciones $f(\vx)$ para un mismo vector $\vx$, y esto
+mismo es lo que se explota en este trabajo para generar aleatoriedad en los datos
+
+\subsection{Nystroem}
+
+Sobretodo en el ámbito de las SVM se utiliza el concepto de \textit{Gramm matrix}
+de un kernel entrenar un modelo. Sea
+$\bm{\chi} = \{\vx_1, \ldots \vx_n\}$
+un conjunto de datos y
+$\kappa(\vx, \vy)$
+un función kernel. La matriz de Gram $G$
+es de tamaño $n \times n$, y
+$G_{i,j} = \kappa(\vx_i, \vx_j)$
+
+El cálculo de esta matriz es muy costoso en tiempo y en espacio, y por lo tanto
+no es factible para la mayoría de problemas de Machine Learning, que requieren
+grandes cantidades de datos.
+
+El método Nystroem consiste en aproximar esta matriz de Gram con un subconjunto
+aleatorio de los datos que sea adecuado sin afectar negativamente la precisión
+de la solución
+\subsection{PCA}
+\subsection{Cross-validation}

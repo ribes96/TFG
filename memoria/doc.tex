@@ -21,6 +21,8 @@
 \usepackage{amsmath,amsfonts,amssymb,amsthm}
 \usepackage{ifthen}
 \usepackage{comment}
+\usepackage{subfig}
+
 
 
 % \restylefloat{table}
@@ -70,7 +72,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\section{Ideas generales}
+\section*{Ideas generales}
 
 El guión que me propuso LLuís es:
 \begin{enumerate}
@@ -94,370 +96,495 @@ El guión que me propuso LLuís es:
  \item Referencias
  \item Apéndices
 \end{enumerate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Introduction}
-\subsection{Problem to solve}
-Todavía no se consigue suficiente precisión con el Machine Learning
-\subsection{Why it is important to solve this problem}
-Con precisión más alta se podría aplicar el machine learning en otros campos
-\subsection{Project proposal}
-Incrementar el accuracy que se puede conseguir con algunos problemas mezclando
-la técnica del bagging (y quizá del boosting) con el tema los RFF
-
-Actualmente el bagging solo se usa con Decision Tree porque es muy inestable.
-Con lo que propongo aquí, podría ser factible usarlo con otros algoritmos más
-estables
-
+  \input{introduction}
 \section{Background}
-Más o menos, cada uno debería ocupar entre media y una página
-\subsection{Machine Learning}
-\subsection{Classification and Regression}
-\subsection{Review de los principales modelos que existen}
-\subsubsection{Decision Tree}
-\subsubsection{Logistic Regression}
-\subsubsection{SVM}
-\subsection{Las técnicas ensembling}
-\subsubsection{Bagging}
-\begin{itemize}
- \item Inventado por Leo Breiman
- \item Pretende reducir el sesgo
-\end{itemize}
-\subsubsection{Boosting}
-\begin{itemize}
- \item Adaboost (adaptive boosting)
- \item El siguiente estimador es más probable que contenga los elementos no
-       no se han predicho bien en el anterior
- \item Se trata de ir modificando los pesos que tiene cada una de las instancias
- \item El entrenamiento de los modelos es secuencial, a diferencia del bagging
- \item Enterarme de quien lo inventó, y para qué ámbitos es útil
-\end{itemize}
-\subsection{El bootstrap}
-\begin{itemize}
- \item En bagging es bueno que los estimadores estén poco relacionados
-       entre ellos
- \item Idealmente, usaríamos un dataset distinto para cada uno de los
-       estimadores, pero eso no siempre es posible
- \item Una alternativa es usar un resampling con repetición sobre cada
-       uno de los estimadores para tener datasets un poco distintos entre ellos.
- \item Enterarme de la cantidad de elementos distintos que se espera que queden
-       en el subconjunto, y quizá hablar de la cantidad de aleatoriedad
-\end{itemize}
-\subsection{Las funciones kernel}
-Las SVM encuentran un híper-plano que separa las instancias de un problema
-determinado en dos subconjuntos del espacio, y en el que cada subconjunto se
-identifica con las clases que se quieren discriminar. Este híper-plano
-busca maximizar la distancia mínima entre él mismo y las instancias (los vectores)
-de cada una de las clases. Para hacerlo, convierte el problema en uno de
-optimización.
+  \input{background}
+\section{Project Development}
+  \input{project_development}
+\section{Experimental Results}
+  \input{experimental_results}
+\section{Conclusion and Future Work}
+  \input{conclusion_and_future_work}
+\section{Sustainability Report}
+  \input{sustainability_report}
 
-Tenemos un conjunto de datos $D = \{\bm{\chi}, \bm{y}\}$, donde $\bm{\chi} = \{\bm{x}_1, \ldots \bm{x}_n\}$, $\bm{x}_i \in \reals^d$, $\bm{y} = \{-1, +1\}^n$
 
-Se requiere encontrar $\bm{\alpha} \in \reals^n$ que maximice:
 
-\begin{equation}
- \sum_i\alpha_i - \frac{1}{2}\sum_i\sum_j\alpha_i\alpha_jy_iy_j\bm{x}_i^T\bm{x}_j
-\end{equation}
 
-% \begin{equation}
-%   \sum_t\alpha^t - \frac{1}{2}\sum_t\sum_s\alpha^t\alpha^sr^tr^s\bm{\upphi}(\bm{x}^t)^T\bm{\upphi}(\bm{x}^s)
-% \end{equation}
-% sujeto a
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{Introduction}
+% \subsection{Problem to solve}
+% Todavía no se consigue suficiente precisión con el Machine Learning
+% \subsection{Why it is important to solve this problem}
+% Con precisión más alta se podría aplicar el machine learning en otros campos
+% \subsection{Project proposal}
+% Incrementar el accuracy que se puede conseguir con algunos problemas mezclando
+% la técnica del bagging (y quizá del boosting) con el tema los RFF
+%
+% Actualmente el bagging solo se usa con Decision Tree porque es muy inestable.
+% Con lo que propongo aquí, podría ser factible usarlo con otros algoritmos más
+% estables
+
+% \section{Background}
+% Más o menos, cada uno debería ocupar entre media y una página
+% \subsection{Machine Learning}
+% \subsection{Classification and Regression}
+% \subsection{Review de los principales modelos que existen}
+% \subsubsection{Decision Tree}
+% \subsubsection{Logistic Regression}
+% \subsubsection{SVM}
+% \subsection{Las técnicas ensembling}
+% \subsubsection{Bagging}
+% \begin{itemize}
+%  \item Inventado por Leo Breiman
+%  \item Pretende reducir el sesgo
+% \end{itemize}
+% \subsubsection{Boosting}
+% \begin{itemize}
+%  \item Adaboost (adaptive boosting)
+%  \item El siguiente estimador es más probable que contenga los elementos no
+%        no se han predicho bien en el anterior
+%  \item Se trata de ir modificando los pesos que tiene cada una de las instancias
+%  \item El entrenamiento de los modelos es secuencial, a diferencia del bagging
+%  \item Enterarme de quien lo inventó, y para qué ámbitos es útil
+% \end{itemize}
+% \subsection{El bootstrap}
+% \begin{itemize}
+%  \item En bagging es bueno que los estimadores estén poco relacionados
+%        entre ellos
+%  \item Idealmente, usaríamos un dataset distinto para cada uno de los
+%        estimadores, pero eso no siempre es posible
+%  \item Una alternativa es usar un resampling con repetición sobre cada
+%        uno de los estimadores para tener datasets un poco distintos entre ellos.
+%  \item Enterarme de la cantidad de elementos distintos que se espera que queden
+%        en el subconjunto, y quizá hablar de la cantidad de aleatoriedad
+% \end{itemize}
+% \subsection{Las funciones kernel}
+% Las SVM encuentran un híper-plano que separa las instancias de un problema
+% determinado en dos subconjuntos del espacio, y en el que cada subconjunto se
+% identifica con las clases que se quieren discriminar. Este híper-plano
+% busca maximizar la distancia mínima entre él mismo y las instancias (los vectores)
+% de cada una de las clases. Para hacerlo, convierte el problema en uno de
+% optimización.
+%
+% Tenemos un conjunto de datos $D = \{\bm{\chi}, \bm{y}\}$, donde $\bm{\chi} = \{\bm{x}_1, \ldots \bm{x}_n\}$, $\bm{x}_i \in \reals^d$, $\bm{y} = \{-1, +1\}^n$
+%
+% Se requiere encontrar $\bm{\alpha} \in \reals^n$ que maximice:
 %
 % \begin{equation}
-%   \sum_t\alpha^tr^t = 0 \textrm{ y } 0 \leq \alpha^t \leq C, \forall t
+%  \sum_i\alpha_i - \frac{1}{2}\sum_i\sum_j\alpha_i\alpha_jy_iy_j\bm{x}_i^T\bm{x}_j
 % \end{equation}
-
-Pero este procedimiento solamente es efectivo si se da el caso que todas las
-instancias de $\bm{\chi}$ son linealmente separables por un híper-plano en cada
-una de las dos clases.
-
-Este no siempre es el caso, y por eso se suele realizar una transformación de los
-datos, que los lleven de un subespacio a otro, que normalmente tiene más dimensiones
-que el original y que se espera que sí permita separar linealmente los datos.
-
-Entonces, si se define una función de transformación de espacio
-$z(\bm{x}) : \reals^d \rightarrow \reals^D$, la función a optimizar sería:
-
-\begin{equation}
- \sum_i\alpha_i - \frac{1}{2}\sum_i\sum_j\alpha_i\alpha_jy_iy_jz(\bm{x}_i)^Tz(\bm{x}_j)
-\end{equation}
-
-Estos cálculos únicamente trabajan con el producto escalar de los vectores, nunca
-con ellos directamente. Es por eso que si existiera una función:
-
-\begin{equation}
- \kappa(\vx, \vy) = z(\vx)^Tz(\vy)
-\end{equation}
-
-Se podría optimizar la función
-
-\begin{equation}
- \sum_i\alpha_i - \frac{1}{2}\sum_i\sum_j\alpha_i\alpha_jy_iy_j\kappa(\bm{x}_i, \bm{x}_j)
-\end{equation}
-
-sin tener jamás que calcular el producto escalar de los vectores. De hecho, la
-dimensionalidad del nuevo espacio vectorial podría ser infinita sin ningún problema.
-Lo único necesario sería que en ese nuevo espacio, que no tenemos por qué conocer,
-los vectores fueran linealmente separables.
-
-Pues estas funcions $\kappa$ existen, y se suelen llamar funciones kernel. Se usan
-especialmente con las SVM, pero se podrían usar en cualquier otro campo.
-
-Algunas de las que existen son el kernel lineal (
-$\kappa(\vx, \vy) = \vx^T\vy + c$
-), el polinómico (
-$\kappa(\vx, \vy) = (\vx^T\vy + c)^d$
-), el gausiano o RBF (
-$\kappa(\vx, \vy) = exp(-\frac{\norm{\vx - \vy}^2}{2\sigma^2})$
-), etc.
-
-\subsubsection{El kernel RBF}
-
-El kernel RBF es una familia de funciones kernel. El nombre viene de
-\textit{Radial Basis Function}. Esta familia de funciones tiene un parámetro
-$\sigma$, y son estas:
-
-\begin{equation}
- \kappa({\vx, \vy}; \sigma) = e^{-\frac{\norm{\vx - \vy}}{2\sigma^2}}
-\end{equation}
-
-A veces también lo expresan con una gamma ($\gamma$), con la equivalencia
-$\gamma = \frac{1}{2\sigma^2}$:
-
-\begin{equation}
- \kappa({\vx, \vy}; \gamma) = e^{-\gamma\norm{\vx - \vy}}
-\end{equation}
-
-Tiene una cierta noción de similaridad entre los dos vectores: cuanto más
-distintos son (cuanto mayor es la norma de su diferencia) más se aproxima a 0,
-y si son iguales es 1.
-
+%
+% % \begin{equation}
+% %   \sum_t\alpha^t - \frac{1}{2}\sum_t\sum_s\alpha^t\alpha^sr^tr^s\bm{\upphi}(\bm{x}^t)^T\bm{\upphi}(\bm{x}^s)
+% % \end{equation}
+% % sujeto a
+% %
+% % \begin{equation}
+% %   \sum_t\alpha^tr^t = 0 \textrm{ y } 0 \leq \alpha^t \leq C, \forall t
+% % \end{equation}
+%
+% Pero este procedimiento solamente es efectivo si se da el caso que todas las
+% instancias de $\bm{\chi}$ son linealmente separables por un híper-plano en cada
+% una de las dos clases.
+%
+% Este no siempre es el caso, y por eso se suele realizar una transformación de los
+% datos, que los lleven de un subespacio a otro, que normalmente tiene más dimensiones
+% que el original y que se espera que sí permita separar linealmente los datos.
+%
+% Entonces, si se define una función de transformación de espacio
+% $z(\bm{x}) : \reals^d \rightarrow \reals^D$, la función a optimizar sería:
+%
+% \begin{equation}
+%  \sum_i\alpha_i - \frac{1}{2}\sum_i\sum_j\alpha_i\alpha_jy_iy_jz(\bm{x}_i)^Tz(\bm{x}_j)
+% \end{equation}
+%
+% Estos cálculos únicamente trabajan con el producto escalar de los vectores, nunca
+% con ellos directamente. Es por eso que si existiera una función:
+%
+% \begin{equation}
+%  \kappa(\vx, \vy) = z(\vx)^Tz(\vy)
+% \end{equation}
+%
+% Se podría optimizar la función
+%
+% \begin{equation}
+%  \sum_i\alpha_i - \frac{1}{2}\sum_i\sum_j\alpha_i\alpha_jy_iy_j\kappa(\bm{x}_i, \bm{x}_j)
+% \end{equation}
+%
+% sin tener jamás que calcular el producto escalar de los vectores. De hecho, la
+% dimensionalidad del nuevo espacio vectorial podría ser infinita sin ningún problema.
+% Lo único necesario sería que en ese nuevo espacio, que no tenemos por qué conocer,
+% los vectores fueran linealmente separables.
+%
+% Pues estas funcions $\kappa$ existen, y se suelen llamar funciones kernel. Se usan
+% especialmente con las SVM, pero se podrían usar en cualquier otro campo.
+%
+% Algunas de las que existen son el kernel lineal (
+% $\kappa(\vx, \vy) = \vx^T\vy + c$
+% ), el polinómico (
+% $\kappa(\vx, \vy) = (\vx^T\vy + c)^d$
+% ), el gausiano o RBF (
+% $\kappa(\vx, \vy) = exp(-\frac{\norm{\vx - \vy}^2}{2\sigma^2})$
+% ), etc.
+%
+% \subsubsection{El kernel RBF}
+%
+% El kernel RBF es una familia de funciones kernel. El nombre viene de
+% \textit{Radial Basis Function}. Esta familia de funciones tiene un parámetro
+% $\sigma$, y son estas:
+%
+% \begin{equation}
+%  \kappa({\vx, \vy}; \sigma) = e^{-\frac{\norm{\vx - \vy}}{2\sigma^2}}
+% \end{equation}
+%
+% A veces también lo expresan con una gamma ($\gamma$), con la equivalencia
+% $\gamma = \frac{1}{2\sigma^2}$:
+%
+% \begin{equation}
+%  \kappa({\vx, \vy}; \gamma) = e^{-\gamma\norm{\vx - \vy}}
+% \end{equation}
+%
 % Tiene una cierta noción de similaridad entre los dos vectores: cuanto más
-% parecidos son (cuanto menor es la norma de su diferencia) más se aproxima a 1, y
-% cuanto más distintos, más cerca de 0.
+% distintos son (cuanto mayor es la norma de su diferencia) más se aproxima a 0,
+% y si son iguales es 1.
+%
+% % Tiene una cierta noción de similaridad entre los dos vectores: cuanto más
+% % parecidos son (cuanto menor es la norma de su diferencia) más se aproxima a 1, y
+% % cuanto más distintos, más cerca de 0.
+%
+% Se sabe que el feature space de este kernel tiene dimensionalidad infinita, y
+% es de los kernel más utilizados.
+%
+% (Me gustaría enterarme si siempre siempre siempre es dimensionalidad infinita,
+% con cualquier valor de gamma).
+%
+% Un valor de $\sigma$ muy pequeño (muy cercano a 0) produce más sobre-ajuste,
+% mientras que un valor más grande lo disminuye.
+%
+%
+% \subsection{Las Random Fourier Features}
+%
+% \begin{equation}
+%   \kernel(\lambda) \approx \langle\phi(\vx), \phi(\vy)\rangle
+% \end{equation}
+%
+% \begin{equation}
+%   \omega_i \sim \kappa(\omega)
+% \end{equation}
+%
+% \begin{equation}
+%   \phi(x) = \frac{1}{\sqrt{D}}\left[ e^{-i\omega^\transp_1x}, \ldots, e^{-i\omega^\transp_Dx} \right]^\transp
+% \end{equation}
+% Es una ténica que permite aproximar el feature space de un kernel. Sea $\kappa$
+% un kernel, tal que
+%
+% \begin{equation}
+%  \kappa(\vx, \vy) = z(\vx)^Tz(\vy)
+% \end{equation}
+%
+% (Creo que no permite aproximar todos los kernel, solo los que cumplen una condición)
+%
+% Donde
+% $z(\vx) : \reals^d \rightarrow \reals^D$.
+% En el caso particular del
+% kernel RBF,
+% $z(\vx) : \reals^d \rightarrow \reals^\infty$
+%
+% Las Random Fourier Features permiten generar una función $f(\vx)$ que aproxima $z(\vx)$
+% con una dimensionalidad arbitraria, de manera que
+% $f(\vx)f(\vy) \approx \kappa(\vx, \vy)$
+%
+% Como el subespacio de $z(\vx)$ es de dimensionalidad infinita para algunos kernels
+% como el RBF, $f(\vx)$ coje un subconjunto aleatorio de todas esas dimensiones,
+% según la cantidad que se haya especificado. Esto permite generar varias imágenes
+% aleatorias de distintas aproximaciones $f(\vx)$ para un mismo vector $\vx$, y esto
+% mismo es lo que se explota en este trabajo para generar aleatoriedad en los datos
+%
+% \subsection{Nystroem}
+%
+% Sobretodo en el ámbito de las SVM se utiliza el concepto de \textit{Gramm matrix}
+% de un kernel entrenar un modelo. Sea
+% $\bm{\chi} = \{\vx_1, \ldots \vx_n\}$
+% un conjunto de datos y
+% $\kappa(\vx, \vy)$
+% un función kernel. La matriz de Gram $G$
+% es de tamaño $n \times n$, y
+% $G_{i,j} = \kappa(\vx_i, \vx_j)$
+%
+% El cálculo de esta matriz es muy costoso en tiempo y en espacio, y por lo tanto
+% no es factible para la mayoría de problemas de Machine Learning, que requieren
+% grandes cantidades de datos.
+%
+% El método Nystroem consiste en aproximar esta matriz de Gram con un subconjunto
+% aleatorio de los datos que sea adecuado sin afectar negativamente la precisión
+% de la solución
+% \subsection{PCA}
+% \subsection{Cross-validation}
 
-Se sabe que el feature space de este kernel tiene dimensionalidad infinita, y
-es de los kernel más utilizados.
+% \section{Workflow of the project}
+% \subsection{La idea general un poco desarroyada}
+%
+% Las funciones kernel son funciones que se pueden expresar de la forma:
+%
+% \begin{equation}
+%    \kappa(\vx, \vy) = \phi(\vx)^T\phi(\vy)
+% \end{equation}
+% Es decir, como producto escalar de una función de sus parámetros. Un kernel muy
+% popular es el RBF (\eng{Radial Basis Function}) gausiano, que es este:
+%
+% \begin{equation}
+%  \kappa({\vx, \vy}; \sigma) = e^{-\frac{\norm{\vx - \vy}}{2\sigma^2}}
+% \end{equation}
+%
+% La función implícita $\phi$ ($\mathcal{L} \mapsto \mathcal{H}$) de este kernel
+% tiene una dimensionalidad infinita, y se sabe que para cualquier conjunto de
+% datos se puede encontrar un kernel RBF $\kappa$ tal que su función implícita
+% $\phi$ es capaz de separarlos mediante un híper-plano.
+%
+% A pesar de que la función $\phi$ tiene dimensionalidad infinita (
+% $\mathcal{H} \equiv \reals^\infty$
+% ) es posible extraer una aproximación aleatoria de la misma con una precisión arbitraria,
+% mediante el uso de \eng{Random Fourier Features} \cite{rff} (RFF). Otra técnica
+% que también se puede utilizar es el método Nystroem. Con estos
+% métodos se puede extraer $\psi(\vx) \approx \phi(\vx)$ y usarlos para lo que
+% haga falta.
+%
+% La extracción de estas aproximaciones se ha usado con anterioridad junto con
+% métodos de redes neuronales, y ha mostrado muy buenos resultados. En este
+% nosotros tratamos de usarlas con otros modelos. En particular, hemos
+% estudiado los modelos de Decision Tree, Logit y LinearSVC, en combinación con
+% varios tipos de ensemble.
+%
+% El uso de ensembles está muy extendido junto con los Decision Tree. Esto se
+% debe a que éste es un modelo muy inestable, y una pequeña alteración en los
+% datos puede producir resultados muy distintos. Estas condiciones son idoneas
+% para hacer un comité de Decision Trees, entrenarlos con datos ligeramente
+% distintos y elegir la solución qué más árboles hayan predicho.
+%
+% Pero este procedimiento no tiene ningún sentido hacerlo con modelos que no son
+% inestables. Si los modelos no son inestables, la mayoría de los estimadores
+% responderán la misma solución, y no servirá para nada haber entrenado tantos
+% modelos distintos. Es como si en un comité de expertos todos ellos opinaran
+% igual: para eso no necesitamos todo un comité, con un solo experto nos habría
+% bastado.
+%
+% La técnica de \eng{bagging} utiliza el \eng{bootstrap} para generar datasets
+% distintos para cada uno de los estimadores. Consiste en hacer un remuestreo de
+% los datos con repetición para cada uno de los estimadores. Esta diferenciación
+% que se produce es suficiente para los Decision Tree, pero es demasiado leve con
+% los métodos más estables, como Logit y LinearSVC.
+%
+% Pero los RFF y Nystroem abren una nueva puerta. Puesto que son aproximaciones
+% aleatorias de un conjunto infinito, podemos sacar tantos mapeos distintos
+% como queramos de los datos originales, y por lo tanto podemos diferenciar
+% todavía más los datasets generados para cada uno de los estimadores.
+%
+% Además de todo esto, hay una ventaja adicional: entrenar una \eng{Support
+% Vector Machine} (SVM) con kernel lineal es más barato que entrenar una no lineal, por
+% ejemplo una que use RBF. Si usamos una SVM lineal, pero en vez de entrenarla
+% con los datos originales la entrenamos con los datos $\psi(\vx)$, tenemos un
+% coste similar al de entrenar una SVM lineal pero con una precisión equiparable
+% a una RBF-SVM. Esto ya se ha hecho antes.
+%
+% Existen varias formas de combinar las RFF con los métodos ensembles. Básicamente,
+% hay dos parámetros que podemos elegir: qué tipo de ensemble usar y en qué
+% momento usar las RFF.
+%
+% Cuando se combina un ensemble con los RFF, básicamente hay dos momentos en
+% los que se puede usar el mapeo. Un momento es nada más empezar, antes de
+% que el ensemble haya visto los datos, y el ensemble trabaja normalmente, solo
+% que en vez de recibir los datos originales recibe un mapeo de los mismos.
+% Este método se abstrae completamente de lo que hace el ensemble, y lo trata
+% como una caja negra. \eng{Black Box}.
+%
+% El otro método consiste en usar el RFF, no nada más empezar y el mismo para
+% todos los estimadores, sino justo antes del estimador: se hace un mapeo nuevo
+% para cada uno de los estimadores. Este método ya se mete dentro de lo que es
+% un ensemble, y por tanto diremos que es de caja blanca (\eng{White Box}).
+%
+% Pero se sabe que se obtienen mejores resultados cuando hay bastante diversidad
+% entre los estimadores del ensemble. Se nos presentan ahora dos formas de crear
+% diversidad en el ensemble. Una de ellas es la forma clásica, mediante el
+% bootstrap, que ha mostrado muy buenos resultados con el \eng{Decision Tree}.
+% Pero ahora podemos usar también la aleatoriedad de los RFF para generar
+% esa diversidad. Entonces tenemos dos opciones: usar los RFF ellos solos o usarlos
+% junto con el Bootstrap. A usarlos junto con el bootstrap le llamaremos un
+% \eng{Bagging}, mientras que si no usamos bootstrap le llamaemos un \eng{Ensemble}.
+%
+% Tenemos entonces varias combinaciones entre manos:
+%
+% \paragraph{Black Bag}
+% Black Box model con Bagging. Primero se hace un mapeo de los datos y después se
+% hace un bootstrap con ellos para cada uno de los estimadores. Si los estimadores
+% son \eng{Decision Tree} es los mismo que un \eng{Random Forest}, pero no con los
+% datos originales, sino con el mapeo.
+%
+% \paragraph{White Bag}
+% White Box model con Bagging. Primero se hace un bootstrap de los datos, para
+% cada uno de los modelos, y después para cada uno de ellos se hace un mapeo de
+% los datos.
+%
+% \paragraph{White Ensemble}
+% White Box model sin baging. Se hace un mapeo para cada uno de los estimadores,
+% todos ellos usando todos los datos originales.
+%
+%
+% El \eng{Black Ensemble} no tiene ningún sentido hacerlo, porque en ese caso
+% todos los estimadores recibirían exactamente los mismos datos, y por lo tanto
+% todos producirían exactamente los mismos resutados, a no ser que tuvieran algún
+% tipo de aleatoriedad, como los Decision Tree. A pesar de que tengamos ese caso
+% particular con los DT, no lo vamos a tratar.
+%
+% Y luego, por supuesto, haremos pruebas con un modelo simple usando los RFF, sin
+% usar ningún tipo de ensemble.
 
-(Me gustaría enterarme si siempre siempre siempre es dimensionalidad infinita,
-con cualquier valor de gamma).
+% \subsubsection{Hipótesis}
+% De precisión:
+% \begin{itemize}
+%   \item Usar bootstrap con RFF es demasiada aleatoriedad y producirá peores
+%   resultados que usar RFF ellos solos.
+%   \item
+% \end{itemize}
+%
+% De tiempos:
+% \begin{itemize}
+%   \item Podemos aproximar la precisión que tendría una RBF-SVM usando una SVM
+%   lineal con el truco de las RFF con un tiempo mucho mejor
+% \end{itemize}
 
-Un valor de $\sigma$ muy pequeño (muy cercano a 0) produce más sobre-ajuste,
-mientras que un valor más grande lo disminuye.
-
-
-\subsection{Las Random Fourier Features}
-
-\begin{equation}
-  \kernel(\lambda) \approx \langle\phi(\vx), \phi(\vy)\rangle
-\end{equation}
-
-\begin{equation}
-  \omega_i \sim \kappa(\omega)
-\end{equation}
-
-\begin{equation}
-  \phi(x) = \frac{1}{\sqrt{D}}\left[ e^{-i\omega^\transp_1x}, \ldots, e^{-i\omega^\transp_Dx} \right]^\transp
-\end{equation}
-Es una ténica que permite aproximar el feature space de un kernel. Sea $\kappa$
-un kernel, tal que
-
-\begin{equation}
- \kappa(\vx, \vy) = z(\vx)^Tz(\vy)
-\end{equation}
-
-(Creo que no permite aproximar todos los kernel, solo los que cumplen una condición)
-
-Donde
-$z(\vx) : \reals^d \rightarrow \reals^D$.
-En el caso particular del
-kernel RBF,
-$z(\vx) : \reals^d \rightarrow \reals^\infty$
-
-Las Random Fourier Features permiten generar una función $f(\vx)$ que aproxima $z(\vx)$
-con una dimensionalidad arbitraria, de manera que
-$f(\vx)f(\vy) \approx \kappa(\vx, \vy)$
-
-Como el subespacio de $z(\vx)$ es de dimensionalidad infinita para algunos kernels
-como el RBF, $f(\vx)$ coje un subconjunto aleatorio de todas esas dimensiones,
-según la cantidad que se haya especificado. Esto permite generar varias imágenes
-aleatorias de distintas aproximaciones $f(\vx)$ para un mismo vector $\vx$, y esto
-mismo es lo que se explota en este trabajo para generar aleatoriedad en los datos
-
-\subsection{Nystroem}
-
-Sobretodo en el ámbito de las SVM se utiliza el concepto de \textit{Gramm matrix}
-de un kernel entrenar un modelo. Sea
-$\bm{\chi} = \{\vx_1, \ldots \vx_n\}$
-un conjunto de datos y
-$\kappa(\vx, \vy)$
-un función kernel. La matriz de Gram $G$
-es de tamaño $n \times n$, y
-$G_{i,j} = \kappa(\vx_i, \vx_j)$
-
-El cálculo de esta matriz es muy costoso en tiempo y en espacio, y por lo tanto
-no es factible para la mayoría de problemas de Machine Learning, que requieren
-grandes cantidades de datos.
-
-El método Nystroem consiste en aproximar esta matriz de Gram con un subconjunto
-aleatorio de los datos que sea adecuado sin afectar negativamente la precisión
-de la solución
-\subsection{PCA}
-\subsection{Cross-validation}
-
-\section{Workflow of the project}
-\subsection{La idea general un poco desarroyada}
-
-Las funciones kernel son funciones que se pueden expresar de la forma:
-
-\begin{equation}
-   \kappa(\vx, \vy) = \phi(\vx)^T\phi(\vy)
-\end{equation}
-Es decir, como producto escalar de una función de sus parámetros. Un kernel muy
-popular es el RBF (\eng{Radial Basis Function}) gausiano, que es este:
-
-\begin{equation}
- \kappa({\vx, \vy}; \sigma) = e^{-\frac{\norm{\vx - \vy}}{2\sigma^2}}
-\end{equation}
-
-La función implícita $\phi$ ($\mathcal{L} \mapsto \mathcal{H}$) de este kernel
-tiene una dimensionalidad infinita, y se sabe que para cualquier conjunto de
-datos se puede encontrar un kernel RBF $\kappa$ tal que su función implícita
-$\phi$ es capaz de separarlos mediante un híper-plano.
-
-A pesar de que la función $\phi$ tiene dimensionalidad infinita (
-$\mathcal{H} \equiv \reals^\infty$
-) es posible extraer una aproximación aleatoria de la misma con una precisión arbitraria,
-mediante el uso de \eng{Random Fourier Features} \cite{rff} (RFF). Otra técnica
-que también se puede utilizar es el método Nystroem. Con estos
-métodos se puede extraer $\psi(\vx) \approx \phi(\vx)$ y usarlos para lo que
-haga falta.
-
-La extracción de estas aproximaciones se ha usado con anterioridad junto con
-métodos de redes neuronales, y ha mostrado muy buenos resultados. En este
-nosotros tratamos de usarlas con otros modelos. En particular, hemos
-estudiado los modelos de Decision Tree, Logit y LinearSVC, en combinación con
-varios tipos de ensemble.
-
-El uso de ensembles está muy extendido junto con los Decision Tree. Esto se
-debe a que éste es un modelo muy inestable, y una pequeña alteración en los
-datos puede producir resultados muy distintos. Estas condiciones son idoneas
-para hacer un comité de Decision Trees, entrenarlos con datos ligeramente
-distintos y elegir la solución qué más árboles hayan predicho.
-
-Pero este procedimiento no tiene ningún sentido hacerlo con modelos que no son
-inestables. Si los modelos no son inestables, la mayoría de los estimadores
-responderán la misma solución, y no servirá para nada haber entrenado tantos
-modelos distintos. Es como si en un comité de expertos todos ellos opinaran
-igual: para eso no necesitamos todo un comité, con un solo experto nos habría
-bastado.
-
-La técnica de \eng{bagging} utiliza el \eng{bootstrap} para generar datasets
-distintos para cada uno de los estimadores. Consiste en hacer un remuestreo de
-los datos con repetición para cada uno de los estimadores. Esta diferenciación
-que se produce es suficiente para los Decision Tree, pero es demasiado leve con
-los métodos más estables, como Logit y LinearSVC.
-
-Pero los RFF y Nystroem abren una nueva puerta. Puesto que son aproximaciones
-aleatorias de un conjunto infinito, podemos sacar tantos mapeos distintos
-como queramos de los datos originales, y por lo tanto podemos diferenciar
-todavía más los datasets generados para cada uno de los estimadores.
-
-Además de todo esto, hay una ventaja adicional: entrenar una \eng{Support
-Vector Machine} (SVM) con kernel lineal es más barato que entrenar una no lineal, por
-ejemplo una que use RBF. Si usamos una SVM lineal, pero en vez de entrenarla
-con los datos originales la entrenamos con los datos $\psi(\vx)$, tenemos un
-coste similar al de entrenar una SVM lineal pero con una precisión equiparable
-a una RBF-SVM. Esto ya se ha hecho antes.
-
-Existen varias formas de combinar las RFF con los métodos ensembles. Básicamente,
-hay dos parámetros que podemos elegir: qué tipo de ensemble usar y en qué
-momento usar las RFF.
-
-Cuando se combina un ensemble con los RFF, básicamente hay dos momentos en
-los que se puede usar el mapeo. Un momento es nada más empezar, antes de
-que el ensemble haya visto los datos, y el ensemble trabaja normalmente, solo
-que en vez de recibir los datos originales recibe un mapeo de los mismos.
-Este método se abstrae completamente de lo que hace el ensemble, y lo trata
-como una caja negra. \eng{Black Box}.
-
-El otro método consiste en usar el RFF, no nada más empezar y el mismo para
-todos los estimadores, sino justo antes del estimador: se hace un mapeo nuevo
-para cada uno de los estimadores. Este método ya se mete dentro de lo que es
-un ensemble, y por tanto diremos que es de caja blanca (\eng{White Box}).
-
-Pero se sabe que se obtienen mejores resultados cuando hay bastante diversidad
-entre los estimadores del ensemble. Se nos presentan ahora dos formas de crear
-diversidad en el ensemble. Una de ellas es la forma clásica, mediante el
-bootstrap, que ha mostrado muy buenos resultados con el \eng{Decision Tree}.
-Pero ahora podemos usar también la aleatoriedad de los RFF para generar
-esa diversidad. Entonces tenemos dos opciones: usar los RFF ellos solos o usarlos
-junto con el Bootstrap. A usarlos junto con el bootstrap le llamaremos un
-\eng{Bagging}, mientras que si no usamos bootstrap le llamaemos un \eng{Ensemble}.
-
-Tenemos entonces varias combinaciones entre manos:
-
-\paragraph{Black Bag}
-Black Box model con Bagging. Primero se hace un mapeo de los datos y después se
-hace un bootstrap con ellos para cada uno de los estimadores. Si los estimadores
-son \eng{Decision Tree} es los mismo que un \eng{Random Forest}, pero no con los
-datos originales, sino con el mapeo.
-
-\paragraph{White Bag}
-White Box model con Bagging. Primero se hace un bootstrap de los datos, para
-cada uno de los modelos, y después para cada uno de ellos se hace un mapeo de
-los datos.
-
-\paragraph{White Ensemble}
-White Box model sin baging. Se hace un mapeo para cada uno de los estimadores,
-todos ellos usando todos los datos originales.
-
-
-El \eng{Black Ensemble} no tiene ningún sentido hacerlo, porque en ese caso
-todos los estimadores recibirían exactamente los mismos datos, y por lo tanto
-todos producirían exactamente los mismos resutados, a no ser que tuvieran algún
-tipo de aleatoriedad, como los Decision Tree. A pesar de que tengamos ese caso
-particular con los DT, no lo vamos a tratar.
-
-Y luego, por supuesto, haremos pruebas con un modelo simple usando los RFF, sin
-usar ningún tipo de ensemble.
-
-\subsubsection{Hipótesis}
-De precisión:
-\begin{itemize}
-  \item Usar bootstrap con RFF es demasiada aleatoriedad y producirá peores
-  resultados que usar RFF ellos solos.
-  \item
-\end{itemize}
-
-De tiempos:
-\begin{itemize}
-  \item Podemos aproximar la precisión que tendría una RBF-SVM usando una SVM
-  lineal con el truco de las RFF con un tiempo mucho mejor
-\end{itemize}
-
-\subsection{Los datasets}
-He enfocado el trabajo únicamente con problemas de clasificación. He hecho
-pruebas con 8 datasets distintos.
-
-Todos ellos los he normalizado a media 0 y varianza 1, y he usado dos tercios
-para train y un tercio para test.
-
-\subsubsection{Pen Digits}
-\cite[Vease][]{pen_digits}
-Distinguir entre los 10 dígitos (0-9) de un conjunto de imágenes. El dataset
-se ha generado cogiendo las coordenadas $x$ e $y$ del trazo hecho por una
-persona para dibujar ese número e interpolando 8 puntos normalmente espaciados
-en todo el trazo del dibujo.
-
-
-\subsubsection{Covertype}
-\subsubsection{Satellite}
-\subsubsection{Vowel}
-\subsubsection{Fall Detection}
-\subsubsection{MNIST}
-\subsubsection{Segment}
-\subsubsection{Digits}
+% \subsection{Los datasets}
+% He enfocado el trabajo únicamente con problemas de clasificación. He hecho
+% pruebas con 8 datasets distintos.
+%
+% Todos ellos los he normalizado a media 0 y varianza 1, y he usado dos tercios
+% para train y un tercio para test.
+%
+% Por limitaciones de las implementaciones de los algoritmos que tengo, no podía
+% trabajar con variables categóricas, de modo que algunas de ellas he tenido que
+% convertirlas a float.
+%
+% Algunos datasets me los daban separados en 2 subconjuntos, uno para train y el
+% otro para test. Yo los he mezclado, y ya si eso he hecho la separación,
+% aleatoria, por mi cuenta más tarde.
+%
+% En algunos casos me daban muchísimas instancias, y yo no necesitaba tantas, y
+% por lo tanto he cogido un subconjunto
+%
+% En algunos casos el dataset no estaba bien balanceado, había muchas instancias
+% de un tipo y pocas de otro. Yo he hecho un subconjunto para cada clase, todos
+% con la misma cantidad de instancias. Esto lo he hecho porque el objetivo de este
+% trabajo no tiene nada que ver con clases mal balanceadas.
+%
+% \subsubsection{Pen Digits}
+% \cite[See][]{pen-digits}
+%
+% Distinguir entre los 10 dígitos (0-9) de un conjunto de imágenes. El dataset
+% se ha generado cogiendo las coordenadas $x$ e $y$ del trazo hecho por una
+% persona para dibujar ese número e interpolando 8 puntos normalmente espaciados
+% en todo el trazo del dibujo.
+%
+% La tabla con la información es \ref{info-dts-pen-digits}
+%
+% \dtsInfo{pen-digits}{16}{10992}{10}
+%
+% \subsubsection{Covertype}
+% \cite[See][]{covertype}
+%
+% Identificar el tipo de terreno usando información como la elevation, el slope,
+% la horizontal distance to nearest surface water features, etc.
+%
+% En el dataset original había un atributo con 40 columnas binarias que
+% identificaba el tipo de tierra, con la Soil Type Designation. Estas 40
+% columnas las he convertido a una sola variable, con números del 1 al 40.
+%
+% La tabla con la información es \ref{info-dts-covertype}
+%
+%
+% \dtsInfo{covertype}{12}{4900}{7}
+%
+% \subsubsection{Satellite}
+% \cite[See][]{satellite}
+%
+% La página de este dataset dice que son 7 clases, pero una de ellas no tiene
+% ninguna presencia, y por lo tanto yo no la he contado para nada.
+%
+% Cada instancia es una parcela de $3 \times 3$ pixels y para cada pixel nos
+% dan 4 números, cada uno de ellos es el color que se ha captado con 4
+% different spectral bands. Por eso son 36: $9 \times 4 = 36$.
+%
+% Lo que se predice es el tipo de terreno que contenía ese pixel, como plantación
+% de algodón,
+%
+% La tabla con la información es \ref{info-dts-satellite}
+% \dtsInfo{satellite}{36}{6435}{6}
+%
+% \subsubsection{Vowel}
+% \cite[See][]{vowel}
+%
+% Me daban los datos separados por quien había dicho cada vocal, y yo lo he
+% mezclado todo.
+%
+% Se trata de ver cual de las 11 vocales que tiene el idioma inglés es la que se
+% ha pronunciado. Para ello se usan 10 atributos.
+%
+% La tabla con la información es \ref{info-dts-vowel}
+% \dtsInfo{vowel}{10}{990}{11}
+%
+% \subsubsection{Fall Detection}
+% \cite[See][]{fall-detection}
+%
+% Se trata de identificar cuando una persona se ha caido al suelo o en qué otro
+% estado está (de pie, tumbado, caminando).
+%
+% La tabla con la información es \ref{info-dts-fall-detection}
+% \dtsInfo{fall-detection}{6}{16382}{6}
+%
+% \subsubsection{MNIST}
+% \cite[See][]{mnist}
+%
+% La tabla con la información es \ref{info-dts-mnist}
+% \dtsInfo{mnist}{12}{4900}{7}
+%
+% \subsubsection{Segment}
+% \cite[See][]{segment}
+%
+% La tabla con la información es \ref{info-dts-segment}
+% \dtsInfo{segment}{717}{5000}{10}
+%
+% \subsubsection{Digits}
+% \cite[See][]{digits}
+%
+% La tabla con la información es \ref{info-dts-digits}
+% \dtsInfo{digits}{64}{5620}{10}
 
 
 
@@ -472,32 +599,155 @@ en todo el trazo del dibujo.
 %
 % Este nuevo espacio de dimensionalidad infinita
 
-\subsection{State of the art con las RFF}
+% \subsection{Búsqueda de híperparámetros}
+% Existen los siguiente híper-parámetros:
+% \subsubsection*{Decision Tree}
+% El algoritmo de Python de DT tiene muchísimos híperparámetros: la máxima
+% profundidad, el mínimo de hojas, mínimo de instancias para hacer split,
+% mínimo decrecimiento de la impureza de un nodo para hacer split, etc.
+%
+% Trabajar con todos ellos no era viable, de modo que únicamente hemos considerado
+% el \eng{min\tu  impurity\tu decrease}. Todos los demás los hemos dejado que
+% sobreajusten. De esta manera el modelo es más parecido al de R, y facilita hacer
+% comparaciones
+% \subsubsection*{Logit}
+% Se puede hacer Logit con regularización de \textit{w} o sin hacerla, pero la
+% implementación en Python que tenía disponible obligaba a hacerla. Como decidimos
+% que no queríamos hacer regularización, hemos puesto un valor que hace que la
+% regularización sea mínima.
+%
+% \subsubsection*{Support Vector Machine}
+%
+% Tiene un parámetro \textit{C} para regular la importancia que se le da a los
+% vectores que quedan fuera del margen. Es el que hemos considerado.
+%
+% También hay otros híperparámetros:
+%
+% \begin{description}
+%   \item[Cantidad  de features] Se puede sacar una cantidad arbitraria de
+%   features, cuanto mayor mejor se aproxima al kernel. Después de muchas pruebas,
+%   vimos que con 500 features ya no se puede mejorar mucho más, de modo que
+%   hemos hecho todas las pruebas usando exactamente 500 features.
+%   \item[Gammas] Tanto el RFF como el Nystroem tienen un parámetro \textit{gamma},
+%   que es el del kernel que quieren simular, el RBF.
+%   \item[Cantidad de estimadores de los ensembles] Se sabe que incrementear la
+%   cantidad de estimadores no empeora la precisión del modelo, pero coger un
+%   número demasiado alto incrementa el tiempo de entrenamiento. Hemos fijado
+%   este parámeto a 500.
+% \end{description}
+%
+% El procedimiento que hemos usado para encontrar los híperparámetros para los
+% experimentos ha sido el siguiente:
+%
+% Hemos usado crossvalidation, pero hemos intentado que éste fuera solo de un
+% híperparámetro para no incrementear demasiado el coste. Por lo tanto, hemos
+% tenido que hacer algunas simplificaciones.
+%
+% En los experimentos que implican los modelos simples, sin ningún añadido, se
+% ha hecho crossvalidation con el único parámetro que tienen: DT el min\tu impurity
+% \tu decrease, Logit no tiene ninguno (pues hemos forzado la regulación al
+% mínimo) y SVM tiene la C. Hemos hecho crossvalidation con esos.
+%
+% Cuando usamos algún sampler, también tenemos una gamma que encontrar. En esos
+% casos, puede ser que estemos usando un modelo simple, o un ensemble de modelos.
+% Cuando se trate de un modelo simple usaremos una gamma que sobreajuste, mientras
+% que haremos crossvalidation con sus híper-parámetros.
+%
+% Cuando se hace un ensemble, hay que dejar que cada uno de los estimadores
+% sobreajusten. Para ello usaremos unos híperparámetros que sobreajusten, mientras
+% que haremos crossvalidation con la gamma.
+
+% \subsection{Hipótesis}
+
+% Poner la hipótesis 2 veces: la primera con muy poco detalle, sin palabras
+% técnicas, en la introducción. Indicando que mas tarde se van a precisar
+%
+% La segunda será más técnica.
+%
+% \begin{itemize}
+%   % \item Las RFF permiten que hacer un ensemble de Logit o de SVM tenga sentido
+%   \item Con las RFF podemos mejorar la precisión de un Logit o de una SVM
+%   haciendo un ensemble con ellos.
+%   \item Es posible conseguir un rendimiento parecido al de una RBF-SVM con
+%   un coste mucho menor usando las RFF
+%   \item Bootstrap + RFF puede generar demasiada aleatoriedad en algunos
+%   problemas, y perjudicar la precisión del algoritmo
+%   % \item El modelo white box es capaz de conseguir más precisión que el black box
+%   \item Por la naturaleza misma del DT, no se beneficiará demasiado de usar los
+%   RFF. Estudiar si un método que no se basa en productos escalares se puede
+%   beneficiar de usar Random Fourier Features. No hablar en particular del dt,
+%   sino de los que no se basan en producto escalar.
+%   \item Tenemos tres tipos de ensembles: Black Bag, Grey Bag y White Bag. El
+%   White bag será el mejor.
+% \end{itemize}
+
+
+% De precisión:
+% \begin{itemize}
+%   \item Usar bootstrap con RFF es demasiada aleatoriedad y producirá peores
+%   resultados que usar RFF ellos solos.
+%   \item
+% \end{itemize}
+%
+% De tiempos:
+% \begin{itemize}
+%   \item Podemos aproximar la precisión que tendría una RBF-SVM usando una SVM
+%   lineal con el truco de las RFF con un tiempo mucho mejor
+% \end{itemize}
+
+% \subsection{Experimentos}
+
+% 1. Plantear la hipótesis \\
+% 2. Plantear los experimentos que habría que hacer \\
+% 3. Mostrar los resultados que he obtenido \\
+% 4. Discutir temas 2 a 2 \\
+% 5. Contrastar las hopótesis, y ver si se han refutado o support \\
+%
+%
+%
+%
+% Los experimentos que vamos a realizar son los siquientes
+%   \subsubsection{De precisión}
+%   \begin{description}
+%     \item[Los modelos simples] Este nos permitirá ver cuál es aproximadamente
+%     la dificultad de cada problema, para poder compararlo con las siguientes
+%     modificaciones.
+%     \item[Black Box vs. White Box] Siempre hemos tenido la teoría de que el
+%     White Box será mejor, pero hay que comprobarlo.
+%     \item[Bag vs Ensemble usando black box]
+%     \item[Bag vs Ensemble usando white box]
+%   \end{description}
+%   \subsection{De tiempo}
 
 
 
-\section{Experimental results}
-\section{Conclussion}
-De momento, parece que algunos problemas sí que se benefician de esto, mientas
-que otros no lo hacen
 
-\section{Future work}
-\begin{itemize}
- \item El trabajo se ha centrado en problemas de clasificación, pero no hay
-       ningún motivo para que no se pueda aplicar el regresión. Se ha omitodo por
-       simplificar
- \item Aquella teoría de que quizá se puede regular la cantidad de aleatoriedad
-       que añade el bootstrap, y quizá inventar un bootstrap con un parámetro para
-       regular la cantidad de aleatoriedad
- \item Pensar en aquella teoría de que quizá se puede inventar un procedimiento
-       para, dato un problema determinado con sus datos, sacar un número que sea
-       representativo de la cantidad promedio de ruido que tiene. Puesto que quizá
-       es útil para este proyecto conocer la cantidad de aleatoriedad que tienen
-       los datos, para que se pueda regular
-\end{itemize}
-\section{Sustainability Report}
+% \subsection{State of the art con las RFF}
 
-\input{sustainability_report}
+
+
+% \section{Experimental results}
+% \section{Conclussion}
+% De momento, parece que algunos problemas sí que se benefician de esto, mientas
+% que otros no lo hacen
+
+% \section{Future work}
+% \begin{itemize}
+%  \item El trabajo se ha centrado en problemas de clasificación, pero no hay
+%        ningún motivo para que no se pueda aplicar el regresión. Se ha omitodo por
+%        simplificar
+%  \item Aquella teoría de que quizá se puede regular la cantidad de aleatoriedad
+%        que añade el bootstrap, y quizá inventar un bootstrap con un parámetro para
+%        regular la cantidad de aleatoriedad
+%  \item Pensar en aquella teoría de que quizá se puede inventar un procedimiento
+%        para, dato un problema determinado con sus datos, sacar un número que sea
+%        representativo de la cantidad promedio de ruido que tiene. Puesto que quizá
+%        es útil para este proyecto conocer la cantidad de aleatoriedad que tienen
+%        los datos, para que se pueda regular
+% \end{itemize}
+% \section{Sustainability Report}
+%
+% \input{sustainability_report}
 
 % Aquí empieza el índice que tenía en la fita de seguiment
 % \section{Context}

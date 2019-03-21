@@ -4,6 +4,24 @@
 \newcommand{\eng}[1]{\textit{#1}}
 \newcommand{\transp}{\intercal}
 \newcommand{\kernel}{\kappa}
+\newcommand{\tu}{\textunderscore}
+\newcommand{\dtsInfo}[4]{
+
+ \begin{table}[]
+  \begin{tabular}{|l|c|}
+   \hline
+   \textbf{Name}         & #1 \\ \hline
+   \textbf{\# Features}  & #2 \\ \hline
+   \textbf{\# Instances} & #3 \\ \hline
+   \textbf{\# Classes}   & #4 \\ \hline
+  \end{tabular}
+  \caption{Info. of dataset #1}
+  \label{info-dts-#1}
+
+ \end{table}
+ % \caption{Info. of dataset #1}
+
+}
 
 % \newenvironment{comment}
 % {
