@@ -4,6 +4,7 @@ from sklearn.kernel_approximation import RBFSampler
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import LinearSVC
 from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC
 from sklearn.pipeline import Pipeline
 from sklearn.ensemble import BaggingClassifier
 from sklearn.decomposition import PCA
@@ -66,6 +67,7 @@ def get_sampler(sampler_name, rbfsampler_gamma, nystroem_gamma):
         s = RBFSampler(gamma=rbfsampler_gamma)
     else:
         raise ValueError('This sampler ({}) is not supported'.format(sampler_name))
+        # raise ValueError(f'This sampler ({sampler_name}) is not supported')
     return s
 
 
@@ -392,7 +394,7 @@ def get_base_model_with_params(model_name, params):
     Parameters
     ----------
     model_name : str
-        One of ['dt', 'linear_svc', 'logit']
+        One of ['dt', 'linear_svc', 'logit', 'rbf_svc']
     params : dict
         Containing the parameters to use with the model creation
 
@@ -405,12 +407,19 @@ def get_base_model_with_params(model_name, params):
         m = DecisionTreeClassifier(**params)
     elif model_name == 'linear_svc':
         # m = LinearSVC(C=1)
-        m = LinearSVC(**params, max_iter=5000)
+        # m = LinearSVC(**params, max_iter=5000)
+        m = LinearSVC(**params, dual=False, tol=1e-2)
     elif model_name == 'logit':
+        # m = LogisticRegression(**params,
+        #                        multi_class='multinomial',
+        #                        solver='lbfgs',
+        #                        max_iter=1000)
         m = LogisticRegression(**params,
                                multi_class='multinomial',
                                solver='lbfgs',
-                               max_iter=1000)
+                               tol=1e-2)
+    elif model_name == 'rbf_svc':
+        m = SVC(**params, kernel='rbf')
     else:
         raise ValueError('This model is not supported')
 

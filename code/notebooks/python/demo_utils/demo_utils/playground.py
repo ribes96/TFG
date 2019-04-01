@@ -6,6 +6,24 @@
 # boxes = ['black_bag', 'grey_bag', 'black_ens', 'grey_ens', 'None']
 # boxes = ['black_bag', 'grey_bag', 'black_ens', 'grey_ens', 'none']
 
+import time
+
+def simple_time_and_accuracy_test(dts_name,
+                                  model_name,
+                                  box_type,
+                                  ):
+    '''
+    La función de abajo tiene que hacer 3 ejecuciones de esta, que solo hace una
+    '''
+
+def time_and_accuracy_test(dts_name,
+                           ):
+    '''
+    Hace una ejecución del test que se indica en los parámetros y con
+    algún tipo de estructura retorna el accuracy obtenido con cada uno de ellos
+    y los tiempos de cross-validation, entrenamiento y respuesta
+    '''
+
 
 def auto_demo(model, dts):
     boxes = ['black_bag', 'grey_bag', 'black_ens', 'grey_ens', 'none']

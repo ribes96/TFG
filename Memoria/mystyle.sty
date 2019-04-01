@@ -1,3 +1,41 @@
+% \usepackage[utf8]{inputenc}
+% \usepackage[spanish]{babel}
+% \usepackage[english]{babel}
+
+% \usepackage{biblatex}
+% \addbibresource{ribes19bib.bib}
+
+\usepackage{csquotes}
+
+% \usepackage{authblk}
+%
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\graphicspath{ {./img/} }
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage{eurosym}
+\usepackage{ upgreek }
+\usepackage{bm}
+
+\usepackage{ dsfont }
+\usepackage{commath}
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{ifthen}
+\usepackage{comment}
+\usepackage{subfig}
+
+\usepackage{caption}
+\captionsetup{justification=raggedright,singlelinecheck=false}
+
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable}
+\usepackage{ textcomp }
+
+
+
+
 \newcommand{\reals}{\mathds{R}}
 \newcommand{\vx}{\ensuremath{\bm{x}}}
 \newcommand{\vy}{\ensuremath{\bm{y}}}
@@ -69,9 +107,17 @@
 
 \newenvironment{note}
 {
-  \begin{tcolorbox}[width=1.3\linewidth, breakable, colback=yellow,coltext=black]
+  \begin{tcolorbox}[breakable, colback=yellow,coltext=black]
 }
 {\end{tcolorbox}}
+
+\newenvironment{release}
+{
+  \begin{tcolorbox}[breakable, colback=green,coltext=black]
+}
+{
+\end{tcolorbox}
+}
 
 \newcommand{\bbag}
 {\subfloat[Black Bag]{\includegraphics[width=0.5\linewidth]{black_bag}}}

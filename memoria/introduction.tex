@@ -1,7 +1,21 @@
 \subsection{Problem to solve}
+
   Todavía no se consigue suficiente precisión con el Machine Learning
+
+  \begin{note}
+    Se trata de encontrar un buen trade-off entre conseguir más precisión con el
+    ML y el coste que tiene conseguirla.
+  \end{note}
+
 \subsection{Why is it important}
   Con precisión más alta se podría aplicar el machine learning en otros campos
+
+  \begin{note}
+    Avances en este campo podrían pemitir usar el ML en campos donde ahora no
+    llega, como la medicina, sociedad, economía. Las ventajas del ML son
+    muchísimas, pero todavía no es posible explotarlas todas.
+  \end{note}
+
 \subsection{Project Proposal}
   Incrementar el accuracy que se puede conseguir con algunos problemas mezclando
   la técnica del bagging (y quizá del boosting) con el tema los RFF
@@ -10,7 +24,54 @@
   Con lo que propongo aquí, podría ser factible usarlo con otros algoritmos más
   estables
 
+  \begin{note}
+    Actualmente existe una batería de algoritmos y tecnologías que son muy
+    útiles, pero que se están usando cada una por su cuenta, no se están
+    combinando. Las que yo veo son:
+    \begin{itemize}
+      \item Los modelos de toda la vida: SVM, Logit, DT, etc.
+      \item Los ensembles junto con el bagging
+      \item Los kernel trick
+      \item Las aproximaciones de los kernel, como RFF y Nystroem
+    \end{itemize}
+
+    Básicamente, la propuesta es combinar todos estos métodos que ya son muy
+    buenos de por sí para conseguir un mejor trade-off entre la precisión y el
+    tiempo de entrenamiento.
+  \end{note}
+
 
   Poner las hipótesis de forma rápida
-\subsection{Chapter Explanation}
+
+  \begin{note}
+    Los hipótesis son:
+    \begin{enumerate}
+      \item Se puede diseñar un algoritmo que permita que tenga sentido hacer
+      un ensemble de modelos distintos a DT, como Logit o SVM
+      \item Se puede aproximar la precisión de una SVM con kernel no lineal con
+      métodos más eficientes, sin perder demasiado la precisión. Esto ya se ha
+      hecho en \cite{svm_rff}
+      \item Las RFF quizá añaden demasiada aleatoriedad, y es necesario
+      reducirla por otro lado
+      \item Los modelos que no se basan en productos lineales de las entradas
+      no se beneficiarán tanto de las RFF
+    \end{enumerate}
+  \end{note}
+\subsection*{Chapter Explanation}
   Poner qué veremos en cada capítulo
+
+  \begin{note}
+    En la sección \ref{st:background} se da una explicación rápida de todos los
+    conceptos que hace falta conocer para entender este trabajo. En la
+    sección \ref{st:development} se explica lo que se ha hecho en este trabajo.
+    En particular, se explica la novedad que aporta este trabajo, las hipótesis
+    que se han planteado con un poco más de detalle, con qué datasets se ha
+    testeado y los procedimientos y preprocesado que se ha tenido con ellos
+    y finalmente qué experimentos hemos diseñado. En la sección
+    \ref{st:experiments} se muestran los resultados de los experimentos y se
+    estudian los mismos para finalmente contrastar las hipótesis que habíamos
+    planteado. En la sección \ref{st:conclusion} se describen las conclusiones
+    a las que se ha llegado con este proyecto y posibles expansiones que se
+    pueden hacer. Finalmente, en la sección \ref{st:sustainability} se hace un
+    estudio de la sostenibilidad de este proyecto.
+  \end{note}

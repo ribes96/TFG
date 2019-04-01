@@ -1,0 +1,180 @@
+\subsection{Hyperparameters}
+
+\begin{note}
+  Existen los siguientes parámetros:
+  \begin{itemize}
+    \item En DT, min-impurity-decrease
+    \item En SVM, la C
+    \item EN RFF y en Nystroem, la gamma
+    \item en RFF y en Nystroem, la cantidad de features
+    \item En los ensembles, la cantidad de estimadores
+  \end{itemize}
+
+  Entonces, hemos usado el siguiente procedimiento:
+  \begin{itemize}
+    \item La cantidad de features la hemos fijado a 500, aquí ya se estanca
+    \item La cantidad de estimadores la hemos fijado a 50
+    \item En modelos simples, se estima el parámetro por cross-validation
+    \item En modelos simples con RFF, se estima el parámetro por cross-validation
+    y se pone una gamam que sobre-ajuste
+    \item En modelos con ensemble, hemos fijado híper-parámetros que
+    sobre-ajusten y se estima la gamma por cross-validation
+    \item En SVM con RBF, se usa la gamma de gamest, y se estima C por
+    cross-validation
+  \end{itemize}
+\end{note}
+
+Existen los siguiente híper-parámetros:
+\subsubsection*{Decision Tree}
+El algoritmo de Python de DT tiene muchísimos híperparámetros: la máxima
+profundidad, el mínimo de hojas, mínimo de instancias para hacer split,
+mínimo decrecimiento de la impureza de un nodo para hacer split, etc.
+
+Trabajar con todos ellos no era viable, de modo que únicamente hemos considerado
+el \eng{min\tu  impurity\tu decrease}. Todos los demás los hemos dejado que
+sobreajusten. De esta manera el modelo es más parecido al de R, y facilita hacer
+comparaciones
+\subsubsection*{Logit}
+Se puede hacer Logit con regularización de \textit{w} o sin hacerla, pero la
+implementación en Python que tenía disponible obligaba a hacerla. Como decidimos
+que no queríamos hacer regularización, hemos puesto un valor que hace que la
+regularización sea mínima.
+
+\subsubsection*{Support Vector Machine}
+
+Tiene un parámetro \textit{C} para regular la importancia que se le da a los
+vectores que quedan fuera del margen. Es el que hemos considerado.
+
+También hay otros híperparámetros:
+
+\begin{description}
+  \item[Cantidad  de features] Se puede sacar una cantidad arbitraria de
+  features, cuanto mayor mejor se aproxima al kernel. Después de muchas pruebas,
+  vimos que con 500 features ya no se puede mejorar mucho más, de modo que
+  hemos hecho todas las pruebas usando exactamente 500 features.
+  \item[Gammas] Tanto el RFF como el Nystroem tienen un parámetro \textit{gamma},
+  que es el del kernel que quieren simular, el RBF.
+  \item[Cantidad de estimadores de los ensembles] Se sabe que incrementear la
+  cantidad de estimadores no empeora la precisión del modelo, pero coger un
+  número demasiado alto incrementa el tiempo de entrenamiento. Hemos fijado
+  este parámeto a 500.
+\end{description}
+
+El procedimiento que hemos usado para encontrar los híperparámetros para los
+experimentos ha sido el siguiente:
+
+Hemos usado crossvalidation, pero hemos intentado que éste fuera solo de un
+híperparámetro para no incrementear demasiado el coste. Por lo tanto, hemos
+tenido que hacer algunas simplificaciones.
+
+En los experimentos que implican los modelos simples, sin ningún añadido, se
+ha hecho crossvalidation con el único parámetro que tienen: DT el min\tu impurity
+\tu decrease, Logit no tiene ninguno (pues hemos forzado la regulación al
+mínimo) y SVM tiene la C. Hemos hecho crossvalidation con esos.
+
+Cuando usamos algún sampler, también tenemos una gamma que encontrar. En esos
+casos, puede ser que estemos usando un modelo simple, o un ensemble de modelos.
+Cuando se trate de un modelo simple usaremos una gamma que sobreajuste, mientras
+que haremos crossvalidation con sus híper-parámetros.
+
+Cuando se hace un ensemble, hay que dejar que cada uno de los estimadores
+sobreajusten. Para ello usaremos unos híperparámetros que sobreajusten, mientras
+que haremos crossvalidation con la gamma.
+
+\subsection{Hypothesis}
+
+Poner la hipótesis 2 veces: la primera con muy poco detalle, sin palabras
+técnicas, en la introducción. Indicando que mas tarde se van a precisar
+
+La segunda será más técnica.
+
+\begin{note}
+  \begin{enumerate}
+    \item Podemos conseguir una precisión similar a SVM con RBF con un coste
+    mucho más pequeño, aproximando el RBF con la RFF
+    \item Podemos hacer que tenga sentido hacer un ensemble de otros modelos
+    (como Logit o SVM) si usamos RFF. Podemos hacer que un ensemble de estos
+    modelos sea mejor que el modelo solo
+    \item RFF + Bootstrap puede ser demasiada aleatoriedad, y perjudicará a algunos
+    modelos.
+    \item Los modelos que no se basen en el producto escalar de las entradas no
+    se van a beneficiar tanto de usar las RFF.
+  \end{enumerate}
+\end{note}
+
+\begin{itemize}
+  % \item Las RFF permiten que hacer un ensemble de Logit o de SVM tenga sentido
+  \item Con las RFF podemos mejorar la precisión de un Logit o de una SVM
+  haciendo un ensemble con ellos.
+  \item Es posible conseguir un rendimiento parecido al de una RBF-SVM con
+  un coste mucho menor usando las RFF
+  \item Bootstrap + RFF puede generar demasiada aleatoriedad en algunos
+  problemas, y perjudicar la precisión del algoritmo
+  % \item El modelo white box es capaz de conseguir más precisión que el black box
+  \item Por la naturaleza misma del DT, no se beneficiará demasiado de usar los
+  RFF. Estudiar si un método que no se basa en productos escalares se puede
+  beneficiar de usar Random Fourier Features. No hablar en particular del dt,
+  sino de los que no se basan en producto escalar.
+  \item Tenemos tres tipos de ensembles: Black Bag, Grey Bag y White Bag. El
+  White bag será el mejor.
+\end{itemize}
+
+\begin{note}
+  \subsubsection{Planteamiento de los experimentos}
+
+  Según las hipótesis que he planteado, únicamente hace falta medir el tiempo
+  para la hipótesis 1. ¿Vale la pena medir tiempo con lo otro? ¿Aunque sea
+  solo para comentarlo?
+
+  \subsubsection*{Para contrastar hipótesis 1}
+  (Emular RBF-SVM)
+  \begin{enumerate}
+    \item Hacer una SVM con el RBF original y otra SVM con las RFF. Ver la
+    precisión que consiguen con cada dataset y también el tiempo que han
+    tardado en llegar. Las pruebas también se pueden hacer con Nystroem
+  \end{enumerate}
+
+  \subsubsection*{Para contrastar hipótesis 2}
+  (Ensembles con otros modelos)
+  Primero hay que saber cuál de los 3 tipos de ensembles es el mejor, para poder
+  compararlos con el normal
+
+  Ver primero si a un solo estimador le beneficia, y luego ver si con ensemble
+  es mejor
+  \begin{enumerate}
+    \item Un Logit normal contra un logit con RFF
+    \item Un Logit normal contra un logit con RFF Black Bag
+    \item Un Logit normal contra un logit con RFF Grey Bag
+    \item Un Logit normal contra un logit con RFF Grey Ensemble
+    \\\hrule
+    \item Un SVM lineal normal contra un SVM lineal con RFF
+    \item Un SVM lineal normal contra un SVM lineal con RFF Black Bag
+    \item Un SVM lineal normal contra un SVM lineal con RFF Grey Bag
+    \item Un SVM lineal normal contra un SVM lineal con RFF Grey Ensemble
+  \end{enumerate}
+  \subsubsection*{Para contrastar hipótesis 3}
+  (RFF + Bootstrap malo)
+  \begin{enumerate}
+    \item Un Logit con RFF Grey Bag contra un Logit con RFF Grey Bag
+    \item Un Logit con RFF Black Ensemble con un solo estimador contra un Logit
+          con RFF Grey Ensemble con un solo estimador
+    \\\hrule
+    \item Un SVM lineal con RFF Grey Bag contra un SVM lineal con RFF Grey Ensemble
+    \item Un SVM lineal con RFF Black Bag con un solo estimador contra un Logit
+          con RFF Black Ensemble con un solo estimador
+  \end{enumerate}
+
+  \subsubsection*{Para contrastar hipótesis 4}
+  RFF + Modelos no dot product malo
+  En el caso del DT quizá sí que tiene sentido el Black Ensemble, porque tiene
+  una parte aleatoria.
+
+  \begin{enumerate}
+
+    \item Un DT normal contra un DT con RFF
+    \item Un RF normal contra un DT con RFF Black Bag
+    \item Un RF normal contra un DT con RFF Black Ensemble
+    \item Un RF normal contra un DT con RFF Grey Bag
+    \item Un RF normal contra un DT con RFF Grey Ensemble
+  \end{enumerate}
+\end{note}

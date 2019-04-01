@@ -257,6 +257,8 @@ def get_sampling_error_graph_from_scores(train_scores, test_scores):
 def sigest(data):
     '''
     Returns an estimation for sigma of a RBF kernel given the data
+
+    Esta función retorna sigma^2, no sigma a pelo
     '''
 
     dist = euclidean_distances(data, data, squared=True)
@@ -278,5 +280,6 @@ def gamest(data):
     '''
     # gamma = 1 / 2sigma^2
     sigma_estim = sigest(data)
-    gamma_estim = np.reciprocal(2*np.square(sigma_estim))
+    # gamma_estim = np.reciprocal(2*np.square(sigma_estim))
+    gamma_estim = np.reciprocal(2*sigma_estim)
     return gamma_estim

@@ -1,0 +1,131 @@
+\subsection{Datasets}
+
+\begin{note}
+  \begin{itemize}
+    \item 8 datasets distintos
+    \item Están normalizados
+    \item Solo trabajo con variables numéricas. Además, los kernels con
+    categóricas no tienen mucho sentido
+    \item Las cosas particulares que he hecho con los datasets:
+    \begin{itemize}
+      \item Mezclar datos de train y test para luego hacer mi propia separación
+      \item Cuando había poca presencia de una clase, hacer resampling con la
+      misma cantidad
+      \item No trabajar cosas como el skewness, y outliers
+      \item Eliminar columnas en las que todo eran 0
+      \item Reducir el conjunto de instancias
+    \end{itemize}
+  \end{itemize}
+\end{note}
+
+He enfocado el trabajo únicamente con problemas de clasificación. He hecho
+pruebas con 8 datasets distintos.
+
+Todos ellos los he normalizado a media 0 y varianza 1, y he usado dos tercios
+para train y un tercio para test.
+
+Por limitaciones de las implementaciones de los algoritmos que tengo, no podía
+trabajar con variables categóricas, de modo que algunas de ellas he tenido que
+convertirlas a float.
+
+Algunos datasets me los daban separados en 2 subconjuntos, uno para train y el
+otro para test. Yo los he mezclado, y ya si eso he hecho la separación,
+aleatoria, por mi cuenta más tarde.
+
+En algunos casos me daban muchísimas instancias, y yo no necesitaba tantas, y
+por lo tanto he cogido un subconjunto
+
+En algunos casos el dataset no estaba bien balanceado, había muchas instancias
+de un tipo y pocas de otro. Yo he hecho un subconjunto para cada clase, todos
+con la misma cantidad de instancias. Esto lo he hecho porque el objetivo de este
+trabajo no tiene nada que ver con clases mal balanceadas.
+
+% TODO convertir os subsection en subsection*
+
+\subsubsection{Pen Digits}
+\cite[See][]{pen-digits}
+
+Distinguir entre los 10 dígitos (0-9) de un conjunto de imágenes. El dataset
+se ha generado cogiendo las coordenadas $x$ e $y$ del trazo hecho por una
+persona para dibujar ese número e interpolando 8 puntos normalmente espaciados
+en todo el trazo del dibujo.
+
+La tabla con la información es \ref{info-dts-pen-digits}
+
+% \dtsInfo{pen-digits}{16}{10992}{10}
+
+\subsubsection{Covertype}
+\cite[See][]{covertype}
+
+Identificar el tipo de terreno usando información como la elevation, el slope,
+la horizontal distance to nearest surface water features, etc.
+
+En el dataset original había un atributo con 40 columnas binarias que
+identificaba el tipo de tierra, con la Soil Type Designation. Estas 40
+columnas las he convertido a una sola variable, con números del 1 al 40.
+
+La tabla con la información es \ref{info-dts-covertype}
+
+
+% \dtsInfo{covertype}{12}{4900}{7}
+
+\subsubsection{Satellite}
+\cite[See][]{satellite}
+
+La página de este dataset dice que son 7 clases, pero una de ellas no tiene
+ninguna presencia, y por lo tanto yo no la he contado para nada.
+
+Cada instancia es una parcela de $3 \times 3$ pixels y para cada pixel nos
+dan 4 números, cada uno de ellos es el color que se ha captado con 4
+different spectral bands. Por eso son 36: $9 \times 4 = 36$.
+
+Lo que se predice es el tipo de terreno que contenía ese pixel, como plantación
+de algodón,
+
+La tabla con la información es \ref{info-dts-satellite}
+% \dtsInfo{satellite}{36}{6435}{6}
+
+\subsubsection{Vowel}
+\cite[See][]{vowel}
+
+% \vowel-info
+% \vowelInfo
+
+Me daban los datos separados por quien había dicho cada vocal, y yo lo he
+mezclado todo.
+
+Se trata de ver cual de las 11 vocales que tiene el idioma inglés es la que se
+ha pronunciado. Para ello se usan 10 atributos.
+
+La tabla con la información es \ref{info-dts-vowel}
+% \dtsInfo{vowel}{10}{990}{11}
+
+\subsubsection{Fall Detection}
+\cite[See][]{fall-detection}
+
+Se trata de identificar cuando una persona se ha caido al suelo o en qué otro
+estado está (de pie, tumbado, caminando).
+
+La tabla con la información es \ref{info-dts-fall-detection}
+% \dtsInfo{fall-detection}{6}{16382}{6}
+
+\subsubsection{MNIST}
+\cite[See][]{mnist}
+
+La tabla con la información es \ref{info-dts-mnist}
+% \dtsInfo{mnist}{12}{4900}{7}
+
+\subsubsection{Segment}
+\cite[See][]{segment}
+
+La tabla con la información es \ref{info-dts-segment}
+% \dtsInfo{segment}{717}{5000}{10}
+
+\subsubsection{Digits}
+\cite[See][]{digits}
+
+La tabla con la información es \ref{info-dts-digits}
+% \dtsInfo{digits}{64}{5620}{10}
+
+
+\allDtsInfo

@@ -1,305 +1,305 @@
-\subsection{General Idea}
-  La idea general un poco desarroyada
-
-  Las funciones kernel son funciones que se pueden expresar de la forma:
-
-  \begin{equation}
-     \kappa(\vx, \vy) = \phi(\vx)^T\phi(\vy)
-  \end{equation}
-  Es decir, como producto escalar de una función de sus parámetros. Un kernel muy
-  popular es el RBF (\eng{Radial Basis Function}) gausiano, que es este:
-
-  \begin{equation}
-   \kappa({\vx, \vy}; \sigma) = e^{-\frac{\norm{\vx - \vy}}{2\sigma^2}}
-  \end{equation}
-
-  La función implícita $\phi$ ($\mathcal{L} \mapsto \mathcal{H}$) de este kernel
-  tiene una dimensionalidad infinita, y se sabe que para cualquier conjunto de
-  datos se puede encontrar un kernel RBF $\kappa$ tal que su función implícita
-  $\phi$ es capaz de separarlos mediante un híper-plano.
-
-  A pesar de que la función $\phi$ tiene dimensionalidad infinita (
-  $\mathcal{H} \equiv \reals^\infty$
-  ) es posible extraer una aproximación aleatoria de la misma con una precisión arbitraria,
-  mediante el uso de \eng{Random Fourier Features} \cite{rff} (RFF). Otra técnica
-  que también se puede utilizar es el método Nystroem. Con estos
-  métodos se puede extraer $\psi(\vx) \approx \phi(\vx)$ y usarlos para lo que
-  haga falta.
-
-  La extracción de estas aproximaciones se ha usado con anterioridad junto con
-  métodos de redes neuronales, y ha mostrado muy buenos resultados. En este
-  nosotros tratamos de usarlas con otros modelos. En particular, hemos
-  estudiado los modelos de Decision Tree, Logit y LinearSVC, en combinación con
-  varios tipos de ensemble.
-
-  El uso de ensembles está muy extendido junto con los Decision Tree. Esto se
-  debe a que éste es un modelo muy inestable, y una pequeña alteración en los
-  datos puede producir resultados muy distintos. Estas condiciones son idoneas
-  para hacer un comité de Decision Trees, entrenarlos con datos ligeramente
-  distintos y elegir la solución qué más árboles hayan predicho.
-
-  Pero este procedimiento no tiene ningún sentido hacerlo con modelos que no son
-  inestables. Si los modelos no son inestables, la mayoría de los estimadores
-  responderán la misma solución, y no servirá para nada haber entrenado tantos
-  modelos distintos. Es como si en un comité de expertos todos ellos opinaran
-  igual: para eso no necesitamos todo un comité, con un solo experto nos habría
-  bastado.
-
-  La técnica de \eng{bagging} utiliza el \eng{bootstrap} para generar datasets
-  distintos para cada uno de los estimadores. Consiste en hacer un remuestreo de
-  los datos con repetición para cada uno de los estimadores. Esta diferenciación
-  que se produce es suficiente para los Decision Tree, pero es demasiado leve con
-  los métodos más estables, como Logit y LinearSVC.
-
-  Pero los RFF y Nystroem abren una nueva puerta. Puesto que son aproximaciones
-  aleatorias de un conjunto infinito, podemos sacar tantos mapeos distintos
-  como queramos de los datos originales, y por lo tanto podemos diferenciar
-  todavía más los datasets generados para cada uno de los estimadores.
-
-  Además de todo esto, hay una ventaja adicional: entrenar una \eng{Support
-  Vector Machine} (SVM) con kernel lineal es más barato que entrenar una no lineal, por
-  ejemplo una que use RBF. Si usamos una SVM lineal, pero en vez de entrenarla
-  con los datos originales la entrenamos con los datos $\psi(\vx)$, tenemos un
-  coste similar al de entrenar una SVM lineal pero con una precisión equiparable
-  a una RBF-SVM. Esto ya se ha hecho antes.
-
-  Existen varias formas de combinar las RFF con los métodos ensembles. Básicamente,
-  hay dos parámetros que podemos elegir: qué tipo de ensemble usar y en qué
-  momento usar las RFF.
-
-  Cuando se combina un ensemble con los RFF, básicamente hay dos momentos en
-  los que se puede usar el mapeo. Un momento es nada más empezar, antes de
-  que el ensemble haya visto los datos, y el ensemble trabaja normalmente, solo
-  que en vez de recibir los datos originales recibe un mapeo de los mismos.
-  Este método se abstrae completamente de lo que hace el ensemble, y lo trata
-  como una caja negra. \eng{Black Box}.
-
-  El otro método consiste en usar el RFF, no nada más empezar y el mismo para
-  todos los estimadores, sino justo antes del estimador: se hace un mapeo nuevo
-  para cada uno de los estimadores. Este método ya se mete dentro de lo que es
-  un ensemble, y por tanto diremos que es de caja blanca (\eng{White Box}).
-
-  Pero se sabe que se obtienen mejores resultados cuando hay bastante diversidad
-  entre los estimadores del ensemble. Se nos presentan ahora dos formas de crear
-  diversidad en el ensemble. Una de ellas es la forma clásica, mediante el
-  bootstrap, que ha mostrado muy buenos resultados con el \eng{Decision Tree}.
-  Pero ahora podemos usar también la aleatoriedad de los RFF para generar
-  esa diversidad. Entonces tenemos dos opciones: usar los RFF ellos solos o usarlos
-  junto con el Bootstrap. A usarlos junto con el bootstrap le llamaremos un
-  \eng{Bagging}, mientras que si no usamos bootstrap le llamaemos un \eng{Ensemble}.
-
-  Tenemos entonces varias combinaciones entre manos:
-
-  \paragraph{Black Bag}
-  Black Box model con Bagging. Primero se hace un mapeo de los datos y después se
-  hace un bootstrap con ellos para cada uno de los estimadores. Si los estimadores
-  son \eng{Decision Tree} es los mismo que un \eng{Random Forest}, pero no con los
-  datos originales, sino con el mapeo.
-
-  \paragraph{White Bag}
-  White Box model con Bagging. Primero se hace un bootstrap de los datos, para
-  cada uno de los modelos, y después para cada uno de ellos se hace un mapeo de
-  los datos.
-
-  \paragraph{White Ensemble}
-  White Box model sin baging. Se hace un mapeo para cada uno de los estimadores,
-  todos ellos usando todos los datos originales.
-
-
-  El \eng{Black Ensemble} no tiene ningún sentido hacerlo, porque en ese caso
-  todos los estimadores recibirían exactamente los mismos datos, y por lo tanto
-  todos producirían exactamente los mismos resutados, a no ser que tuvieran algún
-  tipo de aleatoriedad, como los Decision Tree. A pesar de que tengamos ese caso
-  particular con los DT, no lo vamos a tratar.
-
-  Y luego, por supuesto, haremos pruebas con un modelo simple usando los RFF, sin
-  usar ningún tipo de ensemble.
-\subsection{Hyperparameters}
-
-Existen los siguiente híper-parámetros:
-\subsubsection*{Decision Tree}
-El algoritmo de Python de DT tiene muchísimos híperparámetros: la máxima
-profundidad, el mínimo de hojas, mínimo de instancias para hacer split,
-mínimo decrecimiento de la impureza de un nodo para hacer split, etc.
-
-Trabajar con todos ellos no era viable, de modo que únicamente hemos considerado
-el \eng{min\tu  impurity\tu decrease}. Todos los demás los hemos dejado que
-sobreajusten. De esta manera el modelo es más parecido al de R, y facilita hacer
-comparaciones
-\subsubsection*{Logit}
-Se puede hacer Logit con regularización de \textit{w} o sin hacerla, pero la
-implementación en Python que tenía disponible obligaba a hacerla. Como decidimos
-que no queríamos hacer regularización, hemos puesto un valor que hace que la
-regularización sea mínima.
-
-\subsubsection*{Support Vector Machine}
-
-Tiene un parámetro \textit{C} para regular la importancia que se le da a los
-vectores que quedan fuera del margen. Es el que hemos considerado.
-
-También hay otros híperparámetros:
-
-\begin{description}
-  \item[Cantidad  de features] Se puede sacar una cantidad arbitraria de
-  features, cuanto mayor mejor se aproxima al kernel. Después de muchas pruebas,
-  vimos que con 500 features ya no se puede mejorar mucho más, de modo que
-  hemos hecho todas las pruebas usando exactamente 500 features.
-  \item[Gammas] Tanto el RFF como el Nystroem tienen un parámetro \textit{gamma},
-  que es el del kernel que quieren simular, el RBF.
-  \item[Cantidad de estimadores de los ensembles] Se sabe que incrementear la
-  cantidad de estimadores no empeora la precisión del modelo, pero coger un
-  número demasiado alto incrementa el tiempo de entrenamiento. Hemos fijado
-  este parámeto a 500.
-\end{description}
-
-El procedimiento que hemos usado para encontrar los híperparámetros para los
-experimentos ha sido el siguiente:
-
-Hemos usado crossvalidation, pero hemos intentado que éste fuera solo de un
-híperparámetro para no incrementear demasiado el coste. Por lo tanto, hemos
-tenido que hacer algunas simplificaciones.
-
-En los experimentos que implican los modelos simples, sin ningún añadido, se
-ha hecho crossvalidation con el único parámetro que tienen: DT el min\tu impurity
-\tu decrease, Logit no tiene ninguno (pues hemos forzado la regulación al
-mínimo) y SVM tiene la C. Hemos hecho crossvalidation con esos.
-
-Cuando usamos algún sampler, también tenemos una gamma que encontrar. En esos
-casos, puede ser que estemos usando un modelo simple, o un ensemble de modelos.
-Cuando se trate de un modelo simple usaremos una gamma que sobreajuste, mientras
-que haremos crossvalidation con sus híper-parámetros.
-
-Cuando se hace un ensemble, hay que dejar que cada uno de los estimadores
-sobreajusten. Para ello usaremos unos híperparámetros que sobreajusten, mientras
-que haremos crossvalidation con la gamma.
-
-\subsection{Hypothesis}
-
-Poner la hipótesis 2 veces: la primera con muy poco detalle, sin palabras
-técnicas, en la introducción. Indicando que mas tarde se van a precisar
-
-La segunda será más técnica.
-
-\begin{itemize}
-  % \item Las RFF permiten que hacer un ensemble de Logit o de SVM tenga sentido
-  \item Con las RFF podemos mejorar la precisión de un Logit o de una SVM
-  haciendo un ensemble con ellos.
-  \item Es posible conseguir un rendimiento parecido al de una RBF-SVM con
-  un coste mucho menor usando las RFF
-  \item Bootstrap + RFF puede generar demasiada aleatoriedad en algunos
-  problemas, y perjudicar la precisión del algoritmo
-  % \item El modelo white box es capaz de conseguir más precisión que el black box
-  \item Por la naturaleza misma del DT, no se beneficiará demasiado de usar los
-  RFF. Estudiar si un método que no se basa en productos escalares se puede
-  beneficiar de usar Random Fourier Features. No hablar en particular del dt,
-  sino de los que no se basan en producto escalar.
-  \item Tenemos tres tipos de ensembles: Black Bag, Grey Bag y White Bag. El
-  White bag será el mejor.
-\end{itemize}
-
-
-\subsection{Datasets}
-
-He enfocado el trabajo únicamente con problemas de clasificación. He hecho
-pruebas con 8 datasets distintos.
-
-Todos ellos los he normalizado a media 0 y varianza 1, y he usado dos tercios
-para train y un tercio para test.
-
-Por limitaciones de las implementaciones de los algoritmos que tengo, no podía
-trabajar con variables categóricas, de modo que algunas de ellas he tenido que
-convertirlas a float.
-
-Algunos datasets me los daban separados en 2 subconjuntos, uno para train y el
-otro para test. Yo los he mezclado, y ya si eso he hecho la separación,
-aleatoria, por mi cuenta más tarde.
-
-En algunos casos me daban muchísimas instancias, y yo no necesitaba tantas, y
-por lo tanto he cogido un subconjunto
-
-En algunos casos el dataset no estaba bien balanceado, había muchas instancias
-de un tipo y pocas de otro. Yo he hecho un subconjunto para cada clase, todos
-con la misma cantidad de instancias. Esto lo he hecho porque el objetivo de este
-trabajo no tiene nada que ver con clases mal balanceadas.
-
-\subsubsection{Pen Digits}
-\cite[See][]{pen-digits}
-
-Distinguir entre los 10 dígitos (0-9) de un conjunto de imágenes. El dataset
-se ha generado cogiendo las coordenadas $x$ e $y$ del trazo hecho por una
-persona para dibujar ese número e interpolando 8 puntos normalmente espaciados
-en todo el trazo del dibujo.
-
-La tabla con la información es \ref{info-dts-pen-digits}
-
-\dtsInfo{pen-digits}{16}{10992}{10}
-
-\subsubsection{Covertype}
-\cite[See][]{covertype}
-
-Identificar el tipo de terreno usando información como la elevation, el slope,
-la horizontal distance to nearest surface water features, etc.
-
-En el dataset original había un atributo con 40 columnas binarias que
-identificaba el tipo de tierra, con la Soil Type Designation. Estas 40
-columnas las he convertido a una sola variable, con números del 1 al 40.
-
-La tabla con la información es \ref{info-dts-covertype}
-
-
-\dtsInfo{covertype}{12}{4900}{7}
-
-\subsubsection{Satellite}
-\cite[See][]{satellite}
-
-La página de este dataset dice que son 7 clases, pero una de ellas no tiene
-ninguna presencia, y por lo tanto yo no la he contado para nada.
-
-Cada instancia es una parcela de $3 \times 3$ pixels y para cada pixel nos
-dan 4 números, cada uno de ellos es el color que se ha captado con 4
-different spectral bands. Por eso son 36: $9 \times 4 = 36$.
-
-Lo que se predice es el tipo de terreno que contenía ese pixel, como plantación
-de algodón,
-
-La tabla con la información es \ref{info-dts-satellite}
-\dtsInfo{satellite}{36}{6435}{6}
-
-\subsubsection{Vowel}
-\cite[See][]{vowel}
-
-Me daban los datos separados por quien había dicho cada vocal, y yo lo he
-mezclado todo.
-
-Se trata de ver cual de las 11 vocales que tiene el idioma inglés es la que se
-ha pronunciado. Para ello se usan 10 atributos.
-
-La tabla con la información es \ref{info-dts-vowel}
-\dtsInfo{vowel}{10}{990}{11}
-
-\subsubsection{Fall Detection}
-\cite[See][]{fall-detection}
-
-Se trata de identificar cuando una persona se ha caido al suelo o en qué otro
-estado está (de pie, tumbado, caminando).
-
-La tabla con la información es \ref{info-dts-fall-detection}
-\dtsInfo{fall-detection}{6}{16382}{6}
-
-\subsubsection{MNIST}
-\cite[See][]{mnist}
-
-La tabla con la información es \ref{info-dts-mnist}
-\dtsInfo{mnist}{12}{4900}{7}
-
-\subsubsection{Segment}
-\cite[See][]{segment}
-
-La tabla con la información es \ref{info-dts-segment}
-\dtsInfo{segment}{717}{5000}{10}
-
-\subsubsection{Digits}
-\cite[See][]{digits}
-
-La tabla con la información es \ref{info-dts-digits}
-\dtsInfo{digits}{64}{5620}{10}
+% \subsection{General Idea}
+%   La idea general un poco desarroyada
+%
+%   Las funciones kernel son funciones que se pueden expresar de la forma:
+%
+%   \begin{equation}
+%      \kappa(\vx, \vy) = \phi(\vx)^T\phi(\vy)
+%   \end{equation}
+%   Es decir, como producto escalar de una función de sus parámetros. Un kernel muy
+%   popular es el RBF (\eng{Radial Basis Function}) gausiano, que es este:
+%
+%   \begin{equation}
+%    \kappa({\vx, \vy}; \sigma) = e^{-\frac{\norm{\vx - \vy}}{2\sigma^2}}
+%   \end{equation}
+%
+%   La función implícita $\phi$ ($\mathcal{L} \mapsto \mathcal{H}$) de este kernel
+%   tiene una dimensionalidad infinita, y se sabe que para cualquier conjunto de
+%   datos se puede encontrar un kernel RBF $\kappa$ tal que su función implícita
+%   $\phi$ es capaz de separarlos mediante un híper-plano.
+%
+%   A pesar de que la función $\phi$ tiene dimensionalidad infinita (
+%   $\mathcal{H} \equiv \reals^\infty$
+%   ) es posible extraer una aproximación aleatoria de la misma con una precisión arbitraria,
+%   mediante el uso de \eng{Random Fourier Features} \cite{rff} (RFF). Otra técnica
+%   que también se puede utilizar es el método Nystroem. Con estos
+%   métodos se puede extraer $\psi(\vx) \approx \phi(\vx)$ y usarlos para lo que
+%   haga falta.
+%
+%   La extracción de estas aproximaciones se ha usado con anterioridad junto con
+%   métodos de redes neuronales, y ha mostrado muy buenos resultados. En este
+%   nosotros tratamos de usarlas con otros modelos. En particular, hemos
+%   estudiado los modelos de Decision Tree, Logit y LinearSVC, en combinación con
+%   varios tipos de ensemble.
+%
+%   El uso de ensembles está muy extendido junto con los Decision Tree. Esto se
+%   debe a que éste es un modelo muy inestable, y una pequeña alteración en los
+%   datos puede producir resultados muy distintos. Estas condiciones son idoneas
+%   para hacer un comité de Decision Trees, entrenarlos con datos ligeramente
+%   distintos y elegir la solución qué más árboles hayan predicho.
+%
+%   Pero este procedimiento no tiene ningún sentido hacerlo con modelos que no son
+%   inestables. Si los modelos no son inestables, la mayoría de los estimadores
+%   responderán la misma solución, y no servirá para nada haber entrenado tantos
+%   modelos distintos. Es como si en un comité de expertos todos ellos opinaran
+%   igual: para eso no necesitamos todo un comité, con un solo experto nos habría
+%   bastado.
+%
+%   La técnica de \eng{bagging} utiliza el \eng{bootstrap} para generar datasets
+%   distintos para cada uno de los estimadores. Consiste en hacer un remuestreo de
+%   los datos con repetición para cada uno de los estimadores. Esta diferenciación
+%   que se produce es suficiente para los Decision Tree, pero es demasiado leve con
+%   los métodos más estables, como Logit y LinearSVC.
+%
+%   Pero los RFF y Nystroem abren una nueva puerta. Puesto que son aproximaciones
+%   aleatorias de un conjunto infinito, podemos sacar tantos mapeos distintos
+%   como queramos de los datos originales, y por lo tanto podemos diferenciar
+%   todavía más los datasets generados para cada uno de los estimadores.
+%
+%   Además de todo esto, hay una ventaja adicional: entrenar una \eng{Support
+%   Vector Machine} (SVM) con kernel lineal es más barato que entrenar una no lineal, por
+%   ejemplo una que use RBF. Si usamos una SVM lineal, pero en vez de entrenarla
+%   con los datos originales la entrenamos con los datos $\psi(\vx)$, tenemos un
+%   coste similar al de entrenar una SVM lineal pero con una precisión equiparable
+%   a una RBF-SVM. Esto ya se ha hecho antes.
+%
+%   Existen varias formas de combinar las RFF con los métodos ensembles. Básicamente,
+%   hay dos parámetros que podemos elegir: qué tipo de ensemble usar y en qué
+%   momento usar las RFF.
+%
+%   Cuando se combina un ensemble con los RFF, básicamente hay dos momentos en
+%   los que se puede usar el mapeo. Un momento es nada más empezar, antes de
+%   que el ensemble haya visto los datos, y el ensemble trabaja normalmente, solo
+%   que en vez de recibir los datos originales recibe un mapeo de los mismos.
+%   Este método se abstrae completamente de lo que hace el ensemble, y lo trata
+%   como una caja negra. \eng{Black Box}.
+%
+%   El otro método consiste en usar el RFF, no nada más empezar y el mismo para
+%   todos los estimadores, sino justo antes del estimador: se hace un mapeo nuevo
+%   para cada uno de los estimadores. Este método ya se mete dentro de lo que es
+%   un ensemble, y por tanto diremos que es de caja blanca (\eng{White Box}).
+%
+%   Pero se sabe que se obtienen mejores resultados cuando hay bastante diversidad
+%   entre los estimadores del ensemble. Se nos presentan ahora dos formas de crear
+%   diversidad en el ensemble. Una de ellas es la forma clásica, mediante el
+%   bootstrap, que ha mostrado muy buenos resultados con el \eng{Decision Tree}.
+%   Pero ahora podemos usar también la aleatoriedad de los RFF para generar
+%   esa diversidad. Entonces tenemos dos opciones: usar los RFF ellos solos o usarlos
+%   junto con el Bootstrap. A usarlos junto con el bootstrap le llamaremos un
+%   \eng{Bagging}, mientras que si no usamos bootstrap le llamaemos un \eng{Ensemble}.
+%
+%   Tenemos entonces varias combinaciones entre manos:
+%
+%   \paragraph{Black Bag}
+%   Black Box model con Bagging. Primero se hace un mapeo de los datos y después se
+%   hace un bootstrap con ellos para cada uno de los estimadores. Si los estimadores
+%   son \eng{Decision Tree} es los mismo que un \eng{Random Forest}, pero no con los
+%   datos originales, sino con el mapeo.
+%
+%   \paragraph{White Bag}
+%   White Box model con Bagging. Primero se hace un bootstrap de los datos, para
+%   cada uno de los modelos, y después para cada uno de ellos se hace un mapeo de
+%   los datos.
+%
+%   \paragraph{White Ensemble}
+%   White Box model sin baging. Se hace un mapeo para cada uno de los estimadores,
+%   todos ellos usando todos los datos originales.
+%
+%
+%   El \eng{Black Ensemble} no tiene ningún sentido hacerlo, porque en ese caso
+%   todos los estimadores recibirían exactamente los mismos datos, y por lo tanto
+%   todos producirían exactamente los mismos resutados, a no ser que tuvieran algún
+%   tipo de aleatoriedad, como los Decision Tree. A pesar de que tengamos ese caso
+%   particular con los DT, no lo vamos a tratar.
+%
+%   Y luego, por supuesto, haremos pruebas con un modelo simple usando los RFF, sin
+%   usar ningún tipo de ensemble.
+% \subsection{Hyperparameters}
+%
+% Existen los siguiente híper-parámetros:
+% \subsubsection*{Decision Tree}
+% El algoritmo de Python de DT tiene muchísimos híperparámetros: la máxima
+% profundidad, el mínimo de hojas, mínimo de instancias para hacer split,
+% mínimo decrecimiento de la impureza de un nodo para hacer split, etc.
+%
+% Trabajar con todos ellos no era viable, de modo que únicamente hemos considerado
+% el \eng{min\tu  impurity\tu decrease}. Todos los demás los hemos dejado que
+% sobreajusten. De esta manera el modelo es más parecido al de R, y facilita hacer
+% comparaciones
+% \subsubsection*{Logit}
+% Se puede hacer Logit con regularización de \textit{w} o sin hacerla, pero la
+% implementación en Python que tenía disponible obligaba a hacerla. Como decidimos
+% que no queríamos hacer regularización, hemos puesto un valor que hace que la
+% regularización sea mínima.
+%
+% \subsubsection*{Support Vector Machine}
+%
+% Tiene un parámetro \textit{C} para regular la importancia que se le da a los
+% vectores que quedan fuera del margen. Es el que hemos considerado.
+%
+% También hay otros híperparámetros:
+%
+% \begin{description}
+%   \item[Cantidad  de features] Se puede sacar una cantidad arbitraria de
+%   features, cuanto mayor mejor se aproxima al kernel. Después de muchas pruebas,
+%   vimos que con 500 features ya no se puede mejorar mucho más, de modo que
+%   hemos hecho todas las pruebas usando exactamente 500 features.
+%   \item[Gammas] Tanto el RFF como el Nystroem tienen un parámetro \textit{gamma},
+%   que es el del kernel que quieren simular, el RBF.
+%   \item[Cantidad de estimadores de los ensembles] Se sabe que incrementear la
+%   cantidad de estimadores no empeora la precisión del modelo, pero coger un
+%   número demasiado alto incrementa el tiempo de entrenamiento. Hemos fijado
+%   este parámeto a 500.
+% \end{description}
+%
+% El procedimiento que hemos usado para encontrar los híperparámetros para los
+% experimentos ha sido el siguiente:
+%
+% Hemos usado crossvalidation, pero hemos intentado que éste fuera solo de un
+% híperparámetro para no incrementear demasiado el coste. Por lo tanto, hemos
+% tenido que hacer algunas simplificaciones.
+%
+% En los experimentos que implican los modelos simples, sin ningún añadido, se
+% ha hecho crossvalidation con el único parámetro que tienen: DT el min\tu impurity
+% \tu decrease, Logit no tiene ninguno (pues hemos forzado la regulación al
+% mínimo) y SVM tiene la C. Hemos hecho crossvalidation con esos.
+%
+% Cuando usamos algún sampler, también tenemos una gamma que encontrar. En esos
+% casos, puede ser que estemos usando un modelo simple, o un ensemble de modelos.
+% Cuando se trate de un modelo simple usaremos una gamma que sobreajuste, mientras
+% que haremos crossvalidation con sus híper-parámetros.
+%
+% Cuando se hace un ensemble, hay que dejar que cada uno de los estimadores
+% sobreajusten. Para ello usaremos unos híperparámetros que sobreajusten, mientras
+% que haremos crossvalidation con la gamma.
+%
+% \subsection{Hypothesis}
+%
+% Poner la hipótesis 2 veces: la primera con muy poco detalle, sin palabras
+% técnicas, en la introducción. Indicando que mas tarde se van a precisar
+%
+% La segunda será más técnica.
+%
+% \begin{itemize}
+%   % \item Las RFF permiten que hacer un ensemble de Logit o de SVM tenga sentido
+%   \item Con las RFF podemos mejorar la precisión de un Logit o de una SVM
+%   haciendo un ensemble con ellos.
+%   \item Es posible conseguir un rendimiento parecido al de una RBF-SVM con
+%   un coste mucho menor usando las RFF
+%   \item Bootstrap + RFF puede generar demasiada aleatoriedad en algunos
+%   problemas, y perjudicar la precisión del algoritmo
+%   % \item El modelo white box es capaz de conseguir más precisión que el black box
+%   \item Por la naturaleza misma del DT, no se beneficiará demasiado de usar los
+%   RFF. Estudiar si un método que no se basa en productos escalares se puede
+%   beneficiar de usar Random Fourier Features. No hablar en particular del dt,
+%   sino de los que no se basan en producto escalar.
+%   \item Tenemos tres tipos de ensembles: Black Bag, Grey Bag y White Bag. El
+%   White bag será el mejor.
+% \end{itemize}
+
+
+% \subsection{Datasets}
+%
+% He enfocado el trabajo únicamente con problemas de clasificación. He hecho
+% pruebas con 8 datasets distintos.
+%
+% Todos ellos los he normalizado a media 0 y varianza 1, y he usado dos tercios
+% para train y un tercio para test.
+%
+% Por limitaciones de las implementaciones de los algoritmos que tengo, no podía
+% trabajar con variables categóricas, de modo que algunas de ellas he tenido que
+% convertirlas a float.
+%
+% Algunos datasets me los daban separados en 2 subconjuntos, uno para train y el
+% otro para test. Yo los he mezclado, y ya si eso he hecho la separación,
+% aleatoria, por mi cuenta más tarde.
+%
+% En algunos casos me daban muchísimas instancias, y yo no necesitaba tantas, y
+% por lo tanto he cogido un subconjunto
+%
+% En algunos casos el dataset no estaba bien balanceado, había muchas instancias
+% de un tipo y pocas de otro. Yo he hecho un subconjunto para cada clase, todos
+% con la misma cantidad de instancias. Esto lo he hecho porque el objetivo de este
+% trabajo no tiene nada que ver con clases mal balanceadas.
+%
+% \subsubsection{Pen Digits}
+% \cite[See][]{pen-digits}
+%
+% Distinguir entre los 10 dígitos (0-9) de un conjunto de imágenes. El dataset
+% se ha generado cogiendo las coordenadas $x$ e $y$ del trazo hecho por una
+% persona para dibujar ese número e interpolando 8 puntos normalmente espaciados
+% en todo el trazo del dibujo.
+%
+% La tabla con la información es \ref{info-dts-pen-digits}
+%
+% \dtsInfo{pen-digits}{16}{10992}{10}
+%
+% \subsubsection{Covertype}
+% \cite[See][]{covertype}
+%
+% Identificar el tipo de terreno usando información como la elevation, el slope,
+% la horizontal distance to nearest surface water features, etc.
+%
+% En el dataset original había un atributo con 40 columnas binarias que
+% identificaba el tipo de tierra, con la Soil Type Designation. Estas 40
+% columnas las he convertido a una sola variable, con números del 1 al 40.
+%
+% La tabla con la información es \ref{info-dts-covertype}
+%
+%
+% \dtsInfo{covertype}{12}{4900}{7}
+%
+% \subsubsection{Satellite}
+% \cite[See][]{satellite}
+%
+% La página de este dataset dice que son 7 clases, pero una de ellas no tiene
+% ninguna presencia, y por lo tanto yo no la he contado para nada.
+%
+% Cada instancia es una parcela de $3 \times 3$ pixels y para cada pixel nos
+% dan 4 números, cada uno de ellos es el color que se ha captado con 4
+% different spectral bands. Por eso son 36: $9 \times 4 = 36$.
+%
+% Lo que se predice es el tipo de terreno que contenía ese pixel, como plantación
+% de algodón,
+%
+% La tabla con la información es \ref{info-dts-satellite}
+% \dtsInfo{satellite}{36}{6435}{6}
+%
+% \subsubsection{Vowel}
+% \cite[See][]{vowel}
+%
+% Me daban los datos separados por quien había dicho cada vocal, y yo lo he
+% mezclado todo.
+%
+% Se trata de ver cual de las 11 vocales que tiene el idioma inglés es la que se
+% ha pronunciado. Para ello se usan 10 atributos.
+%
+% La tabla con la información es \ref{info-dts-vowel}
+% \dtsInfo{vowel}{10}{990}{11}
+%
+% \subsubsection{Fall Detection}
+% \cite[See][]{fall-detection}
+%
+% Se trata de identificar cuando una persona se ha caido al suelo o en qué otro
+% estado está (de pie, tumbado, caminando).
+%
+% La tabla con la información es \ref{info-dts-fall-detection}
+% \dtsInfo{fall-detection}{6}{16382}{6}
+%
+% \subsubsection{MNIST}
+% \cite[See][]{mnist}
+%
+% La tabla con la información es \ref{info-dts-mnist}
+% \dtsInfo{mnist}{12}{4900}{7}
+%
+% \subsubsection{Segment}
+% \cite[See][]{segment}
+%
+% La tabla con la información es \ref{info-dts-segment}
+% \dtsInfo{segment}{717}{5000}{10}
+%
+% \subsubsection{Digits}
+% \cite[See][]{digits}
+%
+% La tabla con la información es \ref{info-dts-digits}
+% \dtsInfo{digits}{64}{5620}{10}

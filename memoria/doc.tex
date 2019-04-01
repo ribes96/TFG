@@ -11,6 +11,7 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{graphicx}
+\graphicspath{ {./img/} }
 \usepackage{float}
 \usepackage{hyperref}
 \usepackage{eurosym}
@@ -22,6 +23,13 @@
 \usepackage{ifthen}
 \usepackage{comment}
 \usepackage{subfig}
+
+\usepackage{caption}
+\captionsetup{justification=raggedright,singlelinecheck=false}
+
+\usepackage{tcolorbox}
+\usepackage{ textcomp }
+
 
 
 
@@ -61,6 +69,10 @@
 \newboolean{delivery}
 \setboolean{delivery}{false}
 
+\tcbuselibrary{breakable}
+
+% \tcbset{width=4cm}
+
 
 \begin{document}
 \maketitle
@@ -71,45 +83,34 @@
 %% Content starts here
 %%%%%%%%%%%%%%%%%%%%%%%%
 
+% Quitar cuando el trabajo esté terminado
+\input{notas}
 
-\section*{Ideas generales}
 
-El guión que me propuso LLuís es:
-\begin{enumerate}
- \item Problema que ataco
- \item Por qué es importante
- \item Qué propongo en mi TFG
- \item Estado del arte en el problema que ataco
- \item Nociones generales del tema
-       \begin{itemize}
-        \item Machine Learning
-        \item Árboles
-        \item Logit
-        \item RFF
-        \item Nystroem
-        \item Bootstrap
-        \item Boosting
-       \end{itemize}
- \item El trabajo propiamente dicho (explicar lo que voy a hacer)
- \item Experimentos
- \item Conclusiones y Trabajo futuro
- \item Referencias
- \item Apéndices
-\end{enumerate}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 \section{Introduction}
-  \input{introduction}
+    \label{st:introduction}
+    \input{introduction}
 \section{Background}
-  \input{background}
+    \label{st:background}
+    \input{background}
 \section{Project Development}
-  \input{project_development}
+    \label{st:development}
+    % \input{project_development}
+    \input{project_development_PART1.tex}
+    \input{project_development_PART2.tex}
+    \input{project_development_PART3.tex}
 \section{Experimental Results}
-  \input{experimental_results}
+    \label{st:experiments}
+    \input{experimental_results}
 \section{Conclusion and Future Work}
-  \input{conclusion_and_future_work}
+    \label{st:conclusion}
+    \input{conclusion_and_future_work}
 \section{Sustainability Report}
-  \input{sustainability_report}
+    \label{st:sustainability}
+    \input{sustainability_report}
 
 
 

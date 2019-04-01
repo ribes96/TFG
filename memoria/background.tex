@@ -1,26 +1,90 @@
 Más o menos, cada uno debería ocupar entre media y una página
 \subsection{Machine Learning}
+  \begin{note}
+    \begin{enumerate}
+      \item Qué es el ML
+      \item Subcampos que tiene el ML
+      \item Problemas y dificultades a los que se enfrenta
+    \end{enumerate}
+
+    Los problemas a los que se enfrenta el ML son:
+    \begin{itemize}
+      \item Muchas veces no se tiene TODA la información necesaria para
+      resolver un problema
+      \item Los datos recogidos tienen un cierto error de precisión
+      \item Intentamos aprender sobre TODA la población basándonos
+      únicamente en una muestra
+      \item Muchos de los problemas que intenta resolver son ambiguos o mal
+      definidos. No siempre está claro que lo que hay en la imagen es un 1 y
+      no un 7.
+      \item Siempre corremos el peligro de sobre-ajustar.
+      \item No tenemos un tiempo de entrenamiento infinito
+      \item La forma de la fórmula implícita no la conocemos. Es decir, quizá
+      estamos usando un polinomio cuando la fórmula implícita tiene logaritmos,
+      y por lo tanto nunca seremos capaces de imitar su comportamiento con un
+      polinomio.
+    \end{itemize}
+
+  \end{note}
 \subsection{Classification and Regression}
 \subsection{Review de los principales modelos que existen}
 \subsubsection{Decision Tree}
+  \begin{note}
+    \begin{itemize}
+      \item No se basa en productos escalares
+      \item Es extremadamente rápido
+      \item Es más fácil de interpretar que otros modelos
+      \item Es extremadamente inestable
+      \item Es un poco aleatorio: dos entrenamientos iguales pueden producir
+      árboles distintos (contrastar si esto es solo con los RF)
+      \item Es un modelo no lineal
+    \end{itemize}
+  \end{note}
 \subsubsection{Logistic Regression}
 \subsubsection{SVM}
+  \begin{note}
+    \begin{itemize}
+      \item Originalmente estaban pensadas para clasificar en 2 clases, pero se
+      han hecho expansiones. Con \eng{one-vs-rest} se puede clasificar con
+      más de dos clases, y también existe un modelo de SVM para hacer regresión.
+      \item Se basa únicamente en el producto escalar de sus entradas
+      \item Por si misma es un modelo lineal, incapaz de separar la mayoría de
+      los datos
+      \item Actualmente es muy poco eficiente usarlas porque su coste es
+      cúbico con la cantidad de entradas.
+    \end{itemize}
+  \end{note}
 \subsection{Las técnicas ensembling}
 \subsubsection{Bagging}
-\begin{itemize}
- \item Inventado por Leo Breiman
- \item Pretende reducir el sesgo
-\end{itemize}
+% \begin{itemize}
+%  \item Inventado por Leo Breiman
+%  \item Pretende reducir el sesgo
+% \end{itemize}
+\begin{note}
+  \begin{itemize}
+    \item Inventado por Leo Breiman \cite{breiman_bagging}
+    \item Pretende reducir el sesgo
+    \item Los estimadores se entrenan de forma independiente, se podría hacer
+    en paralelo
+    \item Actualmente casi que solo se usa con el DT, debido a su inestabilidad
+  \end{itemize}
+\end{note}
 \subsubsection{Boosting}
+\begin{note}
 \begin{itemize}
+ \item Cita \cite{boosting}
  \item Adaboost (adaptive boosting)
- \item El siguiente estimador es más probable que contenga los elementos no
+ \item El siguiente estimador es más probable que contenga los elementos que
        no se han predicho bien en el anterior
  \item Se trata de ir modificando los pesos que tiene cada una de las instancias
  \item El entrenamiento de los modelos es secuencial, a diferencia del bagging
  \item Enterarme de quien lo inventó, y para qué ámbitos es útil
+ \item Está basado en la pregunta que planteó Kearns and Valiant de:
+ ``Can a set of weak learners create a single strong learner?''
 \end{itemize}
+\end{note}
 \subsection{El bootstrap}
+\begin{note}
 \begin{itemize}
  \item En bagging es bueno que los estimadores estén poco relacionados
        entre ellos
@@ -30,8 +94,31 @@ Más o menos, cada uno debería ocupar entre media y una página
        uno de los estimadores para tener datasets un poco distintos entre ellos.
  \item Enterarme de la cantidad de elementos distintos que se espera que queden
        en el subconjunto, y quizá hablar de la cantidad de aleatoriedad
+ \item Si la cantidad de instancias del original es la misma que la de cada uno
+ de los subconjuntos, se espera que la proporción de elementos úncos sea de
+ $1 - \frac{1}{e} \approx 0.632$.
+ \item Si el conjunto original tiene $n$ elementos, y tu haces un subconjunto
+ de tamaño $r$, puedes esperar que la proporción de elementos del original que
+ sí tienen presencia en el nuevo sea de $1 - e^{-\frac{r}{n}}$
+
+
 \end{itemize}
+\end{note}
 \subsection{Las funciones kernel}
+
+\begin{note}
+  A kernel is a function that equals to the inner product of inputs mapped into
+  some Hilbert space, i.e:
+  \begin{equation}
+    \kernel(x,y) = \langle \phi(x), \phi(y) \rangle
+  \end{equation}
+  As long as the learning technique relies only on the linear product of the
+  inputs, the underlying mapping $\phi(\cdot)$ doest not need to be explicitly
+  calculated and can, in fact, be unknown.
+
+  \cite{svm_rff}
+\end{note}
+
 Las SVM encuentran un híper-plano que separa las instancias de un problema
 determinado en dos subconjuntos del espacio, y en el que cada subconjunto se
 identifica con las clases que se quieren discriminar. Este híper-plano
@@ -100,6 +187,87 @@ $\kappa(\vx, \vy) = (\vx^T\vy + c)^d$
 $\kappa(\vx, \vy) = exp(-\frac{\norm{\vx - \vy}^2}{2\sigma^2})$
 ), etc.
 
+\begin{note}
+  La SVM simple, la que no permite que nadie viole el margen y que no converge
+  cuando los datos no son linealmente separables plantea este problema.
+
+  Encontrar los valores $\bm{\alpha}$ que maximizan:
+  % \begin{equation}
+  %   L_P = \frac{1}{2}\norm{w}^2 - \sum_{i = 1}^{l} \alpha_iy_i(\vx_i\cdot w + b) + \sum_{i = 1}^l \alpha_i
+  % \end{equation}
+
+  \begin{equation}
+    L_D = \sum_{i = 1}^{l} \alpha_i - \frac{1}{2}\sum_i\sum_j \alpha_i\alpha_jy_iy_j\vx_i\vx_j
+  \end{equation}
+
+  Sujeto a que:
+
+  \begin{align}
+    \alpha_i \geq 0; \forall i\\
+    % w &= \sum_{i = 1}^l\alpha_iy_i\vx_i\\
+    \sum_{i = 1}^l \alpha_iy_i = 0\\
+  \end{align}
+
+  Y la solución se encontraría con:
+  \begin{equation}
+    w = \sum_{i = 1}^l\alpha_iy_i\vx_i
+  \end{equation}
+
+  La $b$ se podría encontrar resolviendo la equación
+  \begin{equation}
+    \alpha_i \left( \vy_i \left( \vw\vx_i + b \right) - 1 \right) = 0; \forall i |\alpha_i \neq 0
+  \end{equation}
+  Se podría resolver con una sola $i$, pero es más estable hacer la media de todas.
+
+
+  Entonces, cuando tenemos un punto nuevo $\vx$ y queremos saber a qué clase
+  pertenece, calculamos $sgn(\vw\vx + b)$. Si es positivo es de la clase $+$,
+  y si es negativo es de la case $-$. Se supone que nunca estará entre $-1 < x < 1$.
+
+
+  Si queremos permitir que haya vectores que cometan un cierto error podemos
+  hacerlo añadiendo las variables $\zeta$.
+
+  Ahora la función objetivo para minimizar ya no es $\frac{1}{2}\norm{\vw}^2$,
+  sino que es:
+  \begin{equation}
+    \frac{1}{2}\norm{\vw}^2 + C\sum_i \zeta_i
+  \end{equation}
+
+  Y entonces el objetivo es maximizar
+
+  \begin{equation}
+    L_D = \sum_i\alpha_i -\frac{1}{2}\sum_{i,j}\alpha_i\alpha_jy_iy_j\vx_i\vx_j
+  \end{equation}
+
+  Sujeto a:
+
+  \begin{align}
+    0 \leq \alpha_i \leq C; \forall i\\
+    \sum_i \alpha_iy_i = 0
+  \end{align}
+
+  La solución es la misma que antes. La única diferencia es que ahora hay una
+  cota superior para $\bm{\alpha}$.
+
+  ¿Pero qué hacemos cuando la función de decisión no es una función lineal de
+  los datos? Imagina que primero mapeáramos los datos a un (posiblemente
+  de infinitas dimensiones) espacio euclideo \Hspace, que vamos a llamar
+  $\phi: \reals^d \mapsto \Hspace$. Puesto que los datos solo aparecen en forma
+  de productos vectoriales, podríamos tener una función
+  $\kernel(\vx, \vy) = \phi(\vx)\cdot\phi(\vy)$
+  únicamente tendríamos que usar la función \kernel, y nunca tendríamos que
+  conocer explícitamente la función $\phi$. Un ejemplo es el kernel rbf, que es
+  \rbf.
+
+  Ahora para hacer una predición ya no podemos usar el vector \vw, porque está
+  en otro espacio. Pero todavía podemos usar la fórmula
+  $sign\left(\sum_{i = 1}^l \alpha_iy_i\phi(\vx_i)\phi(\vx)\right)
+  = sign\left(\sum_{i = 1}^l \alpha_iy_i\kernel(\vx_i, \vx)\right)
+  $
+
+\end{note}
+
 \subsubsection{El kernel RBF}
 
 El kernel RBF es una familia de funciones kernel. El nombre viene de
@@ -133,6 +301,17 @@ con cualquier valor de gamma).
 
 Un valor de $\sigma$ muy pequeño (muy cercano a 0) produce más sobre-ajuste,
 mientras que un valor más grande lo disminuye.
+
+\begin{note}
+  \begin{itemize}
+    \item Su fórmula es \ldots
+    \item La equivalencia entre la $\sigma$ y la $\gamma$
+    \item La noción de similitud que tiene
+    \item \Hspace es de dimensionalidad infinita
+    \item Permite ajustarse totalmente a los datos, tuneando el parámetro.
+    \item $\sigma$ pequeño, más sobre ajuste.
+  \end{itemize}
+\end{note}
 
 
 \subsection{Las Random Fourier Features}
@@ -191,5 +370,5 @@ grandes cantidades de datos.
 El método Nystroem consiste en aproximar esta matriz de Gram con un subconjunto
 aleatorio de los datos que sea adecuado sin afectar negativamente la precisión
 de la solución
-\subsection{PCA}
+% \subsection{PCA}
 \subsection{Cross-validation}
