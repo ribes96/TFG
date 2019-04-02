@@ -419,8 +419,9 @@ def get_base_model_with_params(model_name, params):
                                solver='lbfgs',
                                tol=1e-2)
     elif model_name == 'rbf_svc':
-        m = SVC(**params, kernel='rbf')
+        gamma = params.pop('gamma', 'scale')
+        m = SVC(**params, gamma=gamma, kernel='rbf')
     else:
-        raise ValueError('This model is not supported')
+        raise ValueError(f'This model ({model_name})is not supported')
 
     return m

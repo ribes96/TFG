@@ -283,3 +283,37 @@ def gamest(data):
     # gamma_estim = np.reciprocal(2*np.square(sigma_estim))
     gamma_estim = np.reciprocal(2*sigma_estim)
     return gamma_estim
+
+
+def get_label(model_name, sampler_name, box_name, n_estim):
+    '''
+    Parameters
+    ----------
+    model_name : str
+        One of ['dt', 'logit', 'linear_svc', 'rbf_svc']
+    sampler_name : str
+        One of ['rbf', 'nystroem', 'identity']
+    box_name : str
+        One of ['black_bag', 'grey_bag', 'black_ens', 'grey_ens', 'none']
+    n_estim : int or None
+    '''
+    model_name += ' '
+    if sampler_name == 'identity':
+        sampler_name = ''
+    elif sampler_name == 'rbf':
+        sampler_name = 'rff '
+    else:
+        sampler_name += ' '
+
+    if box_name == 'none':
+        box_name = ''
+    else:
+        box_name += ' '
+
+    if n_estim is None:
+        n_estim = ''
+    else:
+        n_estim = str(n_estim) + ' estims.'
+
+    ret_str = model_name + sampler_name + box_name + n_estim
+    return ret_str
