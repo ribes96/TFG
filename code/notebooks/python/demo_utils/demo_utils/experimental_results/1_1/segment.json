@@ -1,1 +1,41 @@
-[{"train_score": 0.977922077922078, "test_score": 0.9584415584415584, "time": 3.08849276500041, "model_param": {"C": 100}, "gamma": 0.012566188205849977, "label": "rbf_svc ", "model_name": "rbf_svc", "box_name": "none", "description": "A normal RBF-SVC with gamest (segment)"}, {"train_score": 0.9954545454545455, "test_score": 0.2532467532467532, "time": 34.31168235899895, "model_param": {"C": 1000}, "gamma": 1000, "label": "linear_svc rff ", "model_name": "linear_svc", "box_name": "none", "description": "A normal linear-SVC with RFF (segment)"}, {"train_score": 0.4590909090909091, "test_score": 0.16883116883116883, "time": 21.34246677400006, "model_param": {"C": 1000}, "gamma": 1000, "label": "linear_svc nystroem ", "model_name": "linear_svc", "box_name": "none", "description": "A normal linear-SVC with Nystroem (segment)"}]
+[
+    {
+        "box_name": "none",
+        "description": "A normal RBF-SVC with gamest (segment)",
+        "gamma": 0.012566188205849977,
+        "label": "rbf_svc ",
+        "model_name": "rbf_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.9584415584415584,
+        "time": 2.861117614998875,
+        "train_score": 0.977922077922078
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with RFF (segment)",
+        "gamma": 0.012566188205849977,
+        "label": "linear_svc rff ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9441558441558442,
+        "time": 18.940186407999136,
+        "train_score": 0.9694805194805195
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with Nystroem (segment)",
+        "gamma": 0.012566188205849977,
+        "label": "linear_svc nystroem ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9415584415584416,
+        "time": 25.706996413000525,
+        "train_score": 0.9701298701298702
+    }
+]

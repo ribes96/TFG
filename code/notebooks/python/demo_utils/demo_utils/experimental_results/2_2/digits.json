@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Normal logit without regularization (digits)",
+        "gamma": null,
+        "label": "logit ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9597839135654261,
+        "time": 5.190379167999708,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Logit black_bag with RFF without regul. (digits)",
+        "gamma": 0.0043193847469858125,
+        "label": "logit rff black_bag 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9759903961584634,
+        "time": 692.7835523169997,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Logit black_bag with Nys. without regul. (digits)",
+        "gamma": 0.0043193847469858125,
+        "label": "logit nystroem black_bag 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.978391356542617,
+        "time": 693.585556434,
+        "train_score": 0.9991001799640072
+    }
+]

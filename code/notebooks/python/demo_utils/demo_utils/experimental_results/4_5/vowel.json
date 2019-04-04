@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "DT (vowel)",
+        "gamma": null,
+        "label": "dt ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.7909090909090909,
+        "time": 0.3707890969963046,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "grey_ens",
+        "description": "DT with RFF Black Bag (vowel)",
+        "gamma": 0.02393291548227743,
+        "label": "dt rff grey_ens 50 estims.",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0.0
+        },
+        "test_score": 0.9636363636363636,
+        "time": 25.717988536998746,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "grey_ens",
+        "description": "DT with Nystroem Black Bag (vowel)",
+        "gamma": 0.02393291548227743,
+        "label": "dt nystroem grey_ens 50 estims.",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0.0
+        },
+        "test_score": 0.9757575757575757,
+        "time": 123.09987619399908,
+        "train_score": 1.0
+    }
+]

@@ -9,11 +9,131 @@
 %----------------------------------------------------------------------------------------
 
 \section{General Idea}
+\begin{note}
+  \begin{itemize}
+    \item Hemos visto que se puede sacar una aproximación aleatoria de la
+    función implícita de un shift invariant kernel. Esto tiene 2 ventajas
+    \begin{itemize}
+      \item Podemos transformar los datos directamente
+      \item Podemos producir pequeñas variaciones de un mismo dataset, todas
+      ellas válidas
+    \end{itemize}
+    \item Las 4 tipos de modelos que he definido. Referencia a la foto
+    \item ¿Por qué he cogido estos 4 modelos? ¿No podrían haber sido otros?
+    ¿Que tienen estos de bueno? Me he inspirado en Random Forest
+    \item Hay por ahí algún paper que compara RFF y \Nys
+  \end{itemize}
+\end{note}
+\begin{note}
   \subsection{State of the art con las RFF}
-  \subsection{State of the art con las Nystroem}
+\end{note}
+\begin{note}
+  \begin{itemize}
+    \item Se ha trabajado poco con ellas. Solo he encontrado 2 usos:
+    \begin{itemize}
+      \item Stacked kernel network (referencia): usarlas junto a una red
+      neuronal para tener más niveles de aprendizaje no lineal
+      \item RFF with SVM (referencia): usar una SVM sin kernel con los datos
+      mapeados usando RFF
+    \end{itemize}
+  \end{itemize}
+\end{note}
+\begin{note}
+  \subsection{State of the art con las \Nys}
+\end{note}
+
 
 \section{Hyper-parameters}
+\begin{note}
+  \begin{itemize}
+    \item Existen los siguientes:
+    \begin{itemize}
+      \item min-impurity-decrease para DT
+      \item C para SVM
+      \item gamma para RFF y \Nys
+      \item cantidad de features para RFF y \Nys
+      \item cantidad de estimadores para ensembles
+    \end{itemize}
+    \item Hemos usado los siguientes valores:
+    \begin{itemize}
+      \item Cantidad de features a 500
+      \item Cantidad de estimadores a 50
+      \item En modelos simples, el parámetro por crossvalidation
+      \item En modelos simples con RFF, el parámetro por crossvalidation
+      y una gamma que sobreajuste
+      \item En modelos con ensemble, parámetros que sobreajusten y la gamma
+      por crossvalidation
+      \item En RBF-SVM, la gamma por gamest y el parámetro por crossvalidation
+    \end{itemize}
+  \end{itemize}
+\end{note}
 \section{Hypothesis}
+\begin{note}
+  \begin{enumerate}
+    \item Podemos aproximar bien una RBF-SVM
+    \item Puede tener sentido hacer ensembles con otros modelos a DT
+    \item RFF + Bootstrap puede ser malo
+    \item Si el modelo no se basa en productos escalares no se
+    feneficiará tanto
+  \end{enumerate}
+\end{note}
+\begin{note}
   \subsection{Planteamiento de los experimentos}
+\end{note}
+\begin{note}
+  \begin{enumerate}
+    \item Hipótesis: Aproximar RBF-SVM
+    \begin{enumerate}
+      \item Comparar una RBF-SVM con SVM normal que use RFF
+    \end{enumerate}
+    \item Hipótesis: Ensembles con otros
+    \begin{enumerate}
+      \item Logit normal vs. Logit con RFF
+      \item Logit normal vs. Logit con RFF Black Bag
+      \item Logit normal vs. Logit con RFF Grey Bag
+      \item Logit normal vs. Logit con RFF Grey Ensemble
+      \hrule
+      \item Linear-SVM vs Linear-SVM con RFF
+      \item Linear-SVM vs Linear-SVM con RFF Black Bag
+      \item Linear-SVM vs Linear-SVM con RFF Grey Bag
+      \item Linear-SVM vs Linear-SVM con RFF Grey Ensemble
+    \end{enumerate}
+    \item Hipótesis: RFF + Bootstrap
+    \begin{enumerate}
+      \item Logit con RFF Grey Bag vs Logit con RFF Grey Ensemble
+      \item Logit con RFF Black Bag vs Logit con RFF Black Ensemble (los
+      dos con un solo estimador)
+      \hrule
+      \item Linear-SVM con RFF Grey Bag vs Linear-SVM con RFF Grey Ensemble
+      \item Linear-SVM con RFF Black Bag vs Linear-SVM con RFF Black Ensemble (los
+    \end{enumerate}
+    \item Hipótesis: DT + RFF
+    \begin{itemize}
+      \item DT vs DT con RFF
+      \item DT vs DT con RFF Black Bag
+      \item DT vs DT con RFF Black Ensemble
+      \item DT vs DT con RFF Grey Bag
+      \item DT vs DT con RFF Grey Ensemble
+    \end{itemize}
+  \end{enumerate}
+\end{note}
 
 \section{Datasets}
+\begin{note}
+  \begin{itemize}
+    \item 8 Datasets
+    \item Normalizados
+    \item Únicamente tienen variables numéricas, no categóricas
+    \item Únicamente problemas de clasificación
+    \item Algunas cosas particulares que he hecho:
+    \begin{itemize}
+      \item Mezclar datos de train y de test para luego hacer mi propia
+      separación
+      \item Cuando había poca presencia de una clase, hacer un resampling para
+      igualar las cantidades
+      \item No trabajar cosas como el skiwness o los outliers
+      \item Eliminar columnas en las que todo eran 0
+      \item Reducir el conjunto de instancias
+    \end{itemize}
+  \end{itemize}
+\end{note}

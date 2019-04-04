@@ -417,7 +417,7 @@ def get_base_model_with_params(model_name, params):
         m = LogisticRegression(**params,
                                multi_class='multinomial',
                                solver='lbfgs',
-                               tol=1e-2)
+                               tol=1e-2,)
     elif model_name == 'rbf_svc':
         gamma = params.pop('gamma', 'scale')
         m = SVC(**params, gamma=gamma, kernel='rbf')

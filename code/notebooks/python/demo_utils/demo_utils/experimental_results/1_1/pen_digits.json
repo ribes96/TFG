@@ -1,1 +1,41 @@
-[{"train_score": 0.9991001799640072, "test_score": 0.9921968787515006, "time": 8.532472871998834, "model_param": {"C": 100}, "gamma": 0.015262403870547604, "label": "rbf_svc ", "model_name": "rbf_svc", "box_name": "none", "description": "A normal RBF-SVC with gamest (pen_digits)"}, {"train_score": 0.46700659868026395, "test_score": 0.10984393757503001, "time": 46.07226973300021, "model_param": {"C": 100}, "gamma": 1000, "label": "linear_svc rff ", "model_name": "linear_svc", "box_name": "none", "description": "A normal linear-SVC with RFF (pen_digits)"}, {"train_score": 0.24205158968206358, "test_score": 0.09243697478991597, "time": 35.550897917999464, "model_param": {"C": 1}, "gamma": 1000, "label": "linear_svc nystroem ", "model_name": "linear_svc", "box_name": "none", "description": "A normal linear-SVC with Nystroem (pen_digits)"}]
+[
+    {
+        "box_name": "none",
+        "description": "A normal RBF-SVC with gamest (pen_digits)",
+        "gamma": 0.015262403870547604,
+        "label": "rbf_svc ",
+        "model_name": "rbf_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.9921968787515006,
+        "time": 9.915998392001711,
+        "train_score": 0.9991001799640072
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with RFF (pen_digits)",
+        "gamma": 0.015262403870547604,
+        "label": "linear_svc rff ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.9921968787515006,
+        "time": 50.17882167700009,
+        "train_score": 0.9982003599280144
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with Nystroem (pen_digits)",
+        "gamma": 0.015262403870547604,
+        "label": "linear_svc nystroem ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9921968787515006,
+        "time": 63.28028028799963,
+        "train_score": 0.9988002399520096
+    }
+]

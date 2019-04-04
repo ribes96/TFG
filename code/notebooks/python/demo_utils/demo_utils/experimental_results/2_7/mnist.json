@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Linear SVM (mnist)",
+        "gamma": null,
+        "label": "linear_svc ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1
+        },
+        "test_score": 0.8007202881152461,
+        "time": 685.0848287589906,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "grey_bag",
+        "description": "Linear SVM with RFF Black Bag (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "linear_svc rff grey_bag 50 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9087635054021609,
+        "time": 906.818960722012,
+        "train_score": 0.9997000599880024
+    },
+    {
+        "box_name": "grey_bag",
+        "description": "Linear SVM with Nystroem Black Bag (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "linear_svc nystroem grey_bag 50 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.907563025210084,
+        "time": 1074.4994312219933,
+        "train_score": 0.991001799640072
+    }
+]

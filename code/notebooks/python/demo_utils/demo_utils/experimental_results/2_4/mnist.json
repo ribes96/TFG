@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Normal logit without regularization (mnist)",
+        "gamma": null,
+        "label": "logit ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8523409363745498,
+        "time": 8.995850978004455,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "grey_ens",
+        "description": "Logit grey_ens with RFF without regul. (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "logit rff grey_ens 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9057623049219687,
+        "time": 772.1091233519983,
+        "train_score": 0.9982003599280144
+    },
+    {
+        "box_name": "grey_ens",
+        "description": "Logit grey_ens with Nys. without regul. (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "logit nystroem grey_ens 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8955582232893158,
+        "time": 895.0443712199994,
+        "train_score": 0.989502099580084
+    }
+]

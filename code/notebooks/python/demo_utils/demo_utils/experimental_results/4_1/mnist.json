@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "DT (mnist)",
+        "gamma": null,
+        "label": "dt ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.7533013205282113,
+        "time": 9.22788996399322,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "none",
+        "description": "DT with RFF (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "dt rff ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.5372148859543817,
+        "time": 44.5502972999966,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "none",
+        "description": "DT with Nystroem (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "dt nystroem ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.6656662665066027,
+        "time": 64.17048334999708,
+        "train_score": 1.0
+    }
+]

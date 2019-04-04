@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Normal logit without regularization (satellite)",
+        "gamma": null,
+        "label": "logit ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.851140456182473,
+        "time": 4.290205868000157,
+        "train_score": 0.876124775044991
+    },
+    {
+        "box_name": "none",
+        "description": "Logit with RFF without regularization (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "logit rff ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8793517406962785,
+        "time": 15.390926848000163,
+        "train_score": 0.9133173365326934
+    },
+    {
+        "box_name": "none",
+        "description": "Logit with Nystroem without regularization (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "logit nystroem ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8793517406962785,
+        "time": 17.1899117819994,
+        "train_score": 0.9172165566886623
+    }
+]

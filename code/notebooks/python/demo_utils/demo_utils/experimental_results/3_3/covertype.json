@@ -1,0 +1,54 @@
+[
+    {
+        "box_name": "grey_bag",
+        "description": "Linear SVM with RFF Black Bag (covertype)",
+        "gamma": 0.019561556098018122,
+        "label": "linear_svc rff grey_bag 50 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.7446417636252296,
+        "time": 2156.180952789,
+        "train_score": 0.8041016222834405
+    },
+    {
+        "box_name": "grey_bag",
+        "description": "Linear SVM with Nystroem Black Bag (covertype)",
+        "gamma": 0.019561556098018122,
+        "label": "linear_svc nystroem grey_bag 50 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.7526025719534599,
+        "time": 2052.124803714003,
+        "train_score": 0.8160391796755433
+    },
+    {
+        "box_name": "grey_ens",
+        "description": "Linear SVM with RFF Black Bag (covertype)",
+        "gamma": 0.019561556098018122,
+        "label": "linear_svc rff grey_ens 50 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.747091243110839,
+        "time": 1858.5606214739964,
+        "train_score": 0.802877257422712
+    },
+    {
+        "box_name": "grey_ens",
+        "description": "Linear SVM with Nystroem Black Bag (covertype)",
+        "gamma": 0.019561556098018122,
+        "label": "linear_svc nystroem grey_ens 50 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.7519902020820576,
+        "time": 2015.2787930620107,
+        "train_score": 0.8157330884603612
+    }
+]

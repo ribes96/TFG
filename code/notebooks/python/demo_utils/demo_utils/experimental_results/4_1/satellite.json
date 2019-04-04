@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "DT (satellite)",
+        "gamma": null,
+        "label": "dt ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.8331332533013205,
+        "time": 1.742456129999482,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "none",
+        "description": "DT with RFF (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "dt rff ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.8403361344537815,
+        "time": 43.646753570996225,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "none",
+        "description": "DT with Nystroem (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "dt nystroem ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.8349339735894358,
+        "time": 57.85288930400566,
+        "train_score": 1.0
+    }
+]

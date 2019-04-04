@@ -24,14 +24,17 @@
 \usepackage{amsmath,amsfonts,amssymb,amsthm}
 \usepackage{ifthen}
 \usepackage{comment}
-\usepackage{subfig}
+% \usepackage{subfig}
+\usepackage{subfigure}
 
 \usepackage{caption}
 \captionsetup{justification=raggedright,singlelinecheck=false}
+% \usepackage{subcaption}
 
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable}
 \usepackage{ textcomp }
+\usepackage{multicol}
 
 
 
@@ -48,6 +51,8 @@
 \newcommand{\Lspace}{\ensuremath{\mathcal{L}}}
 \newcommand{\semiRbf}{\ensuremath{e^{-\frac{\norm{\vx - \vy}^2}{2\sigma^2}}}}
 \newcommand{\rbf}{\ensuremath{\kernel(\vx,\vy) = \semiRbf}}
+\newcommand{\Nys}{Nyström}
+\newcommand{\RFF}{Random Fourier Features}
 %\newcommand{\dtsInfo}[4]
 % {
 %    \begin{table}[]
@@ -111,6 +116,15 @@
 }
 {\end{tcolorbox}}
 
+
+
+\definecolor{WAgreen}{RGB}{37, 211, 102}
+\newenvironment{delivery}
+{
+  \begin{tcolorbox}[breakable, colback=WAgreen,coltext=black]
+}
+{\end{tcolorbox}}
+
 \newenvironment{release}
 {
   \begin{tcolorbox}[breakable, colback=green,coltext=black]
@@ -148,3 +162,11 @@
   \label{figure:box_models}
   \end{figure}
 }
+
+\renewcommand{\labelenumii}{\theenumii}
+\renewcommand{\theenumii}{\theenumi.\arabic{enumii}.}
+
+\newcommand{\tabhead}[1]{\textbf{#1}}
+
+% Regula el tamaño que tienen las imágenes de los apéndices
+\newcommand{\imgscale}{0.4}

@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Normal logit without regularization (mnist)",
+        "gamma": null,
+        "label": "logit ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8523409363745498,
+        "time": 10.875350459999936,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "none",
+        "description": "Logit with RFF without regularization (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "logit rff ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8757503001200481,
+        "time": 18.34747038899968,
+        "train_score": 0.9991001799640072
+    },
+    {
+        "box_name": "none",
+        "description": "Logit with Nystroem without regularization (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "logit nystroem ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8823529411764706,
+        "time": 20.600777407999885,
+        "train_score": 0.982003599280144
+    }
+]

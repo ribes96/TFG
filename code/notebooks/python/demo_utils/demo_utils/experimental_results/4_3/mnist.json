@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "DT (mnist)",
+        "gamma": null,
+        "label": "dt ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.7539015606242497,
+        "time": 8.602807064002263,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "black_ens",
+        "description": "DT with RFF Black Bag (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "dt rff black_ens 50 estims.",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0.0
+        },
+        "test_score": 0.8319327731092437,
+        "time": 66.91323786800785,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "black_ens",
+        "description": "DT with Nystroem Black Bag (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "dt nystroem black_ens 50 estims.",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0.0
+        },
+        "test_score": 0.8925570228091236,
+        "time": 83.19223566500295,
+        "train_score": 1.0
+    }
+]
