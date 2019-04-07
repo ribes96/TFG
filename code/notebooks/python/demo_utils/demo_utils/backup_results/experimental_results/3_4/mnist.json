@@ -1,0 +1,54 @@
+[
+    {
+        "box_name": "black_bag",
+        "description": "Linear-SVC black_bag with RFF without regul. (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "linear_svc rff black_bag 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1
+        },
+        "test_score": 0.8805522208883554,
+        "time": 63.86624949000543,
+        "train_score": 0.9403119376124776
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Linear-SVC black_bag with Nys without regul. (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "linear_svc nystroem black_bag 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 10
+        },
+        "test_score": 0.9129651860744298,
+        "time": 69.71780930100067,
+        "train_score": 0.9679064187162567
+    },
+    {
+        "box_name": "black_ens",
+        "description": "Linear-SVC black_ens with RFF without regul. (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "linear_svc rff black_ens 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 10
+        },
+        "test_score": 0.8793517406962785,
+        "time": 59.852256748010404,
+        "train_score": 0.9781043791241751
+    },
+    {
+        "box_name": "black_ens",
+        "description": "Linear-SVC black_ens with Nys without regul. (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "linear_svc nystroem black_ens 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 10
+        },
+        "test_score": 0.9087635054021609,
+        "time": 69.86486892100947,
+        "train_score": 0.9649070185962807
+    }
+]

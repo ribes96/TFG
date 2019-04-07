@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "DT (fall_detection)",
+        "gamma": null,
+        "label": "dt ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.6134453781512605,
+        "time": 1.1447643489955226,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "grey_ens",
+        "description": "DT with RFF Black Bag (fall_detection)",
+        "gamma": 0.03696326128090792,
+        "label": "dt rff grey_ens 50 estims.",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0.0
+        },
+        "test_score": 0.6104441776710684,
+        "time": 141.49885062999965,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "grey_ens",
+        "description": "DT with Nystroem Black Bag (fall_detection)",
+        "gamma": 0.03696326128090792,
+        "label": "dt nystroem grey_ens 50 estims.",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0.0
+        },
+        "test_score": 0.60984393757503,
+        "time": 257.82988071300497,
+        "train_score": 1.0
+    }
+]

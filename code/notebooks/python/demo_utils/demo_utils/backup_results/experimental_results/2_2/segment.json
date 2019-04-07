@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Normal logit without regularization (segment)",
+        "gamma": null,
+        "label": "logit ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9545454545454546,
+        "time": 1.447574046000227,
+        "train_score": 0.9642857142857143
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Logit black_bag with RFF without regul. (segment)",
+        "gamma": 0.012566188205849977,
+        "label": "logit rff black_bag 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9532467532467532,
+        "time": 401.5890437470007,
+        "train_score": 0.9759740259740259
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Logit black_bag with Nys. without regul. (segment)",
+        "gamma": 0.012566188205849977,
+        "label": "logit nystroem black_bag 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9532467532467532,
+        "time": 344.04818979300035,
+        "train_score": 0.9759740259740259
+    }
+]

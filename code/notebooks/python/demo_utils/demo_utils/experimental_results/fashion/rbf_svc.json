@@ -1,0 +1,15 @@
+[
+    {
+        "box_name": "none",
+        "description": "An RBF-SVM with fashion mnist",
+        "gamma": 9327641.75,
+        "label": "rbf_svc ",
+        "model_name": "rbf_svc",
+        "model_param": {
+            "C": 50
+        },
+        "test_score": 0.1,
+        "time": 121234.94824530001,
+        "train_score": 1.0
+    }
+]

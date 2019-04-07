@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "DT (pen_digits)",
+        "gamma": null,
+        "label": "dt ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.9345738295318127,
+        "time": 1.147256839001784,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "black_bag",
+        "description": "DT with RFF Black Bag (pen_digits)",
+        "gamma": 0.015262403870547604,
+        "label": "dt rff black_bag 50 estims.",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0.0
+        },
+        "test_score": 0.9909963985594238,
+        "time": 43.63237562299764,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "black_bag",
+        "description": "DT with Nystroem Black Bag (pen_digits)",
+        "gamma": 0.015262403870547604,
+        "label": "dt nystroem black_bag 50 estims.",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0.0
+        },
+        "test_score": 0.9885954381752701,
+        "time": 48.62399919000745,
+        "train_score": 1.0
+    }
+]

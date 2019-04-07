@@ -1,0 +1,12 @@
+Aquí se guardan los resultados que se han obtenido para cada uno de los
+experimentos.
+
+Cada experimento se guarda en un sub-directorio diferente, con nombres
+1_1, 2_4, 3_2 para los experimentos 1.1, 2.4, 3.2 respectivamente.
+
+Dentro de subdirecorio habrá un fichero distinto para cada dataset
+
+Cada fichero tendrá un json, que tendrá todas las columnas de ese
+experimento en ese dataset
+
+La información se guarda como datos, no como gráficas

@@ -274,12 +274,26 @@ def sigest(data):
     return m_upper
 
 
+def subset_gamest(data):
+    N = data.shape[0]
+    # sample_size = int(np.sqrt(N))
+    sample_size = 5000
+    ind = np.random.choice(a=N, size=(sample_size,), replace=False)
+    sample = data[ind]
+    gamma_estimation = gamest(sample)
+    return gamma_estimation
+
+
 def gamest(data):
     '''
     Returns an estimation for gamma of a RBF kernel given the data
     '''
     # gamma = 1 / 2sigma^2
-    sigma_estim = sigest(data)
+    N = data.shape[0]
+    if N > 5000:
+        sigma_estim = subset_gamest(data)
+    else:
+        sigma_estim = sigest(data)
     # gamma_estim = np.reciprocal(2*np.square(sigma_estim))
     gamma_estim = np.reciprocal(2*sigma_estim)
     return gamma_estim

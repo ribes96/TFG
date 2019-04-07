@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "DT (pen_digits)",
+        "gamma": null,
+        "label": "dt ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.9375750300120048,
+        "time": 1.1823929530073656,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "none",
+        "description": "DT with RFF (pen_digits)",
+        "gamma": 0.015262403870547604,
+        "label": "dt rff ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.921968787515006,
+        "time": 36.24376383199706,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "none",
+        "description": "DT with Nystroem (pen_digits)",
+        "gamma": 0.015262403870547604,
+        "label": "dt nystroem ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.9237695078031213,
+        "time": 50.137081983993994,
+        "train_score": 1.0
+    }
+]

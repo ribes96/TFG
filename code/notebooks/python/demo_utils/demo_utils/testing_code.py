@@ -166,3 +166,170 @@ def whole_exp(exp_code):
     '''
     generate_results(exp_code=exp_code)
     generate_graphs(exp_code=exp_code)
+
+
+def graph_all_modes_all_datasets():
+    for dts_name in SUPPORTED_DATASETS:
+        graph_all_modes(dts_name=dts_name)
+
+
+def graph_all_modes(dts_name):
+    '''
+    Asume que ya están realizados todos los experimentos y están guardados
+    en su correspondiente json
+    Genera una gráfica donde se muestran los errores y los tiempos de todos
+    y cada uno de los modelos probados con el dts_name especificado
+
+    Los modelos que tiene que mostrar son:
+
+    RBF-SVC
+    DT
+    Logit
+    Linear-SVC
+
+    DT RFF y Nys
+    Logit RFF y Nys
+    Linear-SVC RFF y Nys
+
+    DT Black Bag
+    DT Grey Bag
+    DT Black Ens
+    DT Grey Ens
+
+    Logit Black Bag
+    Logit Grey Bag
+    Logit Grey Ens
+
+    Linear-SVC Black Bag
+    Linear-SVC Grey Bag
+    Linear-SVC Grey Ens
+    '''
+    locs = [
+        ("1_1", "rbf_svc "),
+        ("4_1", "dt "),
+        ("2_1", "logit "),
+        ("2_5", "linear_svc "),
+
+        ("4_1", "dt rff "),
+        ("4_1", "dt nystroem "),
+        ("2_1", "logit rff "),
+        ("2_1", "logit nystroem "),
+        ("2_5", "linear_svc rff "),
+        ("2_5", "linear_svc nystroem "),
+        ("4_2", "dt rff black_bag 50 estims."),
+        ("4_2", "dt nystroem black_bag 50 estims."),
+
+        ("4_4", "dt rff grey_bag 50 estims."),
+        ("4_4", "dt nystroem grey_bag 50 estims."),
+
+        ("4_3", "dt rff black_ens 50 estims."),
+        ("4_3", "dt nystroem black_ens 50 estims."),
+
+        ("4_5", "dt rff grey_ens 50 estims."),
+        ("4_5", "dt nystroem grey_ens 50 estims."),
+
+        ("2_2", "logit rff black_bag 50 estims."),
+        ("2_2", "logit nystroem black_bag 50 estims."),
+
+        ("2_3", "logit rff grey_bag 50 estims."),
+        ("2_3", "logit nystroem grey_bag 50 estims."),
+
+        ("2_4", "logit rff grey_ens 50 estims."),
+        ("2_4", "logit nystroem grey_ens 50 estims."),
+
+        ("2_6", "linear_svc rff black_bag 50 estims."),
+        ("2_6", "linear_svc nystroem black_bag 50 estims."),
+
+        ("2_7", "linear_svc rff grey_bag 50 estims."),
+        ("2_7", "linear_svc nystroem grey_bag 50 estims."),
+
+        ("2_8", "linear_svc rff grey_ens 50 estims."),
+        ("2_8", "linear_svc nystroem grey_ens 50 estims."),
+    ]
+
+    labels = []
+    train_errors = []
+    test_errors = []
+    times = []
+
+    for i in locs:
+        exp = i[0]
+        lab = i[1]
+
+        i_filename = f'experimental_results/{exp}/{dts_name}.json'
+        with open(i_filename, 'r') as f:
+            dic_list = json.load(f)
+        dic = [d for d in dic_list if d['label'] == lab][0]
+        labels.append(dic['label'])
+        train_errors.append(1 - dic['train_score'])
+        test_errors.append(1 - dic['test_score'])
+        times.append(dic['time'])
+
+    indices = np.argsort(test_errors)
+
+    labels2 = [labels[i] for i in indices]
+    train_errors2 = [train_errors[i] for i in indices]
+    test_errors2 = [test_errors[i] for i in indices]
+    times2 = [times[i] for i in indices]
+
+    # my_new_generate_png(dts_name=dts_name,
+    #                     labels=labels,
+    #                     train_errors=train_errors,
+    #                     test_errors=test_errors,
+    #                     times=times)
+
+    my_new_generate_png(dts_name=dts_name,
+                        labels=labels2,
+                        train_errors=train_errors2,
+                        test_errors=test_errors2,
+                        times=times2)
+
+
+def my_new_generate_png(dts_name, labels, train_errors, test_errors, times):
+    '''
+    Recibe la información necesaria (datos) y genera una imagen con
+    una gráfica que lo representa
+    '''
+    mytimes = [-1 * i for i in times]
+    # filename = f'{exp_code}/{dts_name}'
+    # o_filename = f'experimental_graphs/{filename}.png'
+    o_filename = f'experimental_graphs/all_results/{dts_name}.png'
+
+    N = len(train_errors)
+    ind = np.arange(N)
+    width = 0.80
+    ind = ind * 2
+
+    fig, (x_errors, x_times) = plt.subplots(2, 1, sharex=True, figsize=(18, 5))
+    fig.suptitle(dts_name)
+
+    x_errors.bar(x=ind, height=train_errors, width=-width, align='edge',
+                 label='Train', color='#ef5045')
+    x_errors.bar(x=ind, height=test_errors, width=width,
+                 align='edge', label='Test', color='#10cc35')
+
+    x_errors.set_ylabel('Error')
+
+    # x_errors.set_xticks(ind)
+    # x_errors.set_xticklabels(labels)
+
+    x_times.bar(x=ind, height=mytimes, width=2*width, color='#49dfed')
+    x_times.set_ylabel('Time (s)')
+    plt.xticks(ind, labels)
+
+    ticks = x_times.get_yticks()
+    x_times.set_yticklabels([int(abs(tick)) for tick in ticks])
+
+    degree = 90
+    x_errors.tick_params(rotation=degree)
+    x_times.tick_params(rotation=degree)
+
+    x_times.tick_params(axis='y', reset=True)
+    x_errors.tick_params(axis='y', reset=True)
+
+    x_errors.grid(True)
+    x_times.grid(True)
+
+    x_errors.legend(loc=(.825, 1.02))
+
+    plt.savefig(o_filename, bbox_inches="tight")

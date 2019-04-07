@@ -1,0 +1,15 @@
+[
+    {
+        "box_name": "none",
+        "description": "A linear SVM with fashion mnist",
+        "gamma": null,
+        "label": "linear_svc ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 50
+        },
+        "test_score": 0.8378,
+        "time": 273.5864554780019,
+        "train_score": 0.8621833333333333
+    }
+]

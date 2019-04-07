@@ -1,0 +1,15 @@
+[
+    {
+        "box_name": "none",
+        "description": "A Logit with fashion mnist",
+        "gamma": null,
+        "label": "logit ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8403,
+        "time": 330.54260756400004,
+        "train_score": 0.8635833333333334
+    }
+]

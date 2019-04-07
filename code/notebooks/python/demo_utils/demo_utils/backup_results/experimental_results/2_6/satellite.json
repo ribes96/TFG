@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Linear SVM (satellite)",
+        "gamma": null,
+        "label": "linear_svc ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 10
+        },
+        "test_score": 0.8229291716686674,
+        "time": 4.067056376996334,
+        "train_score": 0.8449310137972406
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Linear SVM with RFF Black Bag (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "linear_svc rff black_bag 50 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8841536614645858,
+        "time": 664.6546455859934,
+        "train_score": 0.9226154769046191
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Linear SVM with Nystroem Black Bag (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "linear_svc nystroem black_bag 50 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8943577430972389,
+        "time": 648.085239795997,
+        "train_score": 0.9352129574085183
+    }
+]

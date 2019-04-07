@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Linear SVM (satellite)",
+        "gamma": null,
+        "label": "linear_svc ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 10
+        },
+        "test_score": 0.8229291716686674,
+        "time": 3.9634542929998133,
+        "train_score": 0.8449310137972406
+    },
+    {
+        "box_name": "none",
+        "description": "Linear SVM with RFF (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "linear_svc rff ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8841536614645858,
+        "time": 45.00612083400483,
+        "train_score": 0.9172165566886623
+    },
+    {
+        "box_name": "none",
+        "description": "Linear SVM with Nystroem (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "linear_svc nystroem ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.8871548619447779,
+        "time": 54.59387304499978,
+        "train_score": 0.9265146970605879
+    }
+]

@@ -10,7 +10,8 @@ import json
 def exp1_1(dts_name):
     exp_code = '1_1'
     # overfitting_gamma = 1000
-    C_values = [10**i for i in range(4)]
+    # C_values = [10**i for i in range(4)]
+    C_values = [0.5, 1, 5, 20, 50]
     tunning_params = {'C': C_values}
     box_type = 'none'
     model1_info = {

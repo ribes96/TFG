@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "DT (covertype)",
+        "gamma": null,
+        "label": "dt ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.6938150642988365,
+        "time": 1.2298406059999252,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "grey_bag",
+        "description": "DT with RFF Black Bag (covertype)",
+        "gamma": 0.019561556098018122,
+        "label": "dt rff grey_bag 50 estims.",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0.0
+        },
+        "test_score": 0.7348438456827924,
+        "time": 143.5145483170054,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "grey_bag",
+        "description": "DT with Nystroem Black Bag (covertype)",
+        "gamma": 0.019561556098018122,
+        "label": "dt nystroem grey_bag 50 estims.",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0.0
+        },
+        "test_score": 0.7519902020820576,
+        "time": 263.1164388580073,
+        "train_score": 1.0
+    }
+]

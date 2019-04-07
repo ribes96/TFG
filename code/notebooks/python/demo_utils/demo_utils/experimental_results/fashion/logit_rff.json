@@ -1,0 +1,15 @@
+[
+    {
+        "box_name": "none",
+        "description": "A Logit with RFF with fashion mnist",
+        "gamma": 9104701.75,
+        "label": "logit rff ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.0988,
+        "time": 100.28256611100005,
+        "train_score": 0.1525
+    }
+]

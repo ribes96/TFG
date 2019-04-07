@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Linear SVM (pen_digits)",
+        "gamma": null,
+        "label": "linear_svc ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.9303721488595438,
+        "time": 3.8051967680003145,
+        "train_score": 0.9379124175164967
+    },
+    {
+        "box_name": "none",
+        "description": "Linear SVM with RFF (pen_digits)",
+        "gamma": 0.015262403870547604,
+        "label": "linear_svc rff ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.992797118847539,
+        "time": 53.67722114400385,
+        "train_score": 0.9982003599280144
+    },
+    {
+        "box_name": "none",
+        "description": "Linear SVM with Nystroem (pen_digits)",
+        "gamma": 0.015262403870547604,
+        "label": "linear_svc nystroem ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.992797118847539,
+        "time": 59.77360765800404,
+        "train_score": 0.998500299940012
+    }
+]

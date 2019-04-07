@@ -6,11 +6,11 @@
         "label": "rbf_svc ",
         "model_name": "rbf_svc",
         "model_param": {
-            "C": 100
+            "C": 5
         },
-        "test_score": 0.9921968787515006,
-        "time": 9.915998392001711,
-        "train_score": 0.9991001799640072
+        "test_score": 0.9915966386554622,
+        "time": 13.505853908000063,
+        "train_score": 0.9949010197960408
     },
     {
         "box_name": "none",
@@ -19,11 +19,11 @@
         "label": "linear_svc rff ",
         "model_name": "linear_svc",
         "model_param": {
-            "C": 100
+            "C": 20
         },
-        "test_score": 0.9921968787515006,
-        "time": 50.17882167700009,
-        "train_score": 0.9982003599280144
+        "test_score": 0.9915966386554622,
+        "time": 56.53194474200018,
+        "train_score": 0.9973005398920216
     },
     {
         "box_name": "none",
@@ -32,10 +32,10 @@
         "label": "linear_svc nystroem ",
         "model_name": "linear_svc",
         "model_param": {
-            "C": 1000
+            "C": 20
         },
-        "test_score": 0.9921968787515006,
-        "time": 63.28028028799963,
-        "train_score": 0.9988002399520096
+        "test_score": 0.992797118847539,
+        "time": 66.03658144300016,
+        "train_score": 0.9967006598680264
     }
 ]
