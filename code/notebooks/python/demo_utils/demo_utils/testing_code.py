@@ -285,6 +285,50 @@ def graph_all_modes(dts_name):
                         times=times2)
 
 
+def generate_all_fashion():
+    prefix = 'experimental_results/fashion'
+    files_names = [
+        'dt.json',
+        'dt_rff_grey_bag.json',
+        'dt_rff.json',
+        'linear_svc.json',
+        'linear_svc_rff.json',
+        'logit.json',
+        'logit_rff_grey_bag.json',
+        'logit_rff.json',
+        'rbf_svc.json',
+    ]
+    labels = []
+    train_errors = []
+    test_errors = []
+    times = []
+    for file in files_names:
+        path = f'{prefix}/{file}'
+        with open(path, 'r') as f:
+            dic_list = json.load(f)
+            dic = dic_list[0]
+        labels.append(dic['label'])
+        train_errors.append(1 - dic['train_score'])
+        test_errors.append(1 - dic['test_score'])
+        times.append(dic['time'])
+
+        indices = np.argsort(test_errors)
+
+        labels2 = [labels[i] for i in indices]
+        train_errors2 = [train_errors[i] for i in indices]
+        test_errors2 = [test_errors[i] for i in indices]
+        times2 = [times[i] for i in indices]
+
+        # Ojo, que no lo guarda en el sitio que nos gustaría
+
+        my_new_generate_png(dts_name='fashion',
+                            labels=labels2,
+                            train_errors=train_errors2,
+                            test_errors=test_errors2,
+                            times=times2)
+
+
+
 def my_new_generate_png(dts_name, labels, train_errors, test_errors, times):
     '''
     Recibe la información necesaria (datos) y genera una imagen con

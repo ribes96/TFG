@@ -2,14 +2,14 @@
     {
         "box_name": "none",
         "description": "A Logit with RFF with fashion mnist",
-        "gamma": 9104701.75,
+        "gamma": 0.00031334607827109305,
         "label": "logit rff ",
         "model_name": "logit",
         "model_param": {
             "C": 1000
         },
-        "test_score": 0.0988,
-        "time": 100.28256611100005,
-        "train_score": 0.1525
+        "test_score": 0.8474,
+        "time": 266.55388248799864,
+        "train_score": 0.8655
     }
 ]

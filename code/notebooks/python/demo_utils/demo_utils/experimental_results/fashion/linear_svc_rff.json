@@ -2,14 +2,14 @@
     {
         "box_name": "none",
         "description": "A linear SVM with RFF with fashion mnist",
-        "gamma": 8834485.5,
+        "gamma": 0.0003159515745598278,
         "label": "linear_svc rff ",
         "model_name": "linear_svc",
         "model_param": {
-            "C": 1
+            "C": 20
         },
-        "test_score": 0.1057,
-        "time": 642.2027239519998,
-        "train_score": 0.14951666666666666
+        "test_score": 0.8513,
+        "time": 1553.7614979559949,
+        "train_score": 0.8720166666666667
     }
 ]

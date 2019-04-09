@@ -1,0 +1,15 @@
+[
+    {
+        "box_name": "none",
+        "description": "A DT with RFF with fashion mnist",
+        "gamma": 0.0003189557098767976,
+        "label": "dt rff ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.6999,
+        "time": 1398.2549358600008,
+        "train_score": 1.0
+    }
+]

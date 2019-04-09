@@ -25,11 +25,11 @@
 \usepackage{ifthen}
 \usepackage{comment}
 % \usepackage{subfig}
-\usepackage{subfigure}
+% \usepackage{subfigure}
 
 \usepackage{caption}
 \captionsetup{justification=raggedright,singlelinecheck=false}
-% \usepackage{subcaption}
+\usepackage{subcaption}
 
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable}
@@ -177,4 +177,91 @@
 \newcommand{\tabhead}[1]{\textbf{#1}}
 
 % Regula el tamaño que tienen las imágenes de los apéndices
-\newcommand{\imgscale}{0.4}
+\newcommand{\imgscale}{1}
+
+\newcommand{\boxScale}{0.7}
+
+\newcommand{\figBlackBag}{
+  \begin{figure}[th]
+  \centering
+  \includegraphics[width=\boxScale\linewidth]{Figures/boxes/black_bag}
+  \decoRule
+  \caption[Black Bag diagram]{Black Bag Model diagram. Each model recieves data
+  from the same Random Mapping, but they take a different resampling with with
+  replacement.}
+  \label{fig:black-bag}
+  \end{figure}
+}
+
+\newcommand{\figBlackEns}{
+  \begin{figure}[th]
+  \centering
+  \includegraphics[width=\boxScale\linewidth]{Figures/boxes/black_ens}
+  \decoRule
+  \caption[Black Ensemble diagram]{Black Ensemble Model diagram. Each model
+  recieves exactly the same data, from just one Random Mapping. This model
+  doesn't make sense unless the basic model has some random process.}
+  \label{fig:black-ens}
+  \end{figure}
+}
+
+\newcommand{\figWhiteBag}{
+  \begin{figure}[th]
+  \centering
+  \includegraphics[width=\boxScale\linewidth]{Figures/boxes/white_bag}
+  \decoRule
+  \caption[White Bag diagram]{White Bag Model diagram. Each models recieves
+  data from a different Random Mapping, which has then had a resampling with
+  replacement.}
+  \label{fig:white-bag}
+  \end{figure}
+}
+
+\newcommand{\figWhiteEns}{
+  \begin{figure}[th]
+  \centering
+  \includegraphics[width=\boxScale\linewidth]{Figures/boxes/white_ens}
+  \decoRule
+  \caption[White Ensemble diagram]{White Ensemble Model diagram. Each model
+  recieves data from a different Random Mapping.}
+  \label{fig:white-ens}
+  \end{figure}
+}
+
+\newcommand{\BlackBoxes}{
+\begin{figure}[ht]
+  {\centering
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\includegraphics[height=10\baselineskip]{Figures/boxes/black_bag}
+    \caption[Black Bag diagram]{Black Bag Model diagram. Each model recieves data
+    from the same Random Mapping, but they take a different resampling with with
+    replacement.}
+    % \label{fig:black-bag}
+  \end{subfigure}%
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\includegraphics[height=10\baselineskip]{Figures/boxes/black_ens}
+    \caption[Black Ensemble diagram]{Black Ensemble Model diagram. Each model
+    recieves exactly the same data, from just one Random Mapping. This model
+    doesn't make sense unless the basic model has some random process.}
+    % \label{fig:black-ens}
+  \end{subfigure}
+
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\includegraphics[height=10\baselineskip]{Figures/boxes/white_bag}
+    \caption[White Bag diagram]{White Bag Model diagram. Each models recieves
+    data from a different Random Mapping, which has then had a resampling with
+    replacement.}
+    % \label{fig:white-bag}
+  \end{subfigure}%
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\includegraphics[height=10\baselineskip]{Figures/boxes/white_ens}
+    \caption[White Ensemble diagram]{White Ensemble Model diagram. Each model
+    recieves data from a different Random Mapping.}
+    % \label{fig:white-ens}
+  \end{subfigure}
+  }
+  \caption[Model Boxes Diagram]\\There are many ways to mix Ensemble Methods with
+  Random Fourier Features. These are the ones studied in this project.
+  \label{fig:model-boxes}
+\end{figure}
+}

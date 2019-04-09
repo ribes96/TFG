@@ -128,6 +128,52 @@
   could mix some of these methods, maybe we could find new Machine Learning
   methods, with better accuracy or trade-off.
 
-  
+  In this project, we try some combinations of currently known techniques which
+  could produce better results or show new useful model designs. For the one
+  hand, we try to extend the usage of ensemble methods to new basic models.
+  Currently, it doesn't make much sense to train an ensemble of Support Vector
+  Machines or of Logistic Regression models, because they are so stable and
+  most of the estimators would predict the same answer. We propose the use of
+  random kernel approximations such as Random Fourier Features (RFF) or the
+  \Nys method to increase the unstability of these methods and thus be able to
+  succesfully train and ansemble with them, hopefully increasing the accuracy
+  of a single estimator.
+
+  On the other hand, the usage of these Random Kernel approximations could
+  allow us to use some methods which right now are not accessible. Support
+  Vector Machines cannot be used with non-linear Kernels such as the Radial
+  Basis Function (RBF) kernel on big datasets, since the cost is very high. But if
+  we transform the data to some space almost equivalent to the one of the
+  RBF kernel, we can use a Linear Support Vector Machine, which is less
+  expensive to train, and achieve a similar accuracy. In fact, with the usage
+  of an ensemble, the results could be improved.
+
+  For this study, we have formulated some hypothesis and we try to confirm or
+  refuse them based on the experimental results. The hypothesis are:
+  \begin{enumerate}
+    \item It is possible to achieve a similar accuracy to a SVM with the RBF
+    kernel but with less training time by using RFF or the \Nys method with
+    a linear SVM.
+    \item It is possible to increase the accuracy of a Logistic Regression
+    model or a SVM by training and ensemble of them with the usage of RFF
+    and the \Nys method.
+    \item Curently used bagging ensemble method could show a bad behaviour
+    in combination with RFF of \Nys method due to an excess of Randomness,
+    caused by the Bootstrap together with the random mapping.
+    \item Basic algorithms which are not based on the dot product of the
+    input data such as the Decision Tree wil not benefit so much of the
+    usage of RFF and \Nys than those that do, like SVM or
+    Logistic Regression.
+  \end{enumerate}
+
+  In the following pages we show an experimental set up to check those
+  hypothesis and the results of the experiments. In Chapter \ref{Chapter2} we
+  explain some of the Machine Learning concepts which are needed to understand
+  the rest of the project. In \ref{Chapter3} we explain with more detail how
+  this study is developed and what experiments are executed. In \ref{Chapter4}
+  we show the results obtained with the experiments and discuss the hypothesis
+  suggested based on them. In \ref{Chapter5} we present the conclussions of
+  this project and propose some future work related to this topic. Finally,
+  in Chapter \ref{Chapter6} we present a sustainability report of this project.
 
 \end{pre-delivery}

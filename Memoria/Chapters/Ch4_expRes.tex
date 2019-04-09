@@ -12,5 +12,129 @@
   \section{Enfrentar resultados 2 a 2}
 \end{note}
 \begin{note}
+  \section*{Exp 1-1}
+  \begin{itemize}
+    \item Nunca jamás conseguimos sacar mejores resultados que una RBF-SVM
+    \item Pero los resultados que conseguimos son bastante parecidos en algunos
+    casos
+    \item En el experimento que hamos hecho, los tiempos de los métodos lineales
+    son mucho mayores que los de la RBF-SVM
+    \item Pero hay que atribuirlo al pequeño tamaño del dataset que hemos usado.
+    En un dataset más grande sí se notaría
+    \item Efectivamente, he realizado el experimento en fashion-mnist, y no hay
+    comparación
+  \end{itemize}
+
+  \section*{Exp 2-1}
+  \begin{itemize}
+    \item En general sí conseguimos mejorar sustancialmente un logit
+    \item Pero los tiempos son un poco mayores
+    \item Con datasets mayores, es de esperar que los tiempos no se disparen
+    demasiado
+  \end{itemize}
+
+\section*{Exp 2-2}
+\begin{itemize}
+  \item En los mismos datasets en los que un solo logit no había conseguido hacer
+  nada, aquí tampoco han hecho nada
+  \item Entre logit normal y logit con ensemble, la precisión es más o menos la
+  misma, pero el tiempo es mucho mayor
+  \item En el caso logit, realmente puede deberse a que no hemos hecho nada
+  para sobreajustar más.
+\end{itemize}
+
+\section*{2-3}
+\begin{itemize}
+  \item Exactamente igual que el anterior
+\end{itemize}
+
+\section*{2-4}
+\begin{itemize}
+  \item Exactamente igual que el anterior
+\end{itemize}
+
+\section*{2-5}
+\begin{itemize}
+  \item Conseguimos mejorar sustancialmente la precisión de la mayoría de
+  datasets
+  \item Los tiempos son mayores, pero todavía son aceptables
+  \item Suponemos que en datasets más grandes los tiempo serían más parecidos
+\end{itemize}
+
+\section*{2-6}
+\begin{itemize}
+  \item El dataset que se resistía se sigue resistiendo cuando hacemos un
+  ensemble
+  \item Ahora los tiempo sí que són muchísimo más grandes, quizá no sale a cuenta
+  hacer ensemble
+  \item Para ver si sale a cuenta hacer ensemble, habrá que verlo más adelante
+\end{itemize}
+
+\section*{2-7}
+\begin{itemize}
+  \item Exactamente igual que el anterior
+\end{itemize}
+
+\section{2-8}
+\begin{itemize}
+  \item Exactamente igual que el anterior
+\end{itemize}
+
+\section*{3-1}
+\begin{itemize}
+  \item No podemos decir que haya una ensemble que claramente sea mejor que los
+  demás
+  \item Da la impresión que en algunos casos el grey es mejor que los otros,
+  pero no es nada concluyente
+\end{itemize}
+
+\section*{3-2}
+\begin{itemize}
+  \item Da la impresión que los black ensembles son un poco mejor que los grey,
+  pero no es nada concluyente
+\end{itemize}
+
+\section*{3-3}
+\begin{itemize}
+  \item Los resultados no son nada concluyentes
+\end{itemize}
+
+\section*{3-4}
+\begin{itemize}
+  \item Exactamente igual que el anterior
+\end{itemize}
+
+\section*{4-1}
+\begin{itemize}
+  \item Usar rff con un solo árbol no es nada beneficioso
+  \item Tanto los errores como los tiempos son más altos
+\end{itemize}
+
+\section*{4-2}
+\begin{itemize}
+  \item En algunos casos ha mejorado sustancialmente, y en otros no
+  \item Pero estamos comparando un solo árbol con 50: claramente los 50
+  tendrían que ser siempre mejores, y ese no es el caso
+  \item Los tiempos no tienen ninguna comparación
+  \item En algunos casos, incluso empeora el usar un ensemble
+\end{itemize}
+
+\section*{4-3}
+\begin{itemize}
+  \item Exactamente igual que el anterior
+\end{itemize}
+
+\section*{4-4}
+\begin{itemize}
+  \item Exactamente igual que el anterior
+\end{itemize}
+
+\section*{4-5}
+\begin{itemize}
+  \item Exactamente igual que el anterior
+\end{itemize}
+
+\end{note}
+\begin{note}
   \section{Contrastar hipótesis con resultados}
 \end{note}

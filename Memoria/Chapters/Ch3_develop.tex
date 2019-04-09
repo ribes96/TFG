@@ -24,6 +24,48 @@
     \item Hay por ahí algún paper que compara RFF y \Nys
   \end{itemize}
 \end{note}
+\begin{pre-delivery}
+  Using RFF or \Nys has two main advantages related to this project:
+  \begin{itemize}
+    \item We can use an explicit mapping of the data instead of the implicit
+    one defined by the Kernel functions.
+    \item We can produce many different datasets (all of them equally valid)
+    from an original one, with the required number of features.
+  \end{itemize}
+  These advantages allow us to define some combinations of the Bagging
+  Ensemble method with the Random Mappings. Depending on where do we place
+  the Random Mapping in the ensemble process we can get two different approaches.
+  If we understand the ensemble as a black box, on which we can only affect the
+  inputs and the outputs of the box without affecting the rest of the process,
+  we get what we have called the Black Box Model. If, on the contrary, we use
+  the Random Mapping in the middle of the ensemble process, we get a White Box
+  Model.
+
+  But we have defined two other models based on these ones. Given that we have
+  assumed that maybe a Bootstrap in combination to the Random Mapping woud be
+  too much randomness for the problem, we have defined also the models which
+  doest perform the Bootstrap. We've called a ``Bag'' the models which do
+  perform a Bootstrap on the data, and ``Ensemble'' to those that don't
+  perform it. Thus, we have defined four models: ``Black Bag'', ``White Bag'',
+  ``Black Ensemble'', and ``White Ensemble''. See \ref{fig:model-boxes}
+  % See Figures \ref{fig:black-bag},
+  % \ref{fig:black-ens}, \ref{fig:white-bag} and \ref{fig:white-ens}.
+
+
+  Since the Black Ensemble models will feed all the estimators with the same
+  data, it only makes sense to use it with models with some randomness in the
+  process. That's why we will barely use it here.
+
+  These models are based on what is done in Random Forest with the Decision
+  Tree, and seem to be the logical ones to start with. That's why we have chosen
+  to work with them.
+\end{pre-delivery}
+\BlackBoxes
+% \BlackBoxes
+% \figBlackBag
+% \figBlackEns
+% \figWhiteBag
+% \figWhiteEns
 \begin{note}
   \subsection{State of the art con las RFF}
 \end{note}
@@ -67,7 +109,37 @@
     \end{itemize}
   \end{itemize}
 \end{note}
+
+\begin{pre-delivery}
+  With the models defined in this project there are many hyper-parameters to
+  tune the models. These are the hyper-parameters that have been used in the
+  experiments:
+  \begin{description}
+    \item[Number of features extracted from the kernel] The higher this value
+    is, the better the appriximation of the kernel function. We have fixed a
+    value of 500, since this is not important as long as it is not too low.
+    \item[Ammount of estimators] Having a large number of estimator doen't
+    affect negatively the accuracy obteined, but increases the computation
+    time, so the ideal number depends on the computational resources
+    available. For this project we have picked 50 estimators for each Bag/Ensemble.
+    \item[Gamma parameter of the RBF Kernel] A higher value will generate a
+    higher overfit. There is a fast method to find a suitable value for this
+    parameter, explained in
+    \cite{caputo2002appearance}
+    % \cite{nys_better_rff}
+    . We have chosen this estimation.
+    \item[Parameters of the simple models] Decision Tree use
+    \textit{min\tu impurity\tu decrease} to tune the overfit, and SVM use a
+    penalty \textit{C} to do the same. When we train these models without
+    any ensemble, we use Cross-Validation to find a suitable value. When we
+    train an ensemble of these models, as we want them to overfit we set
+    \textit{min\tu impurity\tu decrease} to 0 and \textit{C} to 1000, whih
+    is enoght to achieve it.
+  \end{description}
+\end{pre-delivery}
 \section{Hypothesis}
+
+
 \begin{note}
   \begin{enumerate}
     \item Podemos aproximar bien una RBF-SVM
@@ -77,9 +149,73 @@
     feneficiará tanto
   \end{enumerate}
 \end{note}
-\begin{note}
-  \subsection{Planteamiento de los experimentos}
-\end{note}
+
+\begin{tcolorbox}[breakable, colback=red,coltext=black]
+  El paper que hacer Linear SVM con RFF no está indexado en ningún sitio. Es
+  solo un pdf que hay por la red
+\end{tcolorbox}
+\begin{pre-delivery}
+  We had proposed these four hypothesis:
+  \begin{enumerate}
+    \item \textbf{It is possible to achieve an acuracy close to using the
+    RBF Kernel but with a lower cost}
+
+    When the number of instances available is too big it is not possible to
+    use an SVM with the RBF kernel, because the cost is cubic with the
+    number of instances, and the optimization problem is too complex. A linear
+    Kernel needs less time, but it may not be suitable for some problems,
+    since data may not be easy to separate.
+
+    If we could first map the data to the new feature space, we could then feed
+    a Linear SVM with it and have the same accuracy with less costs. But this
+    can't be done with the RBF kernel, since the new feature space has infinite
+    dimensions. However, with the use of RFF and \Nys, we can get an approximation
+    of the feature space of the RBF. Using them with a Linear SVM could
+    increase the accuracy on some datasets at almost the same cost.
+
+    \item \textbf{It could make sense to train ensembles of SVM and Logistic
+    Regression algorithms}
+
+    Since these models are very stable, having an ensemble of them is useless:
+    all of them will allways predict the same answer. There are some
+    methods to randomize a little bit the data, such as Bootstrap, but with
+    these models it is not enough.
+
+    Since RFF and \Nys\ generate a random mapping of the data, we can achieve
+    a higher level of randomization of the data, while still being a good
+    representation of the real data. Random Mapping can allow us to build
+    ensembles with these two models, increasing the overall accuracy at the
+    expense of some computation time.
+
+    \item \textbf{Bootstrap together with a Random Mapping may be too much
+    randomization}
+
+    With a simple mix of Bagging with RFF there are two different sources
+    of randomness. For the one hand, Bootstrap generates a random sample of
+    the data with replacement, and on the other hand, RFF and \Nys perform
+    a Random Mapping of the data to a different feature space.
+
+    It is possible that for some models, this is too much randomization of
+    the data, and it coud have a bad effect on the learning process.
+
+    \item \textbf{Decision Tree does not benefit from RFF and \Nys as much as
+    Logit and SVM do}
+
+    Kernels were originally used on Support Vector Machines because they were
+    a fast way to implicitly compute the inner product of two vectors in a
+    feature space where data was separable by an hyper-plane. They were
+    useful because SVM just needed the inner products of their input to work.
+
+    RFF and \Nys are ways to explicitly compute an approximation of that
+    mapping, which doesn't necessarily fits the requirements of Decision Tree,
+    which has nothing to do with the inned products. That's the reason why
+    Decision Tree may not benefit so much of these Random Mappings.
+  \end{enumerate}
+\end{pre-delivery}
+% \begin{note}
+%   \subsection{Planteamiento de los experimentos}
+% \end{note}
+\subsection{Experiments Proposal}
 \begin{note}
   \begin{enumerate}
     \item Hipótesis: Aproximar RBF-SVM
@@ -117,6 +253,11 @@
     \end{itemize}
   \end{enumerate}
 \end{note}
+
+\begin{pre-delivery}
+  In order to be able to accept or refuse the hypothesis previously proposed, we
+  have defined a set of experiments.
+\end{pre-delivery}
 
 \section{Datasets}
 \begin{note}

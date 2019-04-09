@@ -6,10 +6,10 @@
         "label": "linear_svc ",
         "model_name": "linear_svc",
         "model_param": {
-            "C": 50
+            "C": 0.5
         },
         "test_score": 0.8378,
-        "time": 273.5864554780019,
-        "train_score": 0.8621833333333333
+        "time": 6295.967982790993,
+        "train_score": 0.8735833333333334
     }
 ]

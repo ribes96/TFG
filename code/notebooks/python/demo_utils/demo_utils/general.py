@@ -274,14 +274,15 @@ def sigest(data):
     return m_upper
 
 
-def subset_gamest(data):
+def subset_sigest(data):
     N = data.shape[0]
     # sample_size = int(np.sqrt(N))
     sample_size = 5000
     ind = np.random.choice(a=N, size=(sample_size,), replace=False)
     sample = data[ind]
-    gamma_estimation = gamest(sample)
-    return gamma_estimation
+    # gamma_estimation = gamest(sample)
+    sigma_estimation = sigest(sample)
+    return sigma_estimation
 
 
 def gamest(data):
@@ -291,7 +292,7 @@ def gamest(data):
     # gamma = 1 / 2sigma^2
     N = data.shape[0]
     if N > 5000:
-        sigma_estim = subset_gamest(data)
+        sigma_estim = subset_sigest(data)
     else:
         sigma_estim = sigest(data)
     # gamma_estim = np.reciprocal(2*np.square(sigma_estim))

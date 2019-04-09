@@ -4,6 +4,7 @@ from demo_utils.general_experiment import exp
 import numpy as np
 # from demo_utils.general import gamest
 from demo_utils.general_experiment import store_exp
+from sklearn.preprocessing import StandardScaler
 
 
 def get_fashion_data():
@@ -11,6 +12,11 @@ def get_fashion_data():
     mndata = MNIST(data_dir)
     data_train, target_train = mndata.load_training()
     data_test, target_test = mndata.load_testing()
+
+    scaler = StandardScaler()
+    scaler.fit(data_train)
+    data_train = scaler.transform(data_train)
+    data_test = scaler.transform(data_test)
 
     d = {
         'data_train': np.array(data_train),
@@ -37,6 +43,7 @@ def general_fashion(model_name):
         'dt': fashion_dt,
         'linear_svc_rff': fashion_linear_svc_rff,
         'logit_rff': fashion_logit_rff,
+        'dt_rff': fashion_dt_rff,
 
         'logit_rff_grey_bag': fashion_logit_rff_grey_bag,
         'dt_rff_grey_bag': fashion_dt_rff_grey_bag,
@@ -89,11 +96,12 @@ def fashion_linear_svc_rff(data_train, data_test, target_train, target_test):
 
 
 def fashion_linear_svc(data_train, data_test, target_train, target_test):
-    C_value = 50
-    # C_values = [0.5, 1, 5, 20, 50]
-    # tunning_params = {'C': C_values}
-    model_params = {'C': C_value}
-    tunning_params = {}
+    # C_value = 50
+    C_values = [0.5, 1, 5, 20, 50]
+    tunning_params = {'C': C_values}
+    # model_params = {'C': C_value}
+    # tunning_params = {}
+    model_params = {}
 
     model_info = {
         'model_name': 'linear_svc',
@@ -179,6 +187,38 @@ def fashion_logit(data_train, data_test, target_train, target_test):
     print('Termina el experimento')
 
     store_exp(d, exp_code='fashion', dts_name='logit')
+
+
+def fashion_dt_rff(data_train, data_test, target_train, target_test):
+    # min_id = 0.2
+    min_id_values = [0, 0.1, 0.2, 0.5]
+    tunning_params = {'min_impurity_decrease': min_id_values}
+    # model_params = {'min_impurity_decrease': min_id}
+    model_params = {}
+    # tunning_params = {}
+
+    model_info = {
+        'model_name': 'dt',
+        'model_params': model_params,
+        'rbfsampler_gamma': None,
+        'nystroem_gamma': None,
+        'sampler_name': 'rbf',
+        'pca_bool': False,
+        'pca_first': None,
+        'n_estim': None,
+        'box_type': 'none',
+    }
+    print('Empieza el experimento')
+    d = exp(model_info=model_info,
+            tunning_params=tunning_params,
+            data_train=data_train,
+            data_test=data_test,
+            target_train=target_train,
+            target_test=target_test,
+            description='A DT with RFF with fashion mnist')
+    print('Termina el experimento')
+
+    store_exp(d, exp_code='fashion', dts_name='dt_rff')
 
 
 def fashion_dt(data_train, data_test, target_train, target_test):
