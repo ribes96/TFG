@@ -25,7 +25,7 @@
   \end{itemize}
 \end{note}
 \begin{pre-delivery}
-  Using RFF or \Nys has two main advantages related to this project:
+  Using RFF or \Nys\ has two main advantages related to this project:
   \begin{itemize}
     \item We can use an explicit mapping of the data instead of the implicit
     one defined by the Kernel functions.
@@ -260,6 +260,28 @@
 \end{pre-delivery}
 
 \section{Datasets}
+
+\begin{table}
+ \caption{Information on the datasets used in this project}
+ \label{tab:dts-info}
+ \centering
+ \begin{tabular}{l l l l}
+  \toprule
+  \tabhead{Dataset}                   & \tabhead{N. Instances} & \tabhead{N. Features} & \tabhead{N. Classes} \\
+  \midrule
+  Covertype\cite{covertype}           & 4900                   & 12                    & 7                    \\
+  Digits\cite{digits}                 & 5000                   & 10                    & 10                   \\
+  Fall Detection\cite{fall-detection} & 5000                   & 6                     & 6                    \\
+  MNIST\cite{mnist}                   & 5000                   & 717                   & 10                   \\
+  Pen Digits\cite{pen-digits}         & 5000                   & 16                    & 10                   \\
+  Satellite\cite{satellite}           & 5000                   & 36                    & 6                    \\
+  Segment\cite{segment}               & 2310                   & 19                    & 7                    \\
+  Vowel\cite{vowel}                   & 990                    & 11                    & 10                   \\
+  Fashion MNIST\cite{xiao2017/online}                       & 70000                  & 784                   & 10                   \\
+  \bottomrule                                                                                                 \\
+ \end{tabular}
+\end{table}
+
 \begin{note}
   \begin{itemize}
     \item 8 Datasets
@@ -278,3 +300,20 @@
     \end{itemize}
   \end{itemize}
 \end{note}
+
+\begin{pre-delivery}
+  We have chosen 9 different datasets to run the experiments proposed. All of
+  them are from classification problems since that was the scope of the project.
+  All the data has been normalized to have a mean of 0 and a variance of 1. Since
+  the kernel RBF can only work with numerical data, all categorical variables
+  have been converted to integers. Here follows some of the preprocessing that
+  has been done on the datasets:
+  \paragraph{Covertype}
+  In the original dataset the classes were not balanced. So, we performed a
+  resampling of the data, taking 700 random instances of each of the clases.
+  There were 40 binary columns that were converted to a single numerical
+  variable.
+  \paragraph{MNIST}
+  We took a subset of 5000 instances from the original dataset. Since in the new
+  sample some of the columns contained only zeros, they were removed.
+\end{pre-delivery}

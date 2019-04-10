@@ -19,6 +19,40 @@
   \end{itemize}
 \end{note}
 
+\begin{pre-delivery}
+  Machine Leearning uses statistical and mathematical models to give answers to
+  problems when there is no known formula of procedure to compute the answer.
+  In the subfield of Supervised Learning, the objective is to predict a numerical
+  or categorical variable in response to some input data, and the way of doing
+  it is to feed the model with lots of different examples for which we already
+  know the correct answer, and we expect the models to be able to predict
+  the correct answer to instances that it hasn't seen before. When it does,
+  we say that the model is able to generalize.
+
+  When a model is trained with some data, there is always a risk of overfiting.
+  For a model to overfit means that it adjusts very well to the data that is
+  has seen, but can't predict the correct answer to new, unseen data. This
+  happens because it has not only from the relevant information, but also
+  from the random noise that the data had, and so it can only memorise, but
+  not generalize.
+
+  For this reason, when a Machine Learning algorithm is trained the data
+  is split in two subsets, a \textit{Training  dataset} and a \textit{Testing
+  dataset}. The training dataset will be used to train the model, while the
+  Testing datasets will be used only to check it. If a model has generalized
+  well, it will achieve a good accuracy score on both the training and the
+  testing dataset, but if it has overfitted it will show good results in the
+  training dataset and bad ones in the testing dataset.
+
+  Many models need some parameters to tune the behaviour of the algorithm. For
+  example, some of them are used to adjust how much a model will fit to the data.
+  We usually call these ``hyperparameters''. The correct value for them is not
+  straightforward, and it is normally chosen with a process called
+  ``cross-validation''. This process consists of splitting the training dataset
+  in many subsets and check many possible values for the hyperparameters in order
+  to see which one gets a higher accuracy with unseen data.
+\end{pre-delivery}
+
 \begin{note}
   \section{Review de los principales modelos que existen}
 \end{note}
@@ -34,10 +68,32 @@
       \item Es un modelo no lineal
     \end{itemize}
   \end{note}
+  \begin{pre-delivery}
+    Decision Tree is a predictive model which uses the training data to build
+    a tree where each node splits the data in two sets accoding to some
+    feature, and the leafs contain the set of instances that belong to some class
+    (in classification problems) or that has a similar numerical response variable
+    (for regression problems).
+
+    To predict the answer to a new instance, it uses the features to ``decide''
+    the nodes to cross until it reaches a leaf. The response given is the
+    most prevailing class in the leaf for classification problems, or the mean
+    of the values of the rest of the instances in the leaf.
+
+    Decision Trees have the advantages that it is easy to interpret the
+    tree produced and that it is very fast to build the tree. The way to avoid
+    overfitting is to limit its growth.
+
+    These models are very unstable. This means that small differences in the
+    training data can produce very different Decision Trees. This property
+    is very useful to build an ensemble of estimators to produce better aswers.
+    Random Forest is an algorithm that trains many Decision Trees with some sort
+    of randomization.
+  \end{pre-delivery}
   \subsection{Logistic Regression}
-  \begin{delivery}
-    Hola que tal
-  \end{delivery}
+  % \begin{delivery}
+  %   Hola que tal
+  % \end{delivery}
   \subsection{Support Vector Machines}
   \begin{note}
     \begin{itemize}
@@ -51,6 +107,52 @@
       \item Las fórmulas que quiere optimizar
     \end{itemize}
   \end{note}
+
+  \begin{pre-delivery}
+    Support Vector Machine (SVM) is a model that finds in hyperplane that
+    divides the data in two sets. In two-class classification problems, each
+    side of the hyperplane contains the instances of each of the classes.
+    It does so by converting the problem to an optimization one.
+
+    Given some data
+    $D = \{\bm{\chi}, \bm{y}\}$
+    , where
+    $\bm{\chi} = \{\bm{x}_1, \ldots \bm{x}_n\}$, $\bm{x}_i \in \reals^d$, $\bm{y} = \{-1, +1\}^n$
+    , the optimization problem consists on finding $\bm{\alpha} \in \reals^n$
+    the maximises
+
+\begin{equation}
+  L = \sum_{i = 1}^n\alpha_i -\frac{1}{2}\sum_{i = 1}^n\sum_{j = 1}^n\alpha_i\alpha_jy_iy_j\vx_i^\transp\vx_j
+\end{equation}
+
+subject to
+
+\begin{align}
+  0 \leq \alpha_i \leq C; \forall i\\
+  \sum_{i = 1}^n \alpha_iy_i = 0
+\end{align}
+
+$C$ is an hyperparameter to tune the ammount of penalization for miss-classified
+instances.
+
+If we compute
+\begin{equation}
+  w = \sum_{i = 1}^n\alpha_iy_i\vx_i
+\end{equation}
+and
+
+\begin{equation}
+  b = y_i - \vx_iw
+\end{equation}
+for any $i$ so that $\alpha_i \neq 0$, we can compute the class of $\vx_0$ with
+$sign(\vx_0w + b)$.
+
+Note that this algorithm just uses the dot product of the input data, not the
+data itself. This property is allows us to use the Kernel Trick with them.
+See \ref{sec:kern-trick}
+
+\end{pre-delivery}
+
 
 \section{Ensemble Methods}
   % \subsection{Bagging}
@@ -83,7 +185,48 @@
       \end{itemize}
     \end{note}
 
+  \begin{pre-delivery}
+    Ensemble methods are a technique used in Machine Learning to reduce the
+    overall accuracy error of a basic classification or regression model. The
+    idea is that a comitee of models is expected to learn better than a single
+    one.
+
+    Some ensemble methods are focused on decreasing the error caused by the
+    variance of the model. One example is \textit{Bagging}. Others are focused
+    on the bias error decreasing the bias error, like \textit{Boosting}.
+
+    In Bagging, every model in the ensemble vote with equal weight. Thus, it is
+    important to promote the variance among each of the models, since not doing
+    it would be equivalent to training just one model. Ideally, one would train
+    each of the models with totally different datasets, with no correlation
+    between them. But in practice this is not always possible, because of a
+    limited number of instances to train. One alternative is to use a
+    technique called \textit{Bootstrap}. Bootstrap allows to generate
+    many different instances of a dataset by performing a resampling.
+
+    Given a dataset $D$ of size $n$, Bootstrap generates $m$ new datasets
+    $D_i$ of size $n$ by sampling instances from $D$ uniformly and with
+    replacement. This means that some of the instances in $D$ may be repeated
+    in $D_i$, and others may not appear at all. With a large $n$, it is expected
+    that each dataset $D_i$ will contain $63.2 \% $ of the instances in $D$.
+
+    Theoretically Bagging could be used with any kind of method. However, for
+    most of them Boostrap is not enought to decorrelate each of the estimator.
+    In practice, Bagging is mostly used with Decision Tree, given that this
+    method produces very different tree with a small variation in the data.
+    Random Forest is an algorithm that trains many Decision Trees with a
+    Bagging. Instead of building the tree in a deterministic way, in each
+    split it choses a random subset of features on which to perform the
+    separation. Besides, it lets the estimators overfit, since it has a positive
+    impact in reducing the overall variance of the Forest.
+  \end{pre-delivery}
+
 \section{The kernel trick}
+\label{sec:kern-trick}
+
+
+
+
 \begin{note}
   \begin{itemize}
     \item Teorema de Bochner
@@ -100,6 +243,69 @@
     \end{itemize}
   \end{itemize}
 \end{note}
+
+\begin{pre-delivery}
+  A Kernel is a function that equals to the inner product of inputs mapped into
+  some Hilbert Space
+  \footnote{A Hilbert space is just a generalization of the Euclidean Space which contains
+  the structure of an inner product that allows length and angle to be
+  measured.}
+  , i.e:
+  \begin{equation}
+  \kernel(x,y) = \langle \phi(x)\phi(y) \rangle
+\end{equation}
+% A Hilbert space is just a generalization of the Euclidean Space which contains
+% the structure of an inner product that allows length and angle to be measured.
+
+They are interesting in Machine Learning because we don't need to know the
+explicit function $\phi(\cdot)$. In fact, $\phi(\cdot)$ could map the data to
+a Hilbert Space with infinite dimensions, and we could still compute
+$\phi(\vx)\phi(\vy)$ through the kernel $\kernel$
+
+Support Vector Machines can benefit a lot of Kernel Functions. SVMs solve an
+optimization problem to maximise
+
+\begin{equation}
+  L = \sum_{i = 1}^n\alpha_i -\frac{1}{2}\sum_{i = 1}^n\sum_{j = 1}^n\alpha_i\alpha_jy_iy_j\vx_i^\transp\vx_j
+\end{equation}
+
+in order to find an hyperplane that separates the data points in two classes.
+But with some problems there may not exist such hyperplane, and so it would
+be needed to map the data to a different feature space. If we did that, then
+the function to maximise would be
+
+\begin{equation}
+  L = \sum_{i = 1}^n\alpha_i -\frac{1}{2}\sum_{i = 1}^n\sum_{j = 1}^n\alpha_i\alpha_jy_iy_j\phi(\vx_i)^\transp\phi(\vx_j)
+\end{equation}
+
+As we said previously, SVMs don't work with the data points alone, but just with
+their inner products. Thus, a Kernel could be used to define the optimization
+problem as
+
+\begin{equation}
+  L = \sum_{i = 1}^n\alpha_i -\frac{1}{2}\sum_{i = 1}^n\sum_{j = 1}^n\alpha_i\alpha_jy_iy_j\kernel(\vx_i, \vx_j)
+\end{equation}
+
+This approach has one big advantage:
+% first, we don't need to explicitly
+% compute $\phi(\vx)^\transp\phi(\vy)$, which could have a high cost if the
+% new dimensionality was too big.
+as long as the learning technique relies
+only on the inner product of the input, the underlying mapping $\phi(\cdot)$
+does not need to be explicitly calculated and can, in fact, be unknown.
+
+There are many known Kernels. One that is very popular is the Radial Basis
+Function Kernel, RBF. This kernel is defined as:
+\begin{equation}
+\kernel(\vx,\vy) = \semiRbf
+\end{equation}
+$\gamma$ is a free parameter. The value of this Kernel decreases with the
+euclidean distance of the parameters, so it can be interpreted as a measure
+of similarity. The feature space of this kernel has infinite number of
+dimensions.
+
+
+\end{pre-delivery}
   % \subsection{The RBF kernel}
 
 \section{Random Fourier Features}

@@ -254,7 +254,7 @@ def fashion_dt(data_train, data_test, target_train, target_test):
 
 
 def fashion_rbf_svc(data_train, data_test, target_train, target_test):
-    C_value = 50
+    C_value = 20
     # C_values = [0.5, 1, 5, 20, 50]
     # tunning_params = {'C': C_values}
     model_params = {'C': C_value}
