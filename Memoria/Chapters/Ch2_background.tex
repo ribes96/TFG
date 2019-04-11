@@ -53,9 +53,12 @@
   to see which one gets a higher accuracy with unseen data.
 \end{pre-delivery}
 
-\begin{note}
-  \section{Review de los principales modelos que existen}
-\end{note}
+\section{Some currently used Machine Learning models}
+
+
+% \begin{note}
+  % \section{Review de los principales modelos que existen}
+% \end{note}
   \subsection{Decision Tree}
   \begin{note}
     \begin{itemize}
@@ -142,13 +145,13 @@ If we compute
 and
 
 \begin{equation}
-  b = y_i - \vx_iw
+  b = y_i - w\vx_i
 \end{equation}
 for any $i$ so that $\alpha_i \neq 0$, we can compute the class of $\vx_0$ with
-$sign(\vx_0w + b)$.
+$sign(w\vx_0 + b)$.
 
 Note that this algorithm just uses the dot product of the input data, not the
-data itself. This property is allows us to use the Kernel Trick with them.
+data itself. This property allows us to use the Kernel Trick with them.
 See \ref{sec:kern-trick}
 
 \end{pre-delivery}
@@ -193,13 +196,13 @@ See \ref{sec:kern-trick}
 
     Some ensemble methods are focused on decreasing the error caused by the
     variance of the model. One example is \textit{Bagging}. Others are focused
-    on the bias error decreasing the bias error, like \textit{Boosting}.
+    on error decreasing the bias error, like \textit{Boosting}.
 
     In Bagging, every model in the ensemble vote with equal weight. Thus, it is
     important to promote the variance among each of the models, since not doing
     it would be equivalent to training just one model. Ideally, one would train
     each of the models with totally different datasets, with no correlation
-    between them. But in practice this is not always possible, because of a
+    among them. But in practice this is not always possible, because of a
     limited number of instances to train. One alternative is to use a
     technique called \textit{Bootstrap}. Bootstrap allows to generate
     many different instances of a dataset by performing a resampling.
@@ -211,9 +214,9 @@ See \ref{sec:kern-trick}
     that each dataset $D_i$ will contain $63.2 \% $ of the instances in $D$.
 
     Theoretically Bagging could be used with any kind of method. However, for
-    most of them Boostrap is not enought to decorrelate each of the estimator.
+    most of them Boostrap is not enought to decorrelate the estimators.
     In practice, Bagging is mostly used with Decision Tree, given that this
-    method produces very different tree with a small variation in the data.
+    method produces very different trees with a small variation in the data.
     Random Forest is an algorithm that trains many Decision Trees with a
     Bagging. Instead of building the tree in a deterministic way, in each
     split it choses a random subset of features on which to perform the
@@ -294,16 +297,28 @@ as long as the learning technique relies
 only on the inner product of the input, the underlying mapping $\phi(\cdot)$
 does not need to be explicitly calculated and can, in fact, be unknown.
 
+Kernel functions can be characterised with the Mercer's condition
+\cite{mercer1909functions}. It says that given a function $\kernel(\vx, \vy)$,
+there exists a mapping $\phi(\cdot)$ so that
+$\kernel(\vx, \vy) = \phi(\vx)\phi(\vy)$
+if and only if for any $g(\vx)$ such that $\int g(\vx)^2 d\vx$ is finite then
+$\kernel(\vx, \vy)g(\vx)g(\vy) \geq 0$.
+
 There are many known Kernels. One that is very popular is the Radial Basis
 Function Kernel, RBF. This kernel is defined as:
 \begin{equation}
 \kernel(\vx,\vy) = \semiRbf
 \end{equation}
-$\gamma$ is a free parameter. The value of this Kernel decreases with the
+where $\gamma$ is a free parameter. The value of this Kernel decreases with the
 euclidean distance of the parameters, so it can be interpreted as a measure
 of similarity. The feature space of this kernel has infinite number of
 dimensions.
 
+When a kernel is used with an SVM, the answer can be computed with
+$sign\left(\sum_{i = 1}^n \alpha_iy_i\kernel(\vx_i, \vx)\right)$.
+SVMs using the RBF kernel have a huge ability to fit to the data, and is able
+to separate classes for very difficult problems. The problem is that the
+optimization of the function 
 
 \end{pre-delivery}
   % \subsection{The RBF kernel}

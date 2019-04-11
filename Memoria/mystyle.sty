@@ -30,6 +30,7 @@
 \usepackage{caption}
 \captionsetup{justification=raggedright,singlelinecheck=false}
 \usepackage{subcaption}
+\captionsetup[subfigure]{labelformat=empty}
 
 \usepackage{tcolorbox}
 \tcbuselibrary{breakable}
@@ -229,40 +230,42 @@
   \end{figure}
 }
 
-\newcommand{\BlackBoxes}{
+\newcommand{\BoxesFigure}{
 \begin{figure}[ht]
   {\centering
   \begin{subfigure}[t]{0.5\linewidth}
     \centering\includegraphics[height=10\baselineskip]{Figures/boxes/black_bag}
-    \caption[Black Bag diagram]{Black Bag Model diagram. Each model recieves data
+    \caption[Black Bag diagram]{Black Bag. Each model recieve data
     from the same Random Mapping, but they take a different resampling with with
     replacement.}
     % \label{fig:black-bag}
   \end{subfigure}%
   \begin{subfigure}[t]{0.5\linewidth}
     \centering\includegraphics[height=10\baselineskip]{Figures/boxes/black_ens}
-    \caption[Black Ensemble diagram]{Black Ensemble Model diagram. Each model
-    recieves exactly the same data, from just one Random Mapping. This model
-    doesn't make sense unless the basic model has some random process.}
+    \caption[Black Ensemble diagram]{Black Ensemble. Each model
+    recieve exactly the same data, from just one Random Mapping. Only useful
+    for randomized models.}
     % \label{fig:black-ens}
   \end{subfigure}
 
   \begin{subfigure}[t]{0.5\linewidth}
     \centering\includegraphics[height=10\baselineskip]{Figures/boxes/white_bag}
-    \caption[White Bag diagram]{White Bag Model diagram. Each models recieves
+    \caption[White Bag diagram]{White Bag. Each model recieves
     data from a different Random Mapping, which has then had a resampling with
     replacement.}
     % \label{fig:white-bag}
   \end{subfigure}%
   \begin{subfigure}[t]{0.5\linewidth}
     \centering\includegraphics[height=10\baselineskip]{Figures/boxes/white_ens}
-    \caption[White Ensemble diagram]{White Ensemble Model diagram. Each model
+    \caption[White Ensemble diagram]{White Ensemble. Each model
     recieves data from a different Random Mapping.}
     % \label{fig:white-ens}
   \end{subfigure}
   }
-  \caption[Model Boxes Diagram]\\There are many ways to mix Ensemble Methods with
-  Random Fourier Features. These are the ones studied in this project.
+  \caption[Model Boxes Diagram]\\
+  Four different ways to mix Random Fourier Features with ensemble methods.
+  % There are many ways to mix Ensemble Methods with
+  % Random Fourier Features. These are the ones studied in this project.
   \label{fig:model-boxes}
 \end{figure}
 }

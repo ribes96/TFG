@@ -24,43 +24,126 @@
     \item Hay por ahí algún paper que compara RFF y \Nys
   \end{itemize}
 \end{note}
-\begin{pre-delivery}
-  Using RFF or \Nys\ has two main advantages related to this project:
+
+\begin{note}
   \begin{itemize}
-    \item We can use an explicit mapping of the data instead of the implicit
-    one defined by the Kernel functions.
-    \item We can produce many different datasets (all of them equally valid)
-    from an original one, with the required number of features.
+    \item Usar RFF añade un coste al procedimiento, pero es lineal con la
+    cantidd de instsancias
+    \item Por lo tanto, el uso de las RFF probablemente solo será útil con
+    datasets muy grandes. Si el dataset es pequeño, los costes que tiene son
+    demasiado grandes
+    \item De los 9 problemas con los que hemos experimentado, 7 de ellos son
+    pequeños y únicamente sirven para ilustrar la mejoría de precisión, pero
+    no los tiempos
+    \item El MNIST y el Fashion MNIST se han usado para sacar conclusiones de
+    tiempo
   \end{itemize}
-  These advantages allow us to define some combinations of the Bagging
-  Ensemble method with the Random Mappings. Depending on where do we place
-  the Random Mapping in the ensemble process we can get two different approaches.
-  If we understand the ensemble as a black box, on which we can only affect the
-  inputs and the outputs of the box without affecting the rest of the process,
-  we get what we have called the Black Box Model. If, on the contrary, we use
-  the Random Mapping in the middle of the ensemble process, we get a White Box
-  Model.
+\end{note}
+\begin{pre-delivery}
+  RFF and \Nys\ can be very useful for two main reasons:
+  \begin{itemize}
+    \item They allow us to perform an explicit mapping approximating the Kernel
+    feature space.
+    \item They can be used to generate many different equally valid datasets
+    with the required number of features from a single one.
+  \end{itemize}
 
-  But we have defined two other models based on these ones. Given that we have
-  assumed that maybe a Bootstrap in combination to the Random Mapping woud be
-  too much randomness for the problem, we have defined also the models which
-  doest perform the Bootstrap. We've called a ``Bag'' the models which do
-  perform a Bootstrap on the data, and ``Ensemble'' to those that don't
-  perform it. Thus, we have defined four models: ``Black Bag'', ``White Bag'',
-  ``Black Ensemble'', and ``White Ensemble''. See \ref{fig:model-boxes}
-  % See Figures \ref{fig:black-bag},
-  % \ref{fig:black-ens}, \ref{fig:white-bag} and \ref{fig:white-ens}.
+  We will study how these advantages could be used to increase the accuracy
+  of some models. In particular, we expect they will be useful in two
+  different ways. First, some methods could achieve a higher accuracy if they
+  were trained with data in a Kernel feature space instead of the general
+  one. Second, generating many datasets could make it possible to increase the
+  accuracy of some models by training an ensemble.
+
+  Although both approaches are expected to increase the accuracy of some
+  models, they will also increase a little bit the training time. Performing
+  a random mapping has a linear cost with the number of instances, and training
+  an ensemble clearly multiplies the ammount of work to be done. Thus, the
+  benefit of the methods presented will depend on the circumstances of
+  each problem. It should be noted that both increases in time are linear with the
+  number of instances, so they can scale well with very large datasets. This is
+  in contrast to training SVM with non-linear kernels, whose cost is cubic
+  with the number of instances.
+
+  For this project we have used 9 different datasets to check the hypothesis. 7
+  of them were quite small (5000 instances approx.) and the other 2 had a much
+  bigger size (70000 instances). For this reason, the first ones will usefull
+  to compare the accuracies obtained, but will show a very big increase in the
+  training time. In contrast, the bigger datasets will show the real strenth
+  of these methods.
+
+  We propose two ways of using the random mappings. The first one is very
+  straightforward: simply using a random mapping of the data to train a
+  single model, and use the same mapping in the prediction step with
+  the instances in the input. The second one involves mixing the mapping
+  with some ensemble algorithm.
+
+  There are many ways to mix these two methods. The ones that we have studied
+  are based on the Random Forest and are the most straightforward, but other
+  ways could be studied in a future work.
+
+  The first thing to decide is where to place the random mapping in the whole
+  process. We have taken two different approaches: we can think of an
+  ensemble as a Black Box, where we can only affect the inputs and the outputs,
+  or we can differenciate the different parts it contain, like in a White Box.
+
+  Then, there's what kind of ensemble to use. We've chosen to use the
+  Bagging technique, which is the one that Random Forest uses, but we've
+  also defined a modified version which doesn't perform the Bootstrap. This is
+  because we expected that using Bootstrap together with a random mapping would
+  produce too much randomness in the data, affecting negatively the
+  overall accuracy. We've called the first method a ``Bag'', and the second
+  method an ``Ensemble''.
+
+  From the combination of these approaches we have defined four different
+  ways of mixing: ``Black Bag'', ``Black Ensemble'', ``White Bag'' and
+  ``White ensemble''. See \ref{fig:model-boxes}.
+
+  For this project we have used Random Fourier Features and the \Nys\
+  method to approximate the Radial Basis Function (RBF) Kernel with tree
+  well known Machine Learning algorithms: Support Vector Machine, Logistic
+  Regression and Decision Tree. We study how we can use them to increase
+  the accuracy that we can achieve with them and the computational costs.
 
 
-  Since the Black Ensemble models will feed all the estimators with the same
-  data, it only makes sense to use it with models with some randomness in the
-  process. That's why we will barely use it here.
-
-  These models are based on what is done in Random Forest with the Decision
-  Tree, and seem to be the logical ones to start with. That's why we have chosen
-  to work with them.
 \end{pre-delivery}
-\BlackBoxes
+% \begin{pre-delivery}
+%   Using RFF or \Nys\ has two main advantages related to this project:
+%   \begin{itemize}
+%     \item We can use an explicit mapping of the data instead of the implicit
+%     one defined by the Kernel functions.
+%     \item We can produce many different datasets (all of them equally valid)
+%     from an original one, with the required number of features.
+%   \end{itemize}
+%   These advantages allow us to define some combinations of the Bagging
+%   Ensemble method with the Random Mappings. Depending on where do we place
+%   the Random Mapping in the ensemble process we can get two different approaches.
+%   If we understand the ensemble as a black box, on which we can only affect the
+%   inputs and the outputs of the box without affecting the rest of the process,
+%   we get what we have called the Black Box Model. If, on the contrary, we use
+%   the Random Mapping in the middle of the ensemble process, we get a White Box
+%   Model.
+%
+%   But we have defined two other models based on these ones. Given that we have
+%   assumed that maybe a Bootstrap in combination to the Random Mapping woud be
+%   too much randomness for the problem, we have defined also the models which
+%   doest perform the Bootstrap. We've called a ``Bag'' the models which do
+%   perform a Bootstrap on the data, and ``Ensemble'' to those that don't
+%   perform it. Thus, we have defined four models: ``Black Bag'', ``White Bag'',
+%   ``Black Ensemble'', and ``White Ensemble''. See \ref{fig:model-boxes}
+%   % See Figures \ref{fig:black-bag},
+%   % \ref{fig:black-ens}, \ref{fig:white-bag} and \ref{fig:white-ens}.
+%
+%
+%   Since the Black Ensemble models will feed all the estimators with the same
+%   data, it only makes sense to use it with models with some randomness in the
+%   process. That's why we will barely use it here.
+%
+%   These models are based on what is done in Random Forest with the Decision
+%   Tree, and seem to be the logical ones to start with. That's why we have chosen
+%   to work with them.
+% \end{pre-delivery}
+\BoxesFigure
 % \BlackBoxes
 % \figBlackBag
 % \figBlackEns
@@ -192,13 +275,13 @@
 
     With a simple mix of Bagging with RFF there are two different sources
     of randomness. For the one hand, Bootstrap generates a random sample of
-    the data with replacement, and on the other hand, RFF and \Nys perform
+    the data with replacement, and on the other hand, RFF and \Nys\ perform
     a Random Mapping of the data to a different feature space.
 
     It is possible that for some models, this is too much randomization of
     the data, and it coud have a bad effect on the learning process.
 
-    \item \textbf{Decision Tree does not benefit from RFF and \Nys as much as
+    \item \textbf{Decision Tree does not benefit from RFF and \Nys\ as much as
     Logit and SVM do}
 
     Kernels were originally used on Support Vector Machines because they were
@@ -206,7 +289,7 @@
     feature space where data was separable by an hyper-plane. They were
     useful because SVM just needed the inner products of their input to work.
 
-    RFF and \Nys are ways to explicitly compute an approximation of that
+    RFF and \Nys\ are ways to explicitly compute an approximation of that
     mapping, which doesn't necessarily fits the requirements of Decision Tree,
     which has nothing to do with the inned products. That's the reason why
     Decision Tree may not benefit so much of these Random Mappings.
@@ -255,9 +338,132 @@
 \end{note}
 
 \begin{pre-delivery}
-  In order to be able to accept or refuse the hypothesis previously proposed, we
-  have defined a set of experiments.
+
+  There are two factors we need to check in order to accept of refute the
+  hypothesis: we want to know if these methods increase the accuracy of the
+  models (and if so, how much) and also at what costs does it comes, the
+  increase of training time. The 7 first datasets (Covertype, Digits, Fall
+  Detection, Pen Digits, Satellite, Segment and Vowel) are suitable to measure
+  the increase of the accuracy, but not to measure the time, since the
+  overhead caused by these techniques is too much compared with training
+  with a problem as small as that. The other two datasets (MNIST and Fashion
+  MNIST) have a larger number of instances, and are expected to reflect
+  better the benefits of using these methods.
+  However, some of the models proposed in the experiments are very expensive to
+  train on very large datasets, and it was not possible to run the whole training
+  with them. Some simplifications have been made to extrapolate the real
+  training time.
+
+  To check the hypothesis previously suggested we have proposed a set of
+  experiments:
+
+  \subsubsection*{Hypothesis 1}
+  In this hypothesis we assumed that we could train an SVM with results comparable
+  to the ones using the RBF Kernel, but with much less training time. To
+  check that we have defined the experiment 1.1, where we compare four different
+  models, an SVM without a kernel, an SVM with the RBF kernel and two SVM
+  without kernel but using the random mappings, RFF and \Nys. In order to accept
+  the hypothesis we need to see that the models using RFF and \Nys\ significantly
+  increase the accuracy compared to the single SVM.
+
+  For the method to be useful it would be needed for the training time to
+  be much less using the random mappings compared to the RBF-SVM on large datasets.
+  To check that we will need to focus on MNIST and Fashion-MNIST, since they
+  are the only large datasets.
+
+  Theoretically, for RBF-SVM a cross-validation should have been performed to
+  find a suitable value for C, but the training time needed to do that for the
+  large datasets is too much. To avoid that, we have used the same value found
+  for the SVM with RFF in MNIST and Fashion-MNIST, and have approximated the
+  time that would have been needed if cross-validation had been performed.
+
+  Results of this experiment can be seen in Appendix \ref{Appendix1-1}
+
+
+  \subsubsection*{Hypothesis 2}
+
+  For this hypothesis it was asserted that training an ensemble of SVM and
+  Logistic Regression using a random mapping could increase significantly the
+  accuracy obtained. Nevertheless, the training time is expected to be
+  significantly greater since training an ensemble requires a lot more steps.
+
+  Experiments 2.1 through 2.4 were defined to check that. The first two are for
+  Logistic Regression and the others for SVM.
+  2.1 and 2.3 will compare a single model alone against a single model using
+  a random mapping. 2.2 and 2.4 will compare a single model against the model
+  with Black Bag, White Bag and White Ensemble. The Black Ensemble model is not
+  tested because these estimators are not randomized, and each one would predict
+  the same answer.
+
+  For the hypothesis to be accepted we need to see that we can achieve an
+  increase in the accuracy using any of the ensemble methods proposed. Then we
+  will need to study the increase in the training time, and consider if it
+  is worth it.
+
+  Results of these experiments can be seen in Appendices
+  \ref{Appendix2-1},
+  \ref{Appendix2-2},
+  \ref{Appendix2-3} and
+  \ref{Appendix2-4}.
+  \end{pre-delivery}
+
+  \begin{note}
+    \begin{itemize}
+      \item Solo por aclarar alguna idea, incluir también una gráfica que
+      compare un solo rff con el resto de ensembles, a ver si la mejoría
+      viene por eso
+    \end{itemize}
+  \end{note}
+
+  \begin{pre-delivery}
+  \subsubsection*{Hypothesis 3}
+
+  With this hypothesis we wanted to know if using Bootstrap together with a
+  random mapping will produce worse results than just using the random
+  mapping. To check that we will compare the ``Bags'' against the ``Ensembles''.
+  Experiments 3.1 and 3.3 will compare ``White Bag'' and ``White ensemble'' for
+  Logistic Regression and SVM respectively, and 3.2 and 3.4 will compare
+  ``Black Bag'' and ``Black Ensemble''. To make it fairer only one estimator
+  has been trained, since ``Black Ensemble'' doesn't benefit from using more.
+
+  In order to accept this hypothesis we would need to see a meaningful
+  differences in the accuracy of these models.
+
+  Results of these experiments can be seen in Appendices
+  \ref{Appendix3-1},
+  \ref{Appendix3-2},
+  \ref{Appendix3-3} and
+  \ref{Appendix3-4}.
+
+
+
+  \subsubsection*{Hypothesis 4}
+
+  In this hypothesis we asserted that Decision Tree, which doesn't work with
+  the inner product of the inputs, would not experiment a meaningful increase
+  in the accuracy with the usage of a random mapping approximating the
+  RBF feature space. Decision Tree can normally increase their accuracy
+  by using a normal Bagging. That algorithm is called Random Forest. For this
+  reason the ensemble methods using a random mapping should be compared agains
+  the Random Forest instead of a single Decision Tree.
+
+  Experiment 4.1 compares a single Decision Tree with one that uses a
+  random mapping, and 4.2 compares the Random Forest with
+  ``Black Bag'',
+  ``Black Ensemble'',
+  ``White Bag'' and
+  ``White Ensemble''
+
+  Results of these experiments can be seen in Appendices \ref{Appendix4-1}
+  and \ref{Appendix4-2}
 \end{pre-delivery}
+\begin{note}
+  \subsubsection*{Additionally}
+  \begin{itemize}
+    \item Quizá, para los de hipótesis 2 puedo poner gráficas para contrastar
+    RFF con \Nys
+  \end{itemize}
+\end{note}
 
 \section{Datasets}
 

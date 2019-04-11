@@ -121,27 +121,34 @@
   The current development of Machine Learning has opened many fronts and
   techniques trying to solve many of the difficulties that the field has.
 
-  One known issue is the Bias-Variance dilemma. While solving a classification
-  or regression problem, the expected generalization error of the models is the
+  One known issue is the Bias--Variance dilemma. While solving a classification
+  or regression problem, the expected generalization error of a model is the
   sum of three error terms: the bias, the variance and the irreductible error.
-  While the last one, as the name sugests, can not be reduced, since it is
+  While the last one, as the name suggests, cannot be reduced, since it is
   caused by the inherent random noise in the data, the other two terms seem
   to have an inverse proportion: trying to reduce one of them increases the
-  other one most of the times. In an attempt to reduce both of them (or at
-  least their sum) there have been developed some ensemble methods. While they
-  tend to show good results, their usage is mostly restricted to a small set of
-  models. This is because they tend to work better on unstable
-  models.
+  other most of the times.
+  % In an attempt to reduce both of them (or at
+  % least their sum) there have been developed some ensemble methods.
+  Ensemble methods were developed in an attempt to reduce both of them (or at
+  least their sum).
+  Although they can outperform some models
+  % Although they
+  % tend to show good results,
+  their usage is mostly restricted to a small subset.
+  % their usage is mostly restricted to a small set of models.
+  This is because they only increase significantly the accuracy on unstable
+  methods.
 
   Another advance in Machine Learning has been the usage of kernel methods. They
-  are useful to transform the data into another dimension with better properties,
+  are useful to implicitly transform the data into another feature space with better properties,
   such as a clear dividing margin between classes of data. They are very
   effective, but their high computational costs has caused their use to be limited to just
   some specific problems or with a small number of instances. There are some
-  less expensive approaches to approximate this methods, but they are not
+  less expensive approaches to approximate these methods, but they are not
   widely used.
 
-  And then there is a collection of classical algorithms which tend to have the
+  And then there is a collection of classical algorithms which have the
   advantage of being very simple and straightforward, although they don't
   usually get the highests scores.
 
@@ -157,9 +164,9 @@
   Machines or of Logistic Regression models, because they are so stable and
   most of the estimators would predict the same answer. We propose the use of
   random kernel approximations such as Random Fourier Features (RFF) or the
-  \Nys method to increase the unstability of these methods and thus be able to
+  \Nys\ method to increase the unstability of these models and thus be able to
   succesfully train and ansemble with them, hopefully increasing the accuracy
-  of a single estimator.
+  of a single one.
 
   On the other hand, the usage of these Random Kernel approximations could
   allow us to use some methods which right now are not accessible. Support
@@ -168,27 +175,37 @@
   we transform the data to some space almost equivalent to the one of the
   RBF kernel, we can use a Linear Support Vector Machine, which is less
   expensive to train, and achieve a similar accuracy. In fact, with the usage
-  of an ensemble, the results could be improved.
+  of an ensemble, the results could be improved. Similar approaches have
+  already been studied, and they have showed good results \cite{svm_rff}
+  \cite{Zhang2017StackedKN} \cite{rahimi2008random}.
 
   For this study, we have formulated some hypothesis and we try to confirm or
   refuse them based on the experimental results. The hypothesis are:
   \begin{enumerate}
-    \item It is possible to achieve a similar accuracy to a SVM with the RBF
-    kernel but with less training time by using RFF or the \Nys method with
-    a linear SVM.
-    \item It is possible to increase the accuracy of a Logistic Regression
-    model or a SVM by training and ensemble of them with the usage of RFF
-    and the \Nys method.
-    \item Curently used bagging ensemble method could show a bad behaviour
-    in combination with RFF of \Nys method due to an excess of Randomness,
-    caused by the Bootstrap together with the random mapping.
+    % \item It is possible to achieve a similar accuracy to a SVM with the RBF
+    % kernel but with less training time by using RFF or the \Nys\ method with
+    % a linear SVM.
+    \item An SVM using RFF or \Nys\ could achieve an accuracy similar to
+    using the RBF kernel but with much less training time.
+    % \item It is possible to increase the accuracy of a Logistic Regression
+    % model or a SVM by training and ensemble of them with the usage of RFF
+    % and the \Nys\ method.
+    \item Training an ensemble of SVMs or Logistic Regression models using
+    RFF or \Nys\ could increase the accuracy of a single estimator.
+    % \item Curently used bagging ensemble method could show a bad behaviour
+    % in combination with RFF of \Nys\ method due to an excess of Randomness,
+    % caused by the Bootstrap together with the random mapping.
+    \item Mixing a random mapping with the Bootstrap (from Bagging) could cause
+    an excess of randomness and hence a bad accuracy compared to just using
+    % one ofthem.
+    the random mapping.
     \item Basic algorithms which are not based on the dot product of the
-    input data such as the Decision Tree wil not benefit so much of the
-    usage of RFF and \Nys than those that do, like SVM or
+    input data such as the Decision Tree will not benefit so much of the
+    usage of RFF and \Nys\ than those that do, like SVM or
     Logistic Regression.
   \end{enumerate}
 
-  In the following pages we show an experimental set up to check those
+  In the following pages we show an experimental set up to check these
   hypothesis and the results of the experiments. In Chapter \ref{Chapter2} we
   explain some of the Machine Learning concepts which are needed to understand
   the rest of the project. In \ref{Chapter3} we explain with more detail how

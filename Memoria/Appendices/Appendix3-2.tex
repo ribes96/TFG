@@ -1,0 +1,87 @@
+% Appendix Template
+
+\newcommand{\major}{3}
+\newcommand{\minor}{2}
+
+\newcommand{\undPrefix}{\major_\minor}
+\newcommand{\dotPrefix}{\major.\minor}
+\newcommand{\scoPrefix}{\major-\minor}
+\newcommand{\filePrefix}{\undPrefix}
+
+% \chapter{Results of experiment 1.1} % Main appendix title
+\chapter{Results of experiment \dotPrefix} % Main appendix title
+
+% \label{Appendix1-1} % Change X to a consecutive letter; for referencing this appendix elsewhere, use \ref{AppendixX}
+
+\label{Appendix\scoPrefix} % Change X to a consecutive letter; for referencing this appendix elsewhere, use \ref{AppendixX}
+
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{0.5\linewidth}
+    % \centering\includegraphics[width=\imgscale\linewidth]{Figures/1_1/covertype}
+    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/covertype}
+    \caption{prueba covertype}
+    \label{fig:\undPrefix_covertype}
+  \end{subfigure}%
+  \begin{subfigure}[b]{0.5\linewidth}
+    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/digits}
+    \caption{prueba digits}
+    % \label{fig:1_1_digits}
+    \label{fig:\undPrefix_digits}
+  \end{subfigure}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{0.5\linewidth}
+    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/fall_detection}
+    \caption{prueba fall-detection}
+    \label{fig:\undPrefix_fall_detection}
+  \end{subfigure}%
+  \begin{subfigure}[b]{0.5\linewidth}
+    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/mnist}
+    \caption{prueba mnist}
+    \label{fig:\undPrefix_mnist}
+  \end{subfigure}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{0.5\linewidth}
+    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/pen_digits}
+    \caption{prueba pen-digits}
+    \label{fig:\undPrefix_pen_digits}
+  \end{subfigure}%
+  \begin{subfigure}[b]{0.5\linewidth}
+    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/satellite}
+    \caption{prueba satellite}
+    \label{fig:\undPrefix_satellite}
+  \end{subfigure}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[b]{0.5\linewidth}
+    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/segment}
+    \caption{prueba segment}
+    \label{fig:\undPrefix_segment}
+  \end{subfigure}%
+  \begin{subfigure}[b]{0.5\linewidth}
+    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/vowel}
+    \caption{prueba vowel}
+    \label{fig:\undPrefix_vowel}
+  \end{subfigure}
+\end{figure}
+
+
+\let\major\undefined
+\let\minor\undefined
+
+\let\undPrefix\undefined
+\let\dotPrefix\undefined
+\let\scoPrefix\undefined
+
+\let\filePrefix\undefined

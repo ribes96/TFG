@@ -137,3 +137,18 @@ def exp(model_info, tunning_params, data_train, data_test, target_train,
     }
     print(ret_dic)
     return ret_dic
+
+
+def store_exp_general(*dics, filename):
+    '''
+    Recibe diccionarios y los guarda en disco en json
+    Parameters
+    ==========
+    dics : tuple of dict
+        Diccionarios con los resultados de los experimentos
+    exp_code : str
+        Qué experimento se está realizando. De la forma 2_4
+    '''
+    # filename = f'experimental_results/{exp_code}/{dts_name}.json'
+    with open(filename, 'w') as f:
+        json.dump(dics, f, indent=4, sort_keys=True)
