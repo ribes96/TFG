@@ -9,36 +9,36 @@
 %----------------------------------------------------------------------------------------
 
 \section{General Idea}
-\begin{note}
-  \begin{itemize}
-    \item Hemos visto que se puede sacar una aproximación aleatoria de la
-    función implícita de un shift invariant kernel. Esto tiene 2 ventajas
-    \begin{itemize}
-      \item Podemos transformar los datos directamente
-      \item Podemos producir pequeñas variaciones de un mismo dataset, todas
-      ellas válidas
-    \end{itemize}
-    \item Las 4 tipos de modelos que he definido. Referencia a la foto
-    \item ¿Por qué he cogido estos 4 modelos? ¿No podrían haber sido otros?
-    ¿Que tienen estos de bueno? Me he inspirado en Random Forest
-    \item Hay por ahí algún paper que compara RFF y \Nys
-  \end{itemize}
-\end{note}
+% \begin{note}
+%   \begin{itemize}
+%     \item Hemos visto que se puede sacar una aproximación aleatoria de la
+%     función implícita de un shift invariant kernel. Esto tiene 2 ventajas
+%     \begin{itemize}
+%       \item Podemos transformar los datos directamente
+%       \item Podemos producir pequeñas variaciones de un mismo dataset, todas
+%       ellas válidas
+%     \end{itemize}
+%     \item Las 4 tipos de modelos que he definido. Referencia a la foto
+%     \item ¿Por qué he cogido estos 4 modelos? ¿No podrían haber sido otros?
+%     ¿Que tienen estos de bueno? Me he inspirado en Random Forest
+%     \item Hay por ahí algún paper que compara RFF y \Nys
+%   \end{itemize}
+% \end{note}
 
-\begin{note}
-  \begin{itemize}
-    \item Usar RFF añade un coste al procedimiento, pero es lineal con la
-    cantidd de instsancias
-    \item Por lo tanto, el uso de las RFF probablemente solo será útil con
-    datasets muy grandes. Si el dataset es pequeño, los costes que tiene son
-    demasiado grandes
-    \item De los 9 problemas con los que hemos experimentado, 7 de ellos son
-    pequeños y únicamente sirven para ilustrar la mejoría de precisión, pero
-    no los tiempos
-    \item El MNIST y el Fashion MNIST se han usado para sacar conclusiones de
-    tiempo
-  \end{itemize}
-\end{note}
+% \begin{note}
+%   \begin{itemize}
+%     \item Usar RFF añade un coste al procedimiento, pero es lineal con la
+%     cantidd de instsancias
+%     \item Por lo tanto, el uso de las RFF probablemente solo será útil con
+%     datasets muy grandes. Si el dataset es pequeño, los costes que tiene son
+%     demasiado grandes
+%     \item De los 9 problemas con los que hemos experimentado, 7 de ellos son
+%     pequeños y únicamente sirven para ilustrar la mejoría de precisión, pero
+%     no los tiempos
+%     \item El MNIST y el Fashion MNIST se han usado para sacar conclusiones de
+%     tiempo
+%   \end{itemize}
+% \end{note}
 \begin{pre-delivery}
   RFF and \Nys\ can be very useful for two main reasons:
   \begin{itemize}
@@ -169,29 +169,29 @@
 
 
 \section{Hyper-parameters}
-\begin{note}
-  \begin{itemize}
-    \item Existen los siguientes:
-    \begin{itemize}
-      \item min-impurity-decrease para DT
-      \item C para SVM
-      \item gamma para RFF y \Nys
-      \item cantidad de features para RFF y \Nys
-      \item cantidad de estimadores para ensembles
-    \end{itemize}
-    \item Hemos usado los siguientes valores:
-    \begin{itemize}
-      \item Cantidad de features a 500
-      \item Cantidad de estimadores a 50
-      \item En modelos simples, el parámetro por crossvalidation
-      \item En modelos simples con RFF, el parámetro por crossvalidation
-      y una gamma que sobreajuste
-      \item En modelos con ensemble, parámetros que sobreajusten y la gamma
-      por crossvalidation
-      \item En RBF-SVM, la gamma por gamest y el parámetro por crossvalidation
-    \end{itemize}
-  \end{itemize}
-\end{note}
+% \begin{note}
+%   \begin{itemize}
+%     \item Existen los siguientes:
+%     \begin{itemize}
+%       \item min-impurity-decrease para DT
+%       \item C para SVM
+%       \item gamma para RFF y \Nys
+%       \item cantidad de features para RFF y \Nys
+%       \item cantidad de estimadores para ensembles
+%     \end{itemize}
+%     \item Hemos usado los siguientes valores:
+%     \begin{itemize}
+%       \item Cantidad de features a 500
+%       \item Cantidad de estimadores a 50
+%       \item En modelos simples, el parámetro por crossvalidation
+%       \item En modelos simples con RFF, el parámetro por crossvalidation
+%       y una gamma que sobreajuste
+%       \item En modelos con ensemble, parámetros que sobreajusten y la gamma
+%       por crossvalidation
+%       \item En RBF-SVM, la gamma por gamest y el parámetro por crossvalidation
+%     \end{itemize}
+%   \end{itemize}
+% \end{note}
 
 \begin{pre-delivery}
   With the models defined in this project there are many hyper-parameters to
@@ -223,20 +223,20 @@
 \section{Hypothesis}
 
 
-\begin{note}
-  \begin{enumerate}
-    \item Podemos aproximar bien una RBF-SVM
-    \item Puede tener sentido hacer ensembles con otros modelos a DT
-    \item RFF + Bootstrap puede ser malo
-    \item Si el modelo no se basa en productos escalares no se
-    feneficiará tanto
-  \end{enumerate}
-\end{note}
+% \begin{note}
+%   \begin{enumerate}
+%     \item Podemos aproximar bien una RBF-SVM
+%     \item Puede tener sentido hacer ensembles con otros modelos a DT
+%     \item RFF + Bootstrap puede ser malo
+%     \item Si el modelo no se basa en productos escalares no se
+%     feneficiará tanto
+%   \end{enumerate}
+% \end{note}
 
-\begin{tcolorbox}[breakable, colback=red,coltext=black]
-  El paper que hacer Linear SVM con RFF no está indexado en ningún sitio. Es
-  solo un pdf que hay por la red
-\end{tcolorbox}
+% \begin{tcolorbox}[breakable, colback=red,coltext=black]
+%   El paper que hacer Linear SVM con RFF no está indexado en ningún sitio. Es
+%   solo un pdf que hay por la red
+% \end{tcolorbox}
 \begin{pre-delivery}
   We had proposed these four hypothesis:
   \begin{enumerate}
@@ -361,8 +361,10 @@
   In this hypothesis we assumed that we could train an SVM with results comparable
   to the ones using the RBF Kernel, but with much less training time. To
   check that we have defined the experiment 1.1, where we compare four different
-  models, an SVM without a kernel, an SVM with the RBF kernel and two SVM
-  without kernel but using the random mappings, RFF and \Nys. In order to accept
+  models: an SVM without a kernel, an SVM with the RBF kernel and two SVM
+  without kernel but using the random mappings, RFF and \Nys.
+  % In order to accept
+  To consider that results support
   the hypothesis we need to see that the models using RFF and \Nys\ significantly
   increase the accuracy compared to the single SVM.
 
@@ -374,8 +376,11 @@
   Theoretically, for RBF-SVM a cross-validation should have been performed to
   find a suitable value for C, but the training time needed to do that for the
   large datasets is too much. To avoid that, we have used the same value found
-  for the SVM with RFF in MNIST and Fashion-MNIST, and have approximated the
-  time that would have been needed if cross-validation had been performed.
+  for the SVM with RFF in MNIST and Fashion-MNIST,
+  % and have approximated the
+  % time that would have been needed if cross-validation had been performed.
+  and have multiplied the resulting time by 5 in order to approximately match
+  the real required time with cross-validation.
 
   Results of this experiment can be seen in Appendix \ref{Appendix1-1}
 
@@ -395,7 +400,7 @@
   tested because these estimators are not randomized, and each one would predict
   the same answer.
 
-  For the hypothesis to be accepted we need to see that we can achieve an
+  For the hypothesis to be supported we need to see that we can achieve an
   increase in the accuracy using any of the ensemble methods proposed. Then we
   will need to study the increase in the training time, and consider if it
   is worth it.
@@ -424,9 +429,12 @@
   Experiments 3.1 and 3.3 will compare ``White Bag'' and ``White ensemble'' for
   Logistic Regression and SVM respectively, and 3.2 and 3.4 will compare
   ``Black Bag'' and ``Black Ensemble''. To make it fairer only one estimator
-  has been trained, since ``Black Ensemble'' doesn't benefit from using more.
+  has been trained for the ``Black models'' , since ``Black Ensemble''
+  doesn't benefit from using more.
 
-  In order to accept this hypothesis we would need to see a meaningful
+  % In order to accept
+  To support
+  this hypothesis we would need to see a meaningful
   differences in the accuracy of these models.
 
   Results of these experiments can be seen in Appendices
@@ -452,7 +460,10 @@
   ``Black Bag'',
   ``Black Ensemble'',
   ``White Bag'' and
-  ``White Ensemble''
+  ``White Ensemble''.
+
+  To support this hypothesis we should see that using a random mapping doen't
+  outperform too much compared to not using it.
 
   Results of these experiments can be seen in Appendices \ref{Appendix4-1}
   and \ref{Appendix4-2}
@@ -488,38 +499,70 @@
  \end{tabular}
 \end{table}
 
-\begin{note}
-  \begin{itemize}
-    \item 8 Datasets
-    \item Normalizados
-    \item Únicamente tienen variables numéricas, no categóricas
-    \item Únicamente problemas de clasificación
-    \item Algunas cosas particulares que he hecho:
-    \begin{itemize}
-      \item Mezclar datos de train y de test para luego hacer mi propia
-      separación
-      \item Cuando había poca presencia de una clase, hacer un resampling para
-      igualar las cantidades
-      \item No trabajar cosas como el skiwness o los outliers
-      \item Eliminar columnas en las que todo eran 0
-      \item Reducir el conjunto de instancias
-    \end{itemize}
-  \end{itemize}
-\end{note}
+% \begin{note}
+%   \begin{itemize}
+%     \item 8 Datasets
+%     \item Normalizados
+%     \item Únicamente tienen variables numéricas, no categóricas
+%     \item Únicamente problemas de clasificación
+%     \item Algunas cosas particulares que he hecho:
+%     \begin{itemize}
+%       \item Mezclar datos de train y de test para luego hacer mi propia
+%       separación
+%       \item Cuando había poca presencia de una clase, hacer un resampling para
+%       igualar las cantidades
+%       \item No trabajar cosas como el skiwness o los outliers
+%       \item Eliminar columnas en las que todo eran 0
+%       \item Reducir el conjunto de instancias
+%     \end{itemize}
+%   \end{itemize}
+% \end{note}
+
+% % \begin{pre-delivery}
+%   \begin{incomplete}
+%   We have chosen 9 different datasets to run the experiments proposed. All of
+%   them are from classification problems since that was the scope of the project.
+%   All the features have been normalized to have a mean of 0 and a variance of 1. Since
+%   the kernel RBF can only work with numerical data, all categorical variables
+%   have been converted to integers. Here is the preprocessing that
+%   has been done on the datasets:
+%   \paragraph{Covertype}
+%   In the original dataset the classes were not balanced. So, we performed a
+%   resampling of the data, taking 700 random instances of each of the clases.
+%   There were 40 binary columns that were converted to a single numerical
+%   variable.
+%   \paragraph{MNIST}
+%   We took a subset of 5000 instances from the original dataset. Since in the new
+%   sample some of the columns contained only zeros, they were removed.
+% % \end{pre-delivery}
+% \end{incomplete}
+
 
 \begin{pre-delivery}
-  We have chosen 9 different datasets to run the experiments proposed. All of
-  them are from classification problems since that was the scope of the project.
-  All the data has been normalized to have a mean of 0 and a variance of 1. Since
-  the kernel RBF can only work with numerical data, all categorical variables
-  have been converted to integers. Here follows some of the preprocessing that
-  has been done on the datasets:
-  \paragraph{Covertype}
-  In the original dataset the classes were not balanced. So, we performed a
-  resampling of the data, taking 700 random instances of each of the clases.
-  There were 40 binary columns that were converted to a single numerical
-  variable.
-  \paragraph{MNIST}
-  We took a subset of 5000 instances from the original dataset. Since in the new
-  sample some of the columns contained only zeros, they were removed.
+  This project is focused on studying the effects of Random Fourier Features
+  and \Nys\ on classification problems, but there is nothing that prevents their
+  usage for regression. It is proposed as a future work to perform the
+  same experiments on regression problems.
+
+  The RBF kernel is just designed for numerical values of the features. Thus, we
+  wanted all the variables on the datasets to be numerical. When that was not
+  possible, categorical variables were transformed to integers, as in these
+  circumstances that seemed preferable to using One Hot Encoding.
+
+  Table \ref{tab:dts-info} shows some information of the datasets used in this
+  project. Most of them have few instances compared to some large-scale
+  problems, but we expect the accuracy results will to be representative for
+  bigger problems. Regarding the computation time, smaller datasets may not be
+  the most appropriated to study the performance; for that it will be better to
+  focus on MNIST and Fashion MNIST.
+
+  Some preprocessing was done with the dataset Covertype, since the target classes
+  were very unbalanced. As working with unbalanced classes is out of the scope
+  of this project, we took a random subset of instances of each of the clases
+  and discarded the rest.
+
+  The features in all datasets have been normalised to have a mean of 0 and
+  a variance of 1. This is a common practice to  normalise the contribution
+  of the features of the problem, and also helps to reduce the time of
+  some optimization problems.
 \end{pre-delivery}

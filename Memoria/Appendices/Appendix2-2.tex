@@ -12,126 +12,347 @@
 
 
 \label{Appendix\scoPrefix} % Change X to a consecutive letter; for referencing this appendix elsewhere, use \ref{AppendixX}
+These experiments are discussed \hyperref[disc:h2]{here}
 
 
-\begin{figure}[ht]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Empieza lo nuevo
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[H]
   \centering
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/covertype}
-    \caption{prueba covertype}
+  \renewcommand{\filePrefix}{\undPrefix/rff}
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/covertype}
+    \caption{Exp 2.2 with Random Fourier Feautures with Covertype. Error is decreased by 2\% approx.}
     \label{fig:\undPrefix_covertype}
   \end{subfigure}%
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/digits}
-    \caption{prueba digits}
+  \renewcommand{\filePrefix}{\undPrefix/nys}%
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/covertype}
+    \caption{Exp 2.2 with \Nys\ with Covertype. Error is decreased by 2\% approx.}
+    \label{fig:\undPrefix_covertype}
+  \end{subfigure}%
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \renewcommand{\filePrefix}{\undPrefix/rff}
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/digits}
+    \caption{Exp 2.2 with Random Fourier Feautures with Digits. Error is decreased by 2\% approx.}
+    \label{fig:\undPrefix_digits}
+  \end{subfigure}%
+  \renewcommand{\filePrefix}{\undPrefix/nys}%
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/digits}
+    \caption{Exp 2.2 with \Nys\ with Digits. Error is decreased by 2\% approx.}
     \label{fig:\undPrefix_digits}
   \end{subfigure}
 \end{figure}
 
 
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/fall_detection}
-    \caption{prueba fall-detection}
+  \renewcommand{\filePrefix}{\undPrefix/rff}
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/fall_detection}
+    \caption{Exp 2.2 with Random Fourier Feautures with Fall Detection. Error is not decreased.}
     \label{fig:\undPrefix_fall_detection}
   \end{subfigure}%
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/mnist}
-    \caption{prueba mnist}
+  \renewcommand{\filePrefix}{\undPrefix/nys}%
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/fall_detection}
+    \caption{Exp 2.2 with \Nys\ with Fall Detection. Error is not decreased.}
+    \label{fig:\undPrefix_fall_detection}
+  \end{subfigure}%
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \renewcommand{\filePrefix}{\undPrefix/rff}
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/mnist}
+    \caption{Exp 2.2 with Random Fourier Feautures with MNIST. Error is decreased by 5\% approx.}
+    \label{fig:\undPrefix_mnist}
+  \end{subfigure}%
+  \renewcommand{\filePrefix}{\undPrefix/nys}%
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/mnist}
+    \caption{Exp 2.2 with \Nys\ with MNIST. Error is decreased by 5\% approx.}
     \label{fig:\undPrefix_mnist}
   \end{subfigure}
 \end{figure}
 
 
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/pen_digits}
-    \caption{prueba pen-digits}
+  \renewcommand{\filePrefix}{\undPrefix/rff}
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/pen_digits}
+    \caption{Exp 2.2 with Random Fourier Feautures with Pen Digits. Error is decreased by 4\% approx.}
     \label{fig:\undPrefix_pen_digits}
   \end{subfigure}%
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/satellite}
-    \caption{prueba satellite}
+  \renewcommand{\filePrefix}{\undPrefix/nys}%
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/pen_digits}
+    \caption{Exp 2.2 with \Nys\ with Pen Digits. Error is decreased by 4\% approx.}
+    \label{fig:\undPrefix_pen_digits}
+  \end{subfigure}%
+\end{figure}
+
+
+\begin{figure}[H]
+  \centering
+  \renewcommand{\filePrefix}{\undPrefix/rff}
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/satellite}
+    \caption{Exp 2.2 with Random Fourier Feautures with Satellite. Error is decreased by 3\% approx.}
     \label{fig:\undPrefix_satellite}
+  \end{subfigure}%
+  \renewcommand{\filePrefix}{\undPrefix/nys}%
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/satellite}
+    \caption{Exp 2.2 with \Nys\ with Satellite. Error is decreased by 3\% approx.}
   \end{subfigure}
 \end{figure}
 
-\begin{figure}[ht]
+
+\begin{figure}[H]
   \centering
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/segment}
-    \caption{prueba segment}
+  \renewcommand{\filePrefix}{\undPrefix/rff}
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/segment}
+    \caption{Exp 2.2 with Random Fourier Feautures with Segment. Error is not decreased.}
     \label{fig:\undPrefix_segment}
   \end{subfigure}%
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/vowel}
-    \caption{prueba vowel}
+  \renewcommand{\filePrefix}{\undPrefix/nys}%
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/segment}
+    \caption{Exp 2.2 with \Nys\ with Segment. Error is not decreased.}
+  \end{subfigure}%
+\end{figure}
+
+
+\begin{figure}[H]
+  \centering
+  \renewcommand{\filePrefix}{\undPrefix/rff}
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/vowel}
+    \caption{Exp 2.2 with Random Fourier Feautures with Vowel. Error is decreased by 25\% approx.}
+    \label{fig:\undPrefix_vowel}
+  \end{subfigure}%
+  \renewcommand{\filePrefix}{\undPrefix/nys}%
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/vowel}
+    \caption{Exp 2.2 with \Nys\ with Vowel. Error is decreased by 25\% approx.}
     \label{fig:\undPrefix_vowel}
   \end{subfigure}
 \end{figure}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Termina lo nuevo
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[t]{0.5\linewidth}
+%     \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/covertype}
+%     \caption{Exp 2.2 with Random Fourier Feautures with Covertype. Error is decreased by 2\% approx.}
+%     \label{fig:\undPrefix_covertype}
+%   \end{subfigure}%
+%   \begin{subfigure}[t]{0.5\linewidth}
+%     \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/digits}
+%     \caption{Exp 2.2 with Random Fourier Feautures with Digits. Error is decreased by 2\% approx.}
+%     \label{fig:\undPrefix_digits}
+%   \end{subfigure}
+% \end{figure}
+%
+%
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[t]{0.5\linewidth}
+%     \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/fall_detection}
+%     \caption{Exp 2.2 with Random Fourier Feautures with Fall Detection. Error is not decreased.}
+%     \label{fig:\undPrefix_fall_detection}
+%   \end{subfigure}%
+%   \begin{subfigure}[t]{0.5\linewidth}
+%     \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/mnist}
+%     \caption{Exp 2.2 with Random Fourier Feautures with MNIST. Error is decreased by 5\% approx.}
+%     \label{fig:\undPrefix_mnist}
+%   \end{subfigure}
+% \end{figure}
+%
+%
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[t]{0.5\linewidth}
+%     \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/pen_digits}
+%     \caption{Exp 2.2 with Random Fourier Feautures with Pen Digits. Error is decreased by 4\% approx.}
+%     \label{fig:\undPrefix_pen_digits}
+%   \end{subfigure}%
+%   \begin{subfigure}[t]{0.5\linewidth}
+%     \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/satellite}
+%     \caption{Exp 2.2 with Random Fourier Feautures with Satellite. Error is decreased by 3\% approx.}
+%     \label{fig:\undPrefix_satellite}
+%   \end{subfigure}
+% \end{figure}
+%
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[t]{0.5\linewidth}
+%     \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/segment}
+%     \caption{Exp 2.2 with Random Fourier Feautures with Segment. Error is not decreased.}
+%     \label{fig:\undPrefix_segment}
+%   \end{subfigure}%
+%   \begin{subfigure}[t]{0.5\linewidth}
+%     \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/vowel}
+%     \caption{Exp 2.2 with Random Fourier Feautures with Vowel. Error is decreased by 25\% approx.}
+%     \label{fig:\undPrefix_vowel}
+%   \end{subfigure}
+% \end{figure}
+%
+% %%%%%
+% %%%%%
+%
+% \renewcommand{\filePrefix}{\undPrefix/nys}
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[t]{0.5\linewidth}
+%     \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/covertype}
+%     \caption{Exp 2.2 with \Nys\ with Covertype. Error is decreased by 2\% approx.}
+%     \label{fig:\undPrefix_covertype}
+%   \end{subfigure}%
+%   \begin{subfigure}[t]{0.5\linewidth}
+%     \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/digits}
+%     \caption{Exp 2.2 with \Nys\ with Digits. Error is decreased by 2\% approx.}
+%     \label{fig:\undPrefix_digits}
+%   \end{subfigure}
+% \end{figure}
+%
+%
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[t]{0.5\linewidth}
+%     \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/fall_detection}
+%     \caption{Exp 2.2 with \Nys\ with Fall Detection. Error is not decreased.}
+%     \label{fig:\undPrefix_fall_detection}
+%   \end{subfigure}%
+%   \begin{subfigure}[t]{0.5\linewidth}
+%     \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/mnist}
+%     \caption{Exp 2.2 with \Nys\ with MNIST. Error is decreased by 5\% approx.}
+%     \label{fig:\undPrefix_mnist}
+%   \end{subfigure}
+% \end{figure}
+%
+%
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[t]{0.5\linewidth}
+%     \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/pen_digits}
+%     \caption{Exp 2.2 with \Nys\ with Pen Digits. Error is decreased by 4\% approx.}
+%     \label{fig:\undPrefix_pen_digits}
+%   \end{subfigure}%
+%   \begin{subfigure}[t]{0.5\linewidth}
+%     \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/satellite}
+%     % \caption{prueba satellite}
+%     \caption{Exp 2.2 with \Nys\ with Satellite. Error is decreased by 3\% approx.}
+%   \end{subfigure}
+% \end{figure}
+%
+% \begin{figure}[H]
+%   \centering
+%   \begin{subfigure}[t]{0.5\linewidth}
+%     \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/segment}
+%     \caption{Exp 2.2 with \Nys\ with Segment. Error is not decreased.}
+%   \end{subfigure}%
+%   \begin{subfigure}[t]{0.5\linewidth}
+%     \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/vowel}
+%     \caption{Exp 2.2 with \Nys\ with Vowel. Error is decreased by 25\% approx.}
+%     \label{fig:\undPrefix_vowel}
+%   \end{subfigure}
+% \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\renewcommand{\filePrefix}{\undPrefix/nys}
-\begin{figure}[ht]
+{\LARGE Comparison of Single Model and Ensemble both using a random mapping}
+
+\renewcommand{\filePrefix}{\undPrefix/aux}
+\begin{figure}[H]
   \centering
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/covertype}
-    \caption{prueba covertype}
-    \label{fig:\undPrefix_covertype}
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/covertype}
+    \caption{Logistic Regression with random mapping. A single model vs. an Ensemble. There is not big difference with Covertype.}
+    % \label{fig:\undPrefix_covertype}
+    \label{2_2:aux}
   \end{subfigure}%
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/digits}
-    \caption{prueba digits}
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/digits}
+    \caption{Logistic Regression with random mapping. A single model vs. an Ensemble. There is not big difference with Digits.}
     \label{fig:\undPrefix_digits}
   \end{subfigure}
 \end{figure}
 
 
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/fall_detection}
-    \caption{prueba fall-detection}
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/fall_detection}
+    \caption{Logistic Regression with random mapping. A single model vs. an Ensemble. There is not big difference with Fall Detection.}
     \label{fig:\undPrefix_fall_detection}
   \end{subfigure}%
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/mnist}
-    \caption{prueba mnist}
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/mnist}
+    \caption{Logistic Regression with random mapping. A single model vs. an Ensemble. There is not big difference with MNIST.}
     \label{fig:\undPrefix_mnist}
   \end{subfigure}
 \end{figure}
 
 
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/pen_digits}
-    \caption{prueba pen-digits}
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/pen_digits}
+    \caption{Logistic Regression with random mapping. A single model vs. an Ensemble. There is not big difference with Pen Digits.}
     \label{fig:\undPrefix_pen_digits}
   \end{subfigure}%
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/satellite}
-    \caption{prueba satellite}
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/satellite}
+    \caption{Logistic Regression with random mapping. A single model vs. an Ensemble. There is not big difference with Satellite.}
     \label{fig:\undPrefix_satellite}
   \end{subfigure}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/segment}
-    \caption{prueba segment}
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/segment}
+    \caption{Logistic Regression with random mapping. A single model vs. an Ensemble. There is not big difference with Segment.}
     \label{fig:\undPrefix_segment}
   \end{subfigure}%
-  \begin{subfigure}[b]{0.5\linewidth}
-    \centering\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/vowel}
-    \caption{prueba vowel}
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/vowel}
+    \caption{Logistic Regression with random mapping. A single model vs. an Ensemble. There is not big difference with Vowe.l}
     \label{fig:\undPrefix_vowel}
   \end{subfigure}
 \end{figure}
+
+
 
 
 \let\major\undefined

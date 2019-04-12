@@ -1,0 +1,13 @@
+[
+    {
+        "box_name": "none",
+        "description": "A normal RF (satellite)",
+        "gamma": null,
+        "label": "RF ",
+        "model_name": "rf",
+        "model_param": {},
+        "test_score": 0.9021608643457383,
+        "time": 0.3260916650006038,
+        "train_score": 1.0
+    }
+]

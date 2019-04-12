@@ -1,0 +1,108 @@
+% Appendix Template
+
+\newcommand{\major}{1}
+\newcommand{\minor}{1}
+
+\newcommand{\undPrefix}{\major_\minor}
+\newcommand{\dotPrefix}{\major.\minor}
+\newcommand{\scoPrefix}{\major-\minor}
+\newcommand{\filePrefix}{\undPrefix}
+
+% \chapter{Results of experiment 1.1} % Main appendix title
+\chapter{Título de prueba} % Main appendix title
+% \label{sec:appendices}
+
+% \label{Appendix1-1} % Change X to a consecutive letter; for referencing this appendix elsewhere, use \ref{AppendixX}
+
+\label{Appendix\scoPrefix} % Change X to a consecutive letter; for referencing this appendix elsewhere, use \ref{AppendixX}
+
+These experiments are discussed \hyperref[disc:h1]{here}
+
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.5\linewidth}
+    % \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/1_1/covertype}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/covertype}
+    \caption{Exp. 1.1 with Covertype. SVM is outperformed}
+    \label{fig:\undPrefix_covertype}
+  \end{subfigure}%
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/digits}
+    \caption{Exp. 1.1 with Digits. SVM is outperformed}
+    % \label{fig:1_1_digits}
+    \label{fig:\undPrefix_digits}
+  \end{subfigure}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/fall_detection}
+    \caption{Exp. 1.1 with Fall Detection. RFF or \Nys\ can't outperform SVM}
+    \label{fig:\undPrefix_fall_detection}
+  \end{subfigure}%
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/mnist}
+    \caption{Exp. 1.1 with MNIST. SVM is outperformed}
+    \label{fig:\undPrefix_mnist}
+  \end{subfigure}
+\end{figure}
+
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/pen_digits}
+    \caption{Exp. 1.1 with Pen Digits. SVM is outperformed}
+    \label{fig:\undPrefix_pen_digits}
+  \end{subfigure}%
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}\includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/satellite}
+    \caption{Exp. 1.1 with Satellite. SVM is outperformed}
+    \label{fig:\undPrefix_satellite}
+  \end{subfigure}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}
+    \includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/segment}
+    \caption{Exp. 1.1 with Segment. SVM is outperformed}
+    \label{fig:\undPrefix_segment}
+  \end{subfigure}%
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}
+    \includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/vowel}
+    \caption{Exp. 1.1 with Vowel. SVM is outperformed}
+    \label{fig:\undPrefix_vowel}
+  \end{subfigure}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}
+    \includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/segment}
+    \caption{Exp. 1.1 with Segment. SVM is outperformed}
+    \label{fig:\undPrefix_segment}
+  \end{subfigure}%
+  \begin{subfigure}[t]{0.5\linewidth}
+    \centering\captionsetup{width=.8\linewidth}
+    \includegraphics[width=\imgscale\linewidth]{Figures/\filePrefix/vowel}
+    \caption{Exp. 1.1 with Vowel. SVM is outperformed}
+    \label{fig:\undPrefix_vowel}
+  \end{subfigure}
+\end{figure}
+
+
+\let\major\undefined
+\let\minor\undefined
+
+\let\undPrefix\undefined
+\let\dotPrefix\undefined
+\let\scoPrefix\undefined
+
+\let\filePrefix\undefined

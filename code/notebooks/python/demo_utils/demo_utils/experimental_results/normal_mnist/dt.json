@@ -1,0 +1,15 @@
+[
+    {
+        "box_name": "none",
+        "description": "A DT with normal mnist",
+        "gamma": null,
+        "label": "dt ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.8775,
+        "time": 361.345138333003,
+        "train_score": 1.0
+    }
+]

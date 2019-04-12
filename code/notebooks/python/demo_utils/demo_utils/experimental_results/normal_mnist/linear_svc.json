@@ -1,0 +1,15 @@
+[
+    {
+        "box_name": "none",
+        "description": "A linear SVM with normal mnist",
+        "gamma": null,
+        "label": "linear_svc ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 20
+        },
+        "test_score": 0.9166,
+        "time": 5890.163517457997,
+        "train_score": 0.9270666666666667
+    }
+]

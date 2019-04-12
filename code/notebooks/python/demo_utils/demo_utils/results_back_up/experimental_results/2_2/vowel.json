@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Normal logit without regularization (vowel)",
+        "gamma": null,
+        "label": "logit ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.7242424242424242,
+        "time": 1.1885042229987448,
+        "train_score": 0.7015151515151515
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Logit black_bag with RFF without regul. (vowel)",
+        "gamma": 0.02393291548227743,
+        "label": "logit rff black_bag 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9606060606060606,
+        "time": 232.80470801800038,
+        "train_score": 0.996969696969697
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Logit black_bag with Nys. without regul. (vowel)",
+        "gamma": 0.02393291548227743,
+        "label": "logit nystroem black_bag 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9606060606060606,
+        "time": 227.3869700639989,
+        "train_score": 0.996969696969697
+    }
+]

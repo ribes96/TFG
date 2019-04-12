@@ -1,0 +1,13 @@
+[
+    {
+        "box_name": "none",
+        "description": "A normal RF (pen_digits)",
+        "gamma": null,
+        "label": "RF ",
+        "model_name": "rf",
+        "model_param": {},
+        "test_score": 0.985594237695078,
+        "time": 0.23315401900072175,
+        "train_score": 1.0
+    }
+]

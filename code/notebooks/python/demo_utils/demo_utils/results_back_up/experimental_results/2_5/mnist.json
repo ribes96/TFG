@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Linear SVM (mnist)",
+        "gamma": null,
+        "label": "linear_svc ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1
+        },
+        "test_score": 0.8007202881152461,
+        "time": 723.5685649439984,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "none",
+        "description": "Linear SVM with RFF (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "linear_svc rff ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 10
+        },
+        "test_score": 0.8913565426170468,
+        "time": 63.77494064200437,
+        "train_score": 0.982003599280144
+    },
+    {
+        "box_name": "none",
+        "description": "Linear SVM with Nystroem (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "linear_svc nystroem ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 10
+        },
+        "test_score": 0.9039615846338536,
+        "time": 82.64587312300137,
+        "train_score": 0.9691061787642472
+    }
+]

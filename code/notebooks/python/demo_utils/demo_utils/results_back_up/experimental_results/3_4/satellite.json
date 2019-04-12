@@ -1,0 +1,54 @@
+[
+    {
+        "box_name": "black_bag",
+        "description": "Linear-SVC black_bag with RFF without regul. (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "linear_svc rff black_bag 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8937575030012005,
+        "time": 42.41353054800129,
+        "train_score": 0.9295140971805639
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Linear-SVC black_bag with Nys without regul. (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "linear_svc nystroem black_bag 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.8889555822328932,
+        "time": 51.35004523899988,
+        "train_score": 0.9289142171565686
+    },
+    {
+        "box_name": "black_ens",
+        "description": "Linear-SVC black_ens with RFF without regul. (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "linear_svc rff black_ens 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.8853541416566627,
+        "time": 41.49937306999345,
+        "train_score": 0.9211157768446311
+    },
+    {
+        "box_name": "black_ens",
+        "description": "Linear-SVC black_ens with Nys without regul. (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "linear_svc nystroem black_ens 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.8883553421368547,
+        "time": 48.97124899699702,
+        "train_score": 0.9319136172765446
+    }
+]

@@ -1,0 +1,15 @@
+[
+    {
+        "box_name": "grey_bag",
+        "description": "A Logit with RFF Grey Bag with normal mnist",
+        "gamma": 0.000388898925888444,
+        "label": "logit rff grey_bag 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.944,
+        "time": 15134.226850327002,
+        "train_score": 0.9536833333333333
+    }
+]

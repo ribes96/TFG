@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Linear SVM (segment)",
+        "gamma": null,
+        "label": "linear_svc ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 10
+        },
+        "test_score": 0.9207792207792208,
+        "time": 1.052682014000311,
+        "train_score": 0.9337662337662338
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Linear SVM with RFF Black Bag (segment)",
+        "gamma": 0.012566188205849977,
+        "label": "linear_svc rff black_bag 50 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9428571428571428,
+        "time": 313.21574681299535,
+        "train_score": 0.9694805194805195
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Linear SVM with Nystroem Black Bag (segment)",
+        "gamma": 0.012566188205849977,
+        "label": "linear_svc nystroem black_bag 50 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9467532467532468,
+        "time": 291.77262466300454,
+        "train_score": 0.9753246753246754
+    }
+]

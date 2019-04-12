@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Linear SVM (segment)",
+        "gamma": null,
+        "label": "linear_svc ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 10
+        },
+        "test_score": 0.9207792207792208,
+        "time": 1.0556455410041963,
+        "train_score": 0.9337662337662338
+    },
+    {
+        "box_name": "none",
+        "description": "Linear SVM with RFF (segment)",
+        "gamma": 0.012566188205849977,
+        "label": "linear_svc rff ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9428571428571428,
+        "time": 19.217925284996454,
+        "train_score": 0.9720779220779221
+    },
+    {
+        "box_name": "none",
+        "description": "Linear SVM with Nystroem (segment)",
+        "gamma": 0.012566188205849977,
+        "label": "linear_svc nystroem ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.9441558441558442,
+        "time": 27.377637469006004,
+        "train_score": 0.9727272727272728
+    }
+]

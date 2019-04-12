@@ -1,0 +1,13 @@
+[
+    {
+        "box_name": "none",
+        "description": "A normal RF (vowel)",
+        "gamma": null,
+        "label": "RF ",
+        "model_name": "rf",
+        "model_param": {},
+        "test_score": 0.9272727272727272,
+        "time": 0.08993779399952473,
+        "train_score": 1.0
+    }
+]

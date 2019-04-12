@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Linear SVM (vowel)",
+        "gamma": null,
+        "label": "linear_svc ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.603030303030303,
+        "time": 0.6687664879937074,
+        "train_score": 0.5863636363636363
+    },
+    {
+        "box_name": "none",
+        "description": "Linear SVM with RFF (vowel)",
+        "gamma": 0.02393291548227743,
+        "label": "linear_svc rff ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9696969696969697,
+        "time": 14.830593008002324,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "none",
+        "description": "Linear SVM with Nystroem (vowel)",
+        "gamma": 0.02393291548227743,
+        "label": "linear_svc nystroem ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9757575757575757,
+        "time": 22.059159277996514,
+        "train_score": 1.0
+    }
+]

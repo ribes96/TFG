@@ -1,0 +1,83 @@
+% Chapter Template
+
+\chapter{Conclusion and Future Directions} % Main chapter title
+
+\label{Chapter5} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+
+%----------------------------------------------------------------------------------------
+%	SECTION 1
+%----------------------------------------------------------------------------------------
+
+% \begin{note}
+%   \begin{itemize}
+%     \item Problemas de regresión
+%     \item Aproximar otros kernels a RBF
+%     \item Ver el comportamiento con problemas que no sean tan bonitos (con
+%     missings, clases desbalanceadas, etc)
+%     \item Otros tipos de ensembles, como el boosting
+%   \end{itemize}
+% \end{note}
+%
+% \begin{note}
+%   \begin{itemize}
+%   \item Todo lo que hemos hecho solo sirve con datasets muy grandes. Para
+%   pequeños, en general salimos perdiendo
+%   \item Hemos conseuido hacerle un boost a logit
+%   \item Si usamos RFF, en general no sale nada a cuenta hacer un
+%   ensemble. No se mejora demasiado
+%   \item Sí que podemos aproximar una RBF-SVM con una lineal a coste lineal
+%   \item No hemos observado ninguna diferencia significativa entre usar RFF
+%   o \Nys\
+% \end{itemize}
+%
+% En general los únicos éxitos de este trabajo son:
+% \begin{itemize}
+%   \item Ahora podemos hacer un ensemble de logit y de svm, que antes no se podría
+%   \item también hemos conseguido mejorar un poco un solo logit y svm
+%   \item Hemos aprendido que da igual el tipo de ensemble que cojamos
+% \end{itemize}
+% \end{note}
+
+
+\begin{pre-delivery}
+  We have studied many ways of using Random Fourier Features and \Nys\ method
+  to improve the trade-off between accuracy and training time of some
+  Machine Learning Methods.
+
+  Regarding Support Vector Machines, we've seen that a single SVM using
+  random features can match the accuracy of an SVM using the RBF Kernel, but
+  it is only worth the time for datasets with a lot of instances. In some
+  situations an ensemble of SVMs with random features can increase a little
+  bit the accuracy, but the additional needed training time is too much, and
+  may not be suitable for most of the situations.
+
+  We've seen that Logistic Regression can also benefit from Random Fourier
+  Features and \Nys, achieving better accuracy than a single one. Like with
+  SVMs, Ensembles of Logistic Regression barely increase the accuracy and
+  is much more expensive.
+
+  We've also verified that a single Decision Tree does't benefit from using
+  random features. For some problems an ensemble of Decision Trees using
+  random features outperformed the Random Forest a little bit, but in others
+  the accuracy was worse, so results are not conclusive.
+
+  We've checked that using Bootstrap together with random features is not
+  too much randomness for the models studied, and in fact maybe it should
+  even be increased to benefit from them.
+
+  Finally, we've not observed a clear difference in the performace of using
+  Random Fourier Features compared to \Nys, so it seems that choosing one over
+  the other doen't make a real difference.
+
+  Here are some ideas to extend this work for future studies:
+  \begin{itemize}
+    \item This study was carried out only for classification problems. It may be
+    interesting to run the same experiments regression problems.
+    \item Using Random Fourier Features or \Nys\ to approximate other kernels
+    than the RBF.
+    \item Test these ideas with other types of ensembles, like Boosting.
+    \item Study or characterise what problems can show a higher accuracy
+    using an ensemble of Decision Trees with random features than
+    using a Random Forest.
+  \end{itemize}
+\end{pre-delivery}

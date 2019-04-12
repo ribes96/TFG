@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Normal logit without regularization (digits)",
+        "gamma": null,
+        "label": "logit ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9597839135654261,
+        "time": 5.461090729000716,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "none",
+        "description": "Logit with RFF without regularization (digits)",
+        "gamma": 0.0043193847469858125,
+        "label": "logit rff ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9795918367346939,
+        "time": 18.312279930999466,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "none",
+        "description": "Logit with Nystroem without regularization (digits)",
+        "gamma": 0.0043193847469858125,
+        "label": "logit nystroem ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9765906362545018,
+        "time": 21.385515480000322,
+        "train_score": 0.9994001199760048
+    }
+]

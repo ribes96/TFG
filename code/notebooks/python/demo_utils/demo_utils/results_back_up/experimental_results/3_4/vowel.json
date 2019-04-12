@@ -1,0 +1,54 @@
+[
+    {
+        "box_name": "black_bag",
+        "description": "Linear-SVC black_bag with RFF without regul. (vowel)",
+        "gamma": 0.02393291548227743,
+        "label": "linear_svc rff black_bag 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.9727272727272728,
+        "time": 13.358431432003272,
+        "train_score": 0.996969696969697
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Linear-SVC black_bag with Nys without regul. (vowel)",
+        "gamma": 0.02393291548227743,
+        "label": "linear_svc nystroem black_bag 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9787878787878788,
+        "time": 19.046101840998745,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "black_ens",
+        "description": "Linear-SVC black_ens with RFF without regul. (vowel)",
+        "gamma": 0.02393291548227743,
+        "label": "linear_svc rff black_ens 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9727272727272728,
+        "time": 14.416143588998239,
+        "train_score": 0.9984848484848485
+    },
+    {
+        "box_name": "black_ens",
+        "description": "Linear-SVC black_ens with Nys without regul. (vowel)",
+        "gamma": 0.02393291548227743,
+        "label": "linear_svc nystroem black_ens 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9787878787878788,
+        "time": 20.850638474992593,
+        "train_score": 1.0
+    }
+]
