@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Linear SVM (fall_detection)",
+        "gamma": null,
+        "label": "linear_svc ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.3799519807923169,
+        "time": 1.9404518739975174,
+        "train_score": 0.39682063587282546
+    },
+    {
+        "box_name": "none",
+        "description": "Linear SVM with RFF (fall_detection)",
+        "gamma": 0.03696326128090792,
+        "label": "linear_svc rff ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.42737094837935174,
+        "time": 94.50911879400519,
+        "train_score": 0.4430113977204559
+    },
+    {
+        "box_name": "none",
+        "description": "Linear SVM with Nystroem (fall_detection)",
+        "gamma": 0.03696326128090792,
+        "label": "linear_svc nystroem ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.40936374549819926,
+        "time": 123.06614118300058,
+        "train_score": 0.41781643671265745
+    }
+]

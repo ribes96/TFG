@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "A normal RBF-SVC with gamest (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "rbf_svc ",
+        "model_name": "rbf_svc",
+        "model_param": {
+            "C": 5
+        },
+        "test_score": 0.9267707082833133,
+        "time": 581.9041602960001,
+        "train_score": 0.9754049190161967
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with RFF (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "linear_svc rff ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 5
+        },
+        "test_score": 0.8853541416566627,
+        "time": 69.06995323000001,
+        "train_score": 0.9709058188362327
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with Nystroem (mnist)",
+        "gamma": 0.00037657193377516746,
+        "label": "linear_svc nystroem ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 50
+        },
+        "test_score": 0.9087635054021609,
+        "time": 80.55290143000002,
+        "train_score": 0.9877024595080984
+    }
+]

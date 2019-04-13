@@ -98,6 +98,7 @@ def tmp(filenames, labels, out_filename, dts_name):
     times = []
     for i, _ in enumerate(filenames):
         with open(filenames[i], 'r') as f:
+            print(f'Reading {filenames[i]}...')
             dic_list = json.load(f)
         dic = [d for d in dic_list if d['label'] == labels[i]][0]
         train_errors.append(1 - dic['train_score'])
@@ -212,7 +213,9 @@ def paint_all_results():
     '''
     PREFIX = 'new_experimental_graphs'
     for exp, dir in ficheros:
-        for dts_name in SUPPORTED_DATASETS:
+        new_dts_list = ['fashion_mnist'] + SUPPORTED_DATASETS
+        # for dts_name in SUPPORTED_DATASETS:
+        for dts_name in new_dts_list:
             out_filename = f'{PREFIX}/{exp}/{dir}/{dts_name}.png'
             names_labels = [('experimental_results/'+d.format(dts_name), l) for d, l in ficheros[(exp, dir)]]
 

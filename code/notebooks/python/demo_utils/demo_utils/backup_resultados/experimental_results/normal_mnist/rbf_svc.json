@@ -1,0 +1,15 @@
+[
+    {
+        "box_name": "none",
+        "description": "An RBF-SVM with normal mnist",
+        "gamma": 0.00039050633449526335,
+        "label": "rbf_svc ",
+        "model_name": "rbf_svc",
+        "model_param": {
+            "C": 20
+        },
+        "test_score": 0.9716,
+        "time": 11863.175483866,
+        "train_score": 0.9937833333333334
+    }
+]

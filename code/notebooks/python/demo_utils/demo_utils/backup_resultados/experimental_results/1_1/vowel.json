@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "A normal RBF-SVC with gamest (vowel)",
+        "gamma": 0.02393291548227743,
+        "label": "rbf_svc ",
+        "model_name": "rbf_svc",
+        "model_param": {
+            "C": 50
+        },
+        "test_score": 0.9787878787878788,
+        "time": 1.8900230669996745,
+        "train_score": 0.990909090909091
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with RFF (vowel)",
+        "gamma": 0.02393291548227743,
+        "label": "linear_svc rff ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 50
+        },
+        "test_score": 0.9848484848484849,
+        "time": 14.61086639900077,
+        "train_score": 0.9924242424242424
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with Nystroem (vowel)",
+        "gamma": 0.02393291548227743,
+        "label": "linear_svc nystroem ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 50
+        },
+        "test_score": 0.9818181818181818,
+        "time": 21.701898471000277,
+        "train_score": 0.9924242424242424
+    }
+]

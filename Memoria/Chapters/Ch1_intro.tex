@@ -16,7 +16,7 @@
 \begin{pre-delivery}
   Supervised Learning uses statistical and mathematical models to predict a
   response variable from a classification or regression problem. Usually it does
-  so by trying to minimise an error function or to maximise an accuracy function.
+  so by trying to minimise an error function.
   The better a model is, the higher the accuracy it will obtain on new, unseen
   data.
 
@@ -25,7 +25,7 @@
   computation time to produce the model. Therefore, a trade-off needs to be
   made between the accuracy obtained and the training time.
 
-  In this project we study some new approaches to improve the trade-off of
+  In this project we study some recent approaches to improve the trade-off of
   currently used Machine Learning methods. In particular, we study how
   Kernel approximation techniques could make some procedures feasible in
   very large datasets and also how to increase the accuracy of some models
@@ -123,8 +123,8 @@
 
   One known issue is the Bias--Variance dilemma. While solving a classification
   or regression problem, the expected generalization error of a model is the
-  sum of three error terms: the bias, the variance and the irreductible error.
-  While the last one, as the name suggests, cannot be reduced, since it is
+  sum of three error terms: the squared bias, the variance and the irreducible error.
+  While the latter, as the name suggests, cannot be reduced, since it is
   caused by the inherent random noise in the data, the other two terms seem
   to have an inverse proportion: trying to reduce one of them increases the
   other most of the times.
@@ -135,7 +135,7 @@
   Although they can outperform some models
   % Although they
   % tend to show good results,
-  their usage is mostly restricted to a small subset.
+  their usage is mostly restricted to a small subset of all available models.
   % their usage is mostly restricted to a small set of models.
   This is because they only increase significantly the accuracy on unstable
   methods.
@@ -158,7 +158,7 @@
   methods, with better accuracy or trade-off.
 
   In this project, we try some combinations of currently known techniques which
-  could produce better results or show new useful model designs. For the one
+  could produce better results or show new useful model designs. On the one
   hand, we try to extend the usage of ensemble methods to new basic models.
   Currently, it doesn't make much sense to train an ensemble of Support Vector
   Machines or of Logistic Regression models, because they are so stable and
@@ -171,7 +171,11 @@
   On the other hand, the usage of these Random Kernel approximations could
   allow us to use some methods which right now are not accessible. Support
   Vector Machines cannot be used with non-linear Kernels such as the Radial
-  Basis Function (RBF) kernel on big datasets, since the cost is very high. But if
+  Basis Function (RBF) kernel on big datasets, since the cost is
+  % very high.
+  $\mathcal{O}(n^3)$
+  with the number of instances.
+  But if
   we transform the data to some space almost equivalent to the one of the
   RBF kernel, we can use a Linear Support Vector Machine, which is less
   expensive to train, and achieve a similar accuracy. In fact, with the usage

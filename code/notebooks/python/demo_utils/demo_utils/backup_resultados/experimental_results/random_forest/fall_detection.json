@@ -1,0 +1,13 @@
+[
+    {
+        "box_name": "none",
+        "description": "A normal RF (fall_detection)",
+        "gamma": null,
+        "label": "RF ",
+        "model_name": "rf",
+        "model_param": {},
+        "test_score": 0.7058823529411765,
+        "time": 0.26260991399976774,
+        "train_score": 1.0
+    }
+]

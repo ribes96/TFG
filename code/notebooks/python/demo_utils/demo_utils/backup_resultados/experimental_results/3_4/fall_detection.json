@@ -1,0 +1,54 @@
+[
+    {
+        "box_name": "black_bag",
+        "description": "Linear-SVC black_bag with RFF without regul. (fall_detection)",
+        "gamma": 0.03696326128090792,
+        "label": "linear_svc rff black_bag 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.4297719087635054,
+        "time": 85.38175987100112,
+        "train_score": 0.4472105578884223
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Linear-SVC black_bag with Nys without regul. (fall_detection)",
+        "gamma": 0.03696326128090792,
+        "label": "linear_svc nystroem black_bag 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.46278511404561823,
+        "time": 106.87574514000153,
+        "train_score": 0.4751049790041992
+    },
+    {
+        "box_name": "black_ens",
+        "description": "Linear-SVC black_ens with RFF without regul. (fall_detection)",
+        "gamma": 0.03696326128090792,
+        "label": "linear_svc rff black_ens 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.4255702280912365,
+        "time": 92.54433852499642,
+        "train_score": 0.4469106178764247
+    },
+    {
+        "box_name": "black_ens",
+        "description": "Linear-SVC black_ens with Nys without regul. (fall_detection)",
+        "gamma": 0.03696326128090792,
+        "label": "linear_svc nystroem black_ens 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.4255702280912365,
+        "time": 109.33811535900168,
+        "train_score": 0.4517096580683863
+    }
+]

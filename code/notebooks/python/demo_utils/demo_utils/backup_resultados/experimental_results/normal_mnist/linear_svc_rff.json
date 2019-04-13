@@ -1,0 +1,15 @@
+[
+    {
+        "box_name": "none",
+        "description": "A linear SVM with RFF with normal mnist",
+        "gamma": 0.00037773778531209243,
+        "label": "linear_svc rff ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 50
+        },
+        "test_score": 0.9273,
+        "time": 1868.0928726229977,
+        "train_score": 0.9335333333333333
+    }
+]

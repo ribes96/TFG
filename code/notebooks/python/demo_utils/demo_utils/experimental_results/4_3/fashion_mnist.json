@@ -1,0 +1,41 @@
+[
+  {
+      "box_name": "none",
+      "description": "A DT with fashion mnist",
+      "gamma": null,
+      "label": "dt ",
+      "model_name": "dt",
+      "model_param": {
+          "min_impurity_decrease": 0
+      },
+      "test_score": 0.7911,
+      "time": 610.670111266,
+      "train_score": 1.0
+  },
+  {
+      "box_name": "black_ens",
+      "description": "A DT with RFF Black Ens with fashion mnist",
+      "gamma": 0.0003216701918652771,
+      "label": "dt rff black_ens 50 estims.",
+      "model_name": "dt",
+      "model_param": {
+          "min_impurity_decrease": 0.0
+      },
+      "test_score": 0.8433,
+      "time": 47510.962486071,
+      "train_score": 1.0
+  },
+  {
+      "box_name": "black_ens",
+      "description": "A DT with Nystroem Black Ens with fashion mnist",
+      "gamma": 0.0003216701918652771,
+      "label": "dt nystroem black_ens 50 estims.",
+      "model_name": "dt",
+      "model_param": {
+          "min_impurity_decrease": 0.0
+      },
+      "test_score": 0.8511,
+      "time": 47762.921456071,
+      "train_score": 1.0
+  }
+]

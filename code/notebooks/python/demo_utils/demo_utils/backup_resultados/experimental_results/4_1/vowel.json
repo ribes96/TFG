@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "DT (vowel)",
+        "gamma": null,
+        "label": "dt ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.7818181818181819,
+        "time": 0.45741853199433535,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "none",
+        "description": "DT with RFF (vowel)",
+        "gamma": 0.02393291548227743,
+        "label": "dt rff ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.7636363636363637,
+        "time": 6.873662828002125,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "none",
+        "description": "DT with Nystroem (vowel)",
+        "gamma": 0.02393291548227743,
+        "label": "dt nystroem ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.7454545454545455,
+        "time": 17.68579745599709,
+        "train_score": 1.0
+    }
+]

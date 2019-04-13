@@ -1,0 +1,41 @@
+[
+  {
+      "box_name": "none",
+      "description": "A Logit with fashion mnist",
+      "gamma": null,
+      "label": "logit ",
+      "model_name": "logit",
+      "model_param": {
+          "C": 1000
+      },
+      "test_score": 0.8431,
+      "time": 323.3446214179967,
+      "train_score": 0.87755
+  },
+  {
+      "box_name": "black_bag",
+      "description": "A Logit with RFF Black Bag with fashion mnist",
+      "gamma": 0.0003218390345698723,
+      "label": "logit rff black_bag 50 estims.",
+      "model_name": "logit rff black_bag 50 estims.",
+      "model_param": {
+          "C": 1000
+      },
+      "test_score": 0.8527,
+      "time": 13889.563785971,
+      "train_score": 0.8789333333333333
+  },
+  {
+      "box_name": "black_bag",
+      "description": "A Logit with RFF Black Bag with fashion mnist",
+      "gamma": 0.0003218390345698723,
+      "label": "logit nystroem black_bag 50 estims.",
+      "model_name": "logit nys black_bag 50 estims.",
+      "model_param": {
+          "C": 1000
+      },
+      "test_score": 0.8537,
+      "time": 13909.563785971,
+      "train_score": 0.8794333333333333
+  }
+]

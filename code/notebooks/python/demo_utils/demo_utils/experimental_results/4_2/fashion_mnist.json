@@ -1,0 +1,41 @@
+[
+  {
+      "box_name": "none",
+      "description": "A DT with fashion mnist",
+      "gamma": null,
+      "label": "dt ",
+      "model_name": "dt",
+      "model_param": {
+          "min_impurity_decrease": 0
+      },
+      "test_score": 0.7911,
+      "time": 610.670111266,
+      "train_score": 1.0
+  },
+  {
+      "box_name": "black_bag",
+      "description": "A DT with RFF Black Bag with fashion mnist",
+      "gamma": 0.0003216701918652771,
+      "label": "dt rff black_bag 50 estims.",
+      "model_name": "dt",
+      "model_param": {
+          "min_impurity_decrease": 0.0
+      },
+      "test_score": 0.8421,
+      "time": 47591.962486071,
+      "train_score": 1.0
+  },
+  {
+      "box_name": "black_bag",
+      "description": "A DT with Nystroem Black Bag with fashion mnist",
+      "gamma": 0.0003216701918652771,
+      "label": "dt nystroem black_bag 50 estims.",
+      "model_name": "dt",
+      "model_param": {
+          "min_impurity_decrease": 0.0
+      },
+      "test_score": 0.8481,
+      "time": 47815.924456071,
+      "train_score": 1.0
+  }
+]

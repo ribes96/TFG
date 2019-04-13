@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "DT (segment)",
+        "gamma": null,
+        "label": "dt ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.9636363636363636,
+        "time": 0.6562649880070239,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "grey_bag",
+        "description": "DT with RFF Black Bag (segment)",
+        "gamma": 0.012566188205849977,
+        "label": "dt rff grey_bag 50 estims.",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0.0
+        },
+        "test_score": 0.951948051948052,
+        "time": 62.25442138500512,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "grey_bag",
+        "description": "DT with Nystroem Black Bag (segment)",
+        "gamma": 0.012566188205849977,
+        "label": "dt nystroem grey_bag 50 estims.",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0.0
+        },
+        "test_score": 0.9506493506493506,
+        "time": 164.49903171299957,
+        "train_score": 1.0
+    }
+]

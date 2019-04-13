@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "DT (covertype)",
+        "gamma": null,
+        "label": "dt ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.6962645437844458,
+        "time": 1.2413400020013796,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "none",
+        "description": "DT with RFF (covertype)",
+        "gamma": 0.019561556098018122,
+        "label": "dt rff ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.617881200244948,
+        "time": 42.70770582699333,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "none",
+        "description": "DT with Nystroem (covertype)",
+        "gamma": 0.019561556098018122,
+        "label": "dt nystroem ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.6197183098591549,
+        "time": 54.206698118010536,
+        "train_score": 1.0
+    }
+]

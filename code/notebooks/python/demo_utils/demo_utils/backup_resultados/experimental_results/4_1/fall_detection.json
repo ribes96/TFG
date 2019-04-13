@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "DT (fall_detection)",
+        "gamma": null,
+        "label": "dt ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.6056422569027611,
+        "time": 1.2071506590000354,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "none",
+        "description": "DT with RFF (fall_detection)",
+        "gamma": 0.03696326128090792,
+        "label": "dt rff ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.5162064825930373,
+        "time": 40.16526979500486,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "none",
+        "description": "DT with Nystroem (fall_detection)",
+        "gamma": 0.03696326128090792,
+        "label": "dt nystroem ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.5492196878751501,
+        "time": 51.74166475899983,
+        "train_score": 1.0
+    }
+]

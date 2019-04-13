@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Normal logit without regularization (satellite)",
+        "gamma": null,
+        "label": "logit ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.851140456182473,
+        "time": 3.8112930199931725,
+        "train_score": 0.876124775044991
+    },
+    {
+        "box_name": "grey_ens",
+        "description": "Logit grey_ens with RFF without regul. (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "logit rff grey_ens 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8805522208883554,
+        "time": 636.6621831569937,
+        "train_score": 0.9184163167366527
+    },
+    {
+        "box_name": "grey_ens",
+        "description": "Logit grey_ens with Nys. without regul. (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "logit nystroem grey_ens 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8793517406962785,
+        "time": 747.2591946199973,
+        "train_score": 0.915116976604679
+    }
+]

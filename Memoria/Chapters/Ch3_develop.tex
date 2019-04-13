@@ -101,7 +101,7 @@
 
   For this project we have used Random Fourier Features and the \Nys\
   method to approximate the Radial Basis Function (RBF) Kernel with tree
-  well known Machine Learning algorithms: Support Vector Machine, Logistic
+  well-known Machine Learning algorithms: Support Vector Machine, Logistic
   Regression and Decision Tree. We study how we can use them to increase
   the accuracy that we can achieve with them and the computational costs.
 
@@ -149,23 +149,23 @@
 % \figBlackEns
 % \figWhiteBag
 % \figWhiteEns
-\begin{note}
-  \subsection{State of the art con las RFF}
-\end{note}
-\begin{note}
-  \begin{itemize}
-    \item Se ha trabajado poco con ellas. Solo he encontrado 2 usos:
-    \begin{itemize}
-      \item Stacked kernel network (referencia): usarlas junto a una red
-      neuronal para tener más niveles de aprendizaje no lineal
-      \item RFF with SVM (referencia): usar una SVM sin kernel con los datos
-      mapeados usando RFF
-    \end{itemize}
-  \end{itemize}
-\end{note}
-\begin{note}
-  \subsection{State of the art con las \Nys}
-\end{note}
+% \begin{note}
+%   \subsection{State of the art con las RFF}
+% \end{note}
+% \begin{note}
+%   \begin{itemize}
+%     \item Se ha trabajado poco con ellas. Solo he encontrado 2 usos:
+%     \begin{itemize}
+%       \item Stacked kernel network (referencia): usarlas junto a una red
+%       neuronal para tener más niveles de aprendizaje no lineal
+%       \item RFF with SVM (referencia): usar una SVM sin kernel con los datos
+%       mapeados usando RFF
+%     \end{itemize}
+%   \end{itemize}
+% \end{note}
+% \begin{note}
+%   \subsection{State of the art con las \Nys}
+% \end{note}
 
 
 \section{Hyper-parameters}
@@ -282,7 +282,7 @@
     the data, and it coud have a bad effect on the learning process.
 
     \item \textbf{Decision Tree does not benefit from RFF and \Nys\ as much as
-    Logit and SVM do}
+    Logistic Regression and SVM do}
 
     Kernels were originally used on Support Vector Machines because they were
     a fast way to implicitly compute the inner product of two vectors in a
@@ -412,13 +412,13 @@
   \ref{Appendix2-4}.
   \end{pre-delivery}
 
-  \begin{note}
-    \begin{itemize}
-      \item Solo por aclarar alguna idea, incluir también una gráfica que
-      compare un solo rff con el resto de ensembles, a ver si la mejoría
-      viene por eso
-    \end{itemize}
-  \end{note}
+  % \begin{note}
+  %   \begin{itemize}
+  %     \item Solo por aclarar alguna idea, incluir también una gráfica que
+  %     compare un solo rff con el resto de ensembles, a ver si la mejoría
+  %     viene por eso
+  %   \end{itemize}
+  % \end{note}
 
   \begin{pre-delivery}
   \subsubsection*{Hypothesis 3}
@@ -462,19 +462,19 @@
   ``White Bag'' and
   ``White Ensemble''.
 
-  To support this hypothesis we should see that using a random mapping doen't
+  To support this hypothesis we should see that using a random mapping doesn't
   outperform too much compared to not using it.
 
   Results of these experiments can be seen in Appendices \ref{Appendix4-1}
   and \ref{Appendix4-2}
 \end{pre-delivery}
-\begin{note}
-  \subsubsection*{Additionally}
-  \begin{itemize}
-    \item Quizá, para los de hipótesis 2 puedo poner gráficas para contrastar
-    RFF con \Nys
-  \end{itemize}
-\end{note}
+% \begin{note}
+%   \subsubsection*{Additionally}
+%   \begin{itemize}
+%     \item Quizá, para los de hipótesis 2 puedo poner gráficas para contrastar
+%     RFF con \Nys
+%   \end{itemize}
+% \end{note}
 
 \section{Datasets}
 
@@ -489,7 +489,7 @@
   Covertype\cite{covertype}           & 4900                   & 12                    & 7                    \\
   Digits\cite{digits}                 & 5000                   & 10                    & 10                   \\
   Fall Detection\cite{fall-detection} & 5000                   & 6                     & 6                    \\
-  MNIST\cite{mnist}                   & 5000                   & 717                   & 10                   \\
+  MNIST\cite{mnist}                   & 70000                   & 784                   & 10                   \\
   Pen Digits\cite{pen-digits}         & 5000                   & 16                    & 10                   \\
   Satellite\cite{satellite}           & 5000                   & 36                    & 6                    \\
   Segment\cite{segment}               & 2310                   & 19                    & 7                    \\

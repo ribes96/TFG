@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Normal logit without regularization (pen_digits)",
+        "gamma": null,
+        "label": "logit ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9501800720288115,
+        "time": 4.527686820001691,
+        "train_score": 0.9595080983803239
+    },
+    {
+        "box_name": "grey_bag",
+        "description": "Logit grey_bag with RFF without regul. (pen_digits)",
+        "gamma": 0.015262403870547604,
+        "label": "logit rff grey_bag 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9909963985594238,
+        "time": 727.4534891249968,
+        "train_score": 0.9991001799640072
+    },
+    {
+        "box_name": "grey_bag",
+        "description": "Logit grey_bag with Nys. without regul. (pen_digits)",
+        "gamma": 0.015262403870547604,
+        "label": "logit nystroem grey_bag 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9915966386554622,
+        "time": 842.8445343850035,
+        "train_score": 0.9991001799640072
+    }
+]

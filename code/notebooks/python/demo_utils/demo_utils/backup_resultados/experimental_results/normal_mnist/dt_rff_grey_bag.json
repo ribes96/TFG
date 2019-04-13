@@ -1,0 +1,15 @@
+[
+    {
+        "box_name": "grey_bag",
+        "description": "A DT with RFF Grey Bag with normal mnist",
+        "gamma": 0.00036142493248040523,
+        "label": "dt rff grey_bag 50 estims.",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0.0
+        },
+        "test_score": 0.9244,
+        "time": 41509.256951671,
+        "train_score": 1.0
+    }
+]

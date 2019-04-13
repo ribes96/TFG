@@ -1,0 +1,15 @@
+[
+    {
+        "box_name": "none",
+        "description": "A Logit with RFF with normal mnist",
+        "gamma": 0.0003907978279124826,
+        "label": "logit rff ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9254,
+        "time": 293.6025816210022,
+        "train_score": 0.9329666666666667
+    }
+]

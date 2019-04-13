@@ -1,0 +1,41 @@
+[
+  {
+      "box_name": "none",
+      "description": "A linear SVM with fashion mnist",
+      "gamma": null,
+      "label": "linear_svc ",
+      "model_name": "linear_svc",
+      "model_param": {
+          "C": 0.5
+      },
+      "test_score": 0.8378,
+      "time": 6295.967982790993,
+      "train_score": 0.8735833333333334
+  },
+    {
+        "box_name": "grey_bag",
+        "description": "Linear SVM with RFF Grey Bag fashion mnist",
+        "gamma": 0.00037657193377516746,
+        "label": "linear_svc rff grey_bag 50 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8543,
+        "time": 73827.7614979559949,
+        "train_score": 0.8780566666666667
+    },
+    {
+        "box_name": "grey_bag",
+        "description": "Linear SVM with Nystroem Grey Bag fashion mnist",
+        "gamma": 0.00037657193377516746,
+        "label": "linear_svc nystroem grey_bag 50 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8543,
+        "time": 77650.7314979559949,
+        "train_score": 0.8765866666666667
+    }
+]

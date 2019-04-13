@@ -1,0 +1,54 @@
+[
+    {
+        "box_name": "black_bag",
+        "description": "Logit black_bag with RFF without regul. fashion mnist",
+        "gamma": 0.00037657193377516746,
+        "label": "logit rff black_bag 1 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8474,
+        "time": 266.55388248799864,
+        "train_score": 0.8655
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Logit black_bag with Nys without regul. fashion mnist",
+        "gamma": 0.00037657193377516746,
+        "label": "logit nystroem black_bag 1 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8424,
+        "time": 289.55388248799864,
+        "train_score": 0.8695
+    },
+    {
+        "box_name": "black_ens",
+        "description": "Logit black_ens with RFF without regul. fashion mnist",
+        "gamma": 0.00037657193377516746,
+        "label": "logit rff black_ens 1 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8459,
+        "time": 251.55388248799864,
+        "train_score": 0.8672
+    },
+    {
+        "box_name": "black_ens",
+        "description": "Logit black_ens with Nys without regul. fashion mnist",
+        "gamma": 0.00037657193377516746,
+        "label": "logit nystroem black_ens 1 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8469,
+        "time": 261.55388248799864,
+        "train_score": 0.8664
+    }
+]

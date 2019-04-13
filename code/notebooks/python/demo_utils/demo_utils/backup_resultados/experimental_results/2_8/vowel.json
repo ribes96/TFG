@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Linear SVM (vowel)",
+        "gamma": null,
+        "label": "linear_svc ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.603030303030303,
+        "time": 0.526785732989083,
+        "train_score": 0.5863636363636363
+    },
+    {
+        "box_name": "grey_ens",
+        "description": "Linear SVM with RFF Black Bag (vowel)",
+        "gamma": 0.02393291548227743,
+        "label": "linear_svc rff grey_ens 50 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9818181818181818,
+        "time": 231.52132244998938,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "grey_ens",
+        "description": "Linear SVM with Nystroem Black Bag (vowel)",
+        "gamma": 0.02393291548227743,
+        "label": "linear_svc nystroem grey_ens 50 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9818181818181818,
+        "time": 335.2614576060005,
+        "train_score": 1.0
+    }
+]

@@ -1,0 +1,54 @@
+[
+    {
+        "box_name": "grey_bag",
+        "description": "Logit grey_bag with RFF without regul. (digits)",
+        "gamma": 0.0043193847469858125,
+        "label": "logit rff grey_bag 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9819927971188476,
+        "time": 740.984718216001,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "grey_bag",
+        "description": "Logit grey_bag with Nys. without regul. (digits)",
+        "gamma": 0.0043193847469858125,
+        "label": "logit nystroem grey_bag 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.978391356542617,
+        "time": 841.6883277769994,
+        "train_score": 0.9997000599880024
+    },
+    {
+        "box_name": "grey_ens",
+        "description": "Logit grey_ens with RFF without regul. (digits)",
+        "gamma": 0.0043193847469858125,
+        "label": "logit rff grey_ens 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9813925570228091,
+        "time": 719.5580551739986,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "grey_ens",
+        "description": "Logit grey_ens with Nys. without regul. (digits)",
+        "gamma": 0.0043193847469858125,
+        "label": "logit nystroem grey_ens 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9765906362545018,
+        "time": 831.820280208005,
+        "train_score": 1.0
+    }
+]

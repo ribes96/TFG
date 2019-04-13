@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Linear SVM (pen_digits)",
+        "gamma": null,
+        "label": "linear_svc ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.9303721488595438,
+        "time": 3.508946456000558,
+        "train_score": 0.9379124175164967
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Linear SVM with RFF Black Bag (pen_digits)",
+        "gamma": 0.015262403870547604,
+        "label": "linear_svc rff black_bag 50 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.992797118847539,
+        "time": 589.6663206570083,
+        "train_score": 0.9982003599280144
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Linear SVM with Nystroem Black Bag (pen_digits)",
+        "gamma": 0.015262403870547604,
+        "label": "linear_svc nystroem black_bag 50 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9921968787515006,
+        "time": 641.9014524609956,
+        "train_score": 0.998500299940012
+    }
+]

@@ -20,8 +20,13 @@
 % \end{note}
 
 \begin{pre-delivery}
-  Machine Leearning uses statistical and mathematical models to give answers to
-  problems when there is no known formula of procedure to compute the answer.
+  % Machine Leearning uses statistical and mathematical models to give answers to
+  % problems when there is no known formula of procedure to compute the answer.
+
+  Machine Leearning uses statistical and mathematical models to give
+  computational answers based on data to problems when there is no known
+  formula of procedure.
+
   In the subfield of Supervised Learning, the objective is to predict a numerical
   or categorical variable in response to some input data, and the way of doing
   it is to feed the model with lots of different examples for which we already
@@ -31,10 +36,15 @@
 
   When a model is trained with some data, there is always a risk of overfiting.
   For a model to overfit means that it adjusts very well to the data that is
-  has seen, but can't predict the correct answer to new, unseen data. This
-  happens because it has not only from the relevant information, but also
-  from the random noise that the data had, and so it can only memorise, but
-  not generalize.
+  has seen, but can't predict the correct answer to new, unseen data.
+  % This
+  % happens because it has not only from the relevant information, but also
+  % from the random noise that the data had, and so it can only memorise, but
+  % not generalize.
+  This happens because it has not only fitted the relevant information,
+  but also random noise present in the data sample, and thus it generalizes
+  poorly. In the extreme case of ovefitting, the model tends to memorise the
+  data sample.
 
   For this reason, when a Machine Learning algorithm is trained the data
   is split in two subsets, a \textit{Training  dataset} and a \textit{Testing
@@ -47,7 +57,7 @@
   Many models need some parameters to tune the behaviour of the algorithm. For
   example, some of them are used to adjust how much a model will fit to the data.
   We usually call these ``hyperparameters''. The correct value for them is not
-  straightforward, and it is normally chosen with a process called
+  straightforward, and it is normally chosen with a resampling process called
   ``cross-validation''. This process consists of splitting the training dataset
   in many subsets and check many possible values for the hyperparameters in order
   to see which one gets a higher accuracy with unseen data.
@@ -94,9 +104,40 @@
     of randomization.
   \end{pre-delivery}
   \subsection{Logistic Regression}
-  % \begin{delivery}
-  %   Hola que tal
-  % \end{delivery}
+  \begin{pre-delivery}
+    Logistic Regression models the probability that an instance belongs to
+    a class, and predicts the class with a higher probability. To do so it
+    uses the \textit{logistic sigmoid function}, defined by:
+
+    \begin{equation}
+      \sigma(a) = \frac{1}{1 + exp(-a)}
+    \end{equation}
+
+     Once the vector $w \in \reals^d$ has been found, the predicted probability
+     that an instance $\vx \in \reals^d$ belongs to a class is
+     $y(\vx) = \sigma(w^\transp\vx)$.
+
+     % To find a suitable $w$ it solves an optimization problem of finding $w$
+     % that maximizes the likelihood that each of the instances belongs to the
+     % specified class
+
+     Given
+     $D = \{\bm{\chi}, \bm{t}\}$
+     , where
+     $\bm{\chi} = \{\bm{x}_1, \ldots \bm{x}_n\}$, $\bm{x}_i \in \reals^d$, $\bm{t} = \{0, 1\}^n$
+     it tries to maximize a likelihood function that can be writen
+
+     \begin{equation}
+       p(\bm{t} | w) = \prod_{i = 1}^n y_i^{\bm{t}_i} (1 - y_i)^{1 - \bm{t}_i}
+     \end{equation}
+
+     where $y_i = \sigma(w^\transp\vx_i)$.
+     % , the problem is to find $w \in \reals^d$ and $c \in \reals$ that minimizes
+
+     % \begin{equation}
+     %   \frac{1}{2}w^\transp w + \sum_{i = 1}^n log\left( exp\left( -y_i(\vx_i^\transp w + c) \right) + 1\right)
+     % \end{equation}
+  \end{pre-delivery}
   \subsection{Support Vector Machines}
   % \begin{note}
   %   \begin{itemize}
@@ -135,8 +176,11 @@ subject to
   \sum_{i = 1}^n \alpha_iy_i = 0
 \end{align}
 
-$C$ is an hyperparameter to tune the ammount of penalization for miss-classified
-instances.
+% $C$ is an hyperparameter to tune the ammount of penalization for miss-classified
+% instances.
+
+$C$ is an hyper-parameter to tune the ammount of penalization for missclassified
+instances or instances located within the margin zone.
 
 If we compute
 \begin{equation}
@@ -263,7 +307,7 @@ See \ref{sec:kern-trick}
 They are interesting in Machine Learning because we don't need to know the
 explicit function $\phi(\cdot)$. In fact, $\phi(\cdot)$ could map the data to
 a Hilbert Space with infinite dimensions, and we could still compute
-$\phi(\vx)\phi(\vy)$ through the kernel $\kernel$
+$\phi(\vx)\cdot\phi(\vy)$ through the kernel $\kernel$
 
 Support Vector Machines can benefit a lot of Kernel Functions. SVMs solve an
 optimization problem to maximise
@@ -300,16 +344,16 @@ does not need to be explicitly calculated and can, in fact, be unknown.
 Kernel functions can be characterised with the Mercer's condition
 \cite{mercer1909functions}. It says that given a function $\kernel(\vx, \vy)$,
 there exists a mapping $\phi(\cdot)$ so that
-$\kernel(\vx, \vy) = \phi(\vx)\phi(\vy)$
+$\kernel(\vx, \vy) = \phi(\vx)\cdot\phi(\vy)$
 if and only if for any $g(\vx)$ such that $\int g(\vx)^2 d\vx$ is finite then
-$\kernel(\vx, \vy)g(\vx)g(\vy) \geq 0$.
+$\int \kernel(\vx, \vy)g(\vx)g(\vy) \geq 0$.
 
 There are many known Kernels. One that is very popular is the Radial Basis
 Function Kernel, RBF. This kernel is defined as:
 \begin{equation}
 \kernel(\vx,\vy) = \semiRbf
 \end{equation}
-where $\gamma$ is a free parameter. The value of this Kernel decreases with the
+where $\gamma > 0$ is a free parameter. The value of this Kernel decreases with the
 euclidean distance of the parameters, so it can be interpreted as a measure
 of similarity. The feature space of this kernel has infinite number of
 dimensions.
@@ -324,4 +368,99 @@ optimization of the function
   % \subsection{The RBF kernel}
 
 \section{Random Fourier Features}
+
+% \begin{note}
+%   \begin{itemize}
+%     \item Teorema de bochner
+%     \item Tiene que ser un shift invariant kernel
+%     \item Es más, tiene que ser un positive definite shift-invariant kernel
+%     \item Converge bounds for ability to approximate
+%     \item Instead, we propose to factor the kernel function itself
+%     \item La factorización no depende de los datos
+%     \item we propose explicitly mapping
+% the data to a low-dimensional Euclidean inner product space using a randomized feature map z :
+% Rd --> RD so that the inner product between a pair of transformed points approximates their kernel
+% evaluation
+% \item Puesto que los valores están entre -1 y 1, hay un teorema que asegura
+% la convergencia exponencial hacia el kernel real
+%   \end{itemize}
+% \end{note}
+
+\begin{pre-delivery}
+  A kernel function
+  $\kernel(\vx, \vy)$ with $\vx, \vy \in \reals^d$
+  equals the inner product of inputs mapped with some function $\phi(\cdot)$,
+  so that
+  $\phi(\vx)^\transp\phi(\vy) = \kernel(\vx, \vy)$.
+  But $\phi(\cdot)$ could be a mapping to an infinitely-dimensional space, so
+  calculating $\phi(\vx)$ is not possible for some kernels.
+
+  Random Fourier Features provide a way to, given a kernel $\kernel(\vx, \vy)$,
+  explicitly map the data to a
+  low-dimensional Euclidean inner product space using a randomized feature
+  map $z: \reals^d \mapsto \reals^D$ so that the inner product between a pair
+  of transformed points approximates their kernel evaluation, i.e:
+
+  \begin{equation}
+    \kernel(\vx, \vy) = \phi(\vx)^\transp\phi(\vy) \approx z(\vx)^\transp z(\vy)
+  \end{equation}
+
+  To approximate the RBF kernel, it uses the Bochner's Theorem, which says:
+
+\newtheorem{theorem}{Theorem}
+  \begin{theorem}
+    \cite{rudin1962fourier}
+    A continuous kernel $\kernel(x, y) = \kernel(x - y)$ on $\reals^D$  is
+    positive definite if and only if $k(\delta)$ is the
+    Fourier Transform of a non-negative measure.
+  \end{theorem}
+
+  % Since RBF is defined as $\kernel(\vx, \vy) = e^{-\gamma\norm{\vx - \vy}^2}$
+
+  Since it is known that RBF is shift-invariant and positive definite, then
+  its Fourier transform is a proper probability distribution, and so
+
+  \begin{equation}
+    \kernel(\vx - \vy) = \int_{\reals^D} p(w)e^{iw^\transp (\vx-\vy)}
+    = \int_{\reals^D} p(w)cos\left(w^\transp (\vx-\vy)\right)
+  \end{equation}
+
+  A random feature can be obtained by picking $w \sim \{\mathcal{N}(0, 2\gamma)\}^d$
+  and $b \sim \mathcal{U}(0, 2\pi)$
+  and computing $\sqrt{2}cos(w^\transp\vx + b)$. To generate a lower variance
+  approximation of $\phi(\vx)$ with $D$ features we can concatenate $D$ randomly
+  chosen features $(f_1, \ldots, f_D)$ into a column vector and normalize each
+  component by $\sqrt{D}$.
+
+  It is guaranteed an exponentially fast convergence in $D$ between
+  $z(\vx)^\transp z(\vy)$ and $\kernel(\vx, \vy)$.
+
+\end{pre-delivery}
+
 \section{\Nys}
+
+\begin{pre-delivery}
+  The \Nys\ method is a general method for low-rank approximations of
+  kernels. It achieves this by subsampling the data on which the kernel
+  is evaluated.
+
+  In kernel methods the data can be represented in a kernel matrix $K$, where
+  $K_{i,j} = \kernel(\vx_i, \vx_j)$. The problem of these methods is their
+  high computational cost associated with the kernel matrix: with non-linear
+  kernels, the cost of training the model is cubic with the number of
+  instances, something unacceptable for large-scale problems.
+
+  The \Nys\ method consists on generating an approximation of the kernel matrix of
+  ranq $q$, where $q$ can be a lot smaller than the number of instances, without
+  any significant decrease in the accuracy of the solution. This way, if there
+  are $n$ instances in a dataset, the complexity can be reduced from
+  $\mathcal{O}(n^3)$ to $\mathcal{O}(nq^2)$.
+
+  With \Nys, given a kernel $\kernel(\vx, \vy) = \phi(\vx)\phi(\vy)$, one can
+  construct a mapping $z: \reals^d \mapsto \reals^q$ so that
+  $z(\vx) \approx \phi(\vx)$. This function defines each component $j$ as
+  $z_j(\vy) = \frac{1}{q}\sum_{i = 1}^q \kernel(\vy, \vx_i)g_i(\vx_i)$,
+  where $\vx_1, \ldots, \vx_q$ are some chosen instances and
+  $g_i(\cdot)$ comes from a column from the Singular Value Decomposition
+  of the approximated kernel matrix.
+\end{pre-delivery}

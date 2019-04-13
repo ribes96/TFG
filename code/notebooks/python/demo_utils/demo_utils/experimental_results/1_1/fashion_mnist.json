@@ -1,0 +1,41 @@
+[
+  {
+      "box_name": "none",
+      "description": "An RBF-SVM with fashion mnist",
+      "gamma": 0.0003229965046563922,
+      "label": "rbf_svc ",
+      "model_name": "rbf_svc",
+      "model_param": {
+          "C": 20
+      },
+      "test_score": 0.8857,
+      "time": 92674.911400905,
+      "train_score": 0.9444
+  },
+  {
+      "box_name": "none",
+      "description": "A linear SVM with RFF with fashion mnist",
+      "gamma": 0.0003159515745598278,
+      "label": "linear_svc rff ",
+      "model_name": "linear_svc",
+      "model_param": {
+          "C": 20
+      },
+      "test_score": 0.8513,
+      "time": 1553.7614979559949,
+      "train_score": 0.8720166666666667
+  },
+  {
+      "box_name": "none",
+      "description": "A linear SVM with Nystroem with fashion mnist",
+      "gamma": 0.0003159515745598278,
+      "label": "linear_svc nystroem ",
+      "model_name": "linear_svc",
+      "model_param": {
+          "C": 20
+      },
+      "test_score": 0.8631,
+      "time": 1823.7614279659949,
+      "train_score": 0.8790266666666667
+  }
+]

@@ -1,0 +1,15 @@
+[
+    {
+        "box_name": "none",
+        "description": "A DT with RFF with normal mnist",
+        "gamma": 0.00038535035885707867,
+        "label": "dt rff ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.6994,
+        "time": 1331.918208037001,
+        "train_score": 1.0
+    }
+]

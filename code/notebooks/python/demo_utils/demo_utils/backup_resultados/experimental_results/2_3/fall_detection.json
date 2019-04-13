@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "Normal logit without regularization (fall_detection)",
+        "gamma": null,
+        "label": "logit ",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.3949579831932773,
+        "time": 2.527664885001286,
+        "train_score": 0.40941811637672465
+    },
+    {
+        "box_name": "grey_bag",
+        "description": "Logit grey_bag with RFF without regul. (fall_detection)",
+        "gamma": 0.03696326128090792,
+        "label": "logit rff grey_bag 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.3895558223289316,
+        "time": 634.926171346,
+        "train_score": 0.40431913617276544
+    },
+    {
+        "box_name": "grey_bag",
+        "description": "Logit grey_bag with Nys. without regul. (fall_detection)",
+        "gamma": 0.03696326128090792,
+        "label": "logit nystroem grey_bag 50 estims.",
+        "model_name": "logit",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.38835534213685474,
+        "time": 745.4482699299988,
+        "train_score": 0.4034193161367726
+    }
+]

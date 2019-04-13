@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "DT (satellite)",
+        "gamma": null,
+        "label": "dt ",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0
+        },
+        "test_score": 0.8289315726290516,
+        "time": 1.6167435700044734,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "black_ens",
+        "description": "DT with RFF Black Bag (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "dt rff black_ens 50 estims.",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0.0
+        },
+        "test_score": 0.9009603841536614,
+        "time": 62.801167855010135,
+        "train_score": 1.0
+    },
+    {
+        "box_name": "black_ens",
+        "description": "DT with Nystroem Black Bag (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "dt nystroem black_ens 50 estims.",
+        "model_name": "dt",
+        "model_param": {
+            "min_impurity_decrease": 0.0
+        },
+        "test_score": 0.9039615846338536,
+        "time": 66.69153796900355,
+        "train_score": 1.0
+    }
+]

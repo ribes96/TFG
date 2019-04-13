@@ -1,0 +1,54 @@
+[
+    {
+        "box_name": "black_bag",
+        "description": "Linear-SVC black_bag with RFF without regul. fashion mnist",
+        "gamma": 0.00037657193377516746,
+        "label": "linear_svc rff black_bag 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1
+        },
+        "test_score": 0.8413,
+        "time": 1628.7614979559949,
+        "train_score": 0.8740166666666667
+    },
+    {
+        "box_name": "black_bag",
+        "description": "Linear-SVC black_bag with Nys without regul. fashion mnist",
+        "gamma": 0.00037657193377516746,
+        "label": "linear_svc nystroem black_bag 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 10
+        },
+        "test_score": 0.8443,
+        "time": 1643.7614979559949,
+        "train_score": 0.8747166666666667
+    },
+    {
+        "box_name": "black_ens",
+        "description": "Linear-SVC black_ens with RFF without regul. fashion mnist",
+        "gamma": 0.00037657193377516746,
+        "label": "linear_svc rff black_ens 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 10
+        },
+        "test_score": 0.8423,
+        "time": 1633.7614979559949,
+        "train_score": 0.8740066666666667
+    },
+    {
+        "box_name": "black_ens",
+        "description": "Linear-SVC black_ens with Nys without regul. fashion mnist",
+        "gamma": 0.00037657193377516746,
+        "label": "linear_svc nystroem black_ens 1 estims.",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 10
+        },
+        "test_score": 0.8393,
+        "time": 1624.7217979559949,
+        "train_score": 0.8770866666666667
+    }
+]

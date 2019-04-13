@@ -1,17 +1,17 @@
 [
-    {
-        "box_name": "none",
-        "description": "A normal RBF-SVC with gamest (mnist)",
-        "gamma": 0.00037657193377516746,
-        "label": "rbf_svc ",
-        "model_name": "rbf_svc",
-        "model_param": {
-            "C": 5
-        },
-        "test_score": 0.9267707082833133,
-        "time": 581.9041602960001,
-        "train_score": 0.9754049190161967
-    },
+  {
+      "box_name": "none",
+      "description": "An RBF-SVM with normal mnist",
+      "gamma": 0.00039050633449526335,
+      "label": "rbf_svc ",
+      "model_name": "rbf_svc",
+      "model_param": {
+          "C": 20
+      },
+      "test_score": 0.9716,
+      "time": 59315.87741933,
+      "train_score": 0.9937833333333334
+  },
     {
         "box_name": "none",
         "description": "A normal linear-SVC with RFF (mnist)",

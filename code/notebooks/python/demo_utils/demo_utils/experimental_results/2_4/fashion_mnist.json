@@ -1,0 +1,41 @@
+[
+  {
+      "box_name": "none",
+      "description": "A Logit with fashion mnist",
+      "gamma": null,
+      "label": "logit ",
+      "model_name": "logit",
+      "model_param": {
+          "C": 1000
+      },
+      "test_score": 0.8431,
+      "time": 323.3446214179967,
+      "train_score": 0.87755
+  },
+  {
+      "box_name": "grey_ens",
+      "description": "A Logit with RFF Grey Ens with fashion mnist",
+      "gamma": 0.0003218390345698723,
+      "label": "logit rff grey_ens 50 estims.",
+      "model_name": "logit",
+      "model_param": {
+          "C": 1000
+      },
+      "test_score": 0.8562,
+      "time": 14649.563785971,
+      "train_score": 0.8789333333333333
+  },
+  {
+      "box_name": "grey_ens",
+      "description": "A Logit with Nystroem Grey Ens with fashion mnist",
+      "gamma": 0.0003218390345698723,
+      "label": "logit nystroem grey_ens 50 estims.",
+      "model_name": "logit",
+      "model_param": {
+          "C": 1000
+      },
+      "test_score": 0.8615,
+      "time": 14872.563289971,
+      "train_score": 0.8689333333333333
+  }
+]
