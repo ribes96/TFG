@@ -8,6 +8,7 @@
 %	SECTION 1
 %----------------------------------------------------------------------------------------
 
+
 \begin{pre-delivery}
   In this chapter we will study the results obtained from the experiments and
   discuss the hypothesis that were considered for this project. All the results
@@ -15,6 +16,15 @@
 
 \section*{Hypothesis 1}
 \label{disc:h1}
+
+\begin{figure}[th]
+\centering
+\includegraphics[scale=0.6]{Figures/1_1/mnist}
+\decoRule
+\caption{Exp. 1.1 with MNIST. SVM is outperformed}
+\label{eje:1_1}
+\end{figure}
+
 
 Hypothesis 1 claimed that Linear SVMs could achieve the accuracy of an
 RBF-SVM but with much less training time. To check that we ran experiment
@@ -24,7 +34,7 @@ We can see that the models using Random Fourier Features or \Nys\ (shorted as
 RFF and Nys.) reduce the error compared to a single Support Vector Machine
 in the cases were using the real RBF kernel increased the
 accuracy. In fact, the error incurred is always very close to the one of
-RBF-SVM.
+RBF-SVM. See Figure \ref{eje:1_1}.
 
 Regarding the training time, we observe that in most of the datasets it was
 needed more time to train a single SVM using a random mapping than to train
@@ -42,6 +52,22 @@ hypothesis 1 is true for large datasets.
 
 \section*{Hypothesis 2}
 \label{disc:h2}
+
+\begin{figure}[th]
+\centering
+\includegraphics[scale=0.6]{Figures/2_1/pen_digits}
+\decoRule
+\caption{Exp 2.1 with Pen Digits. Error is decreased by 4\% approx.}
+\label{eje:2_1.1}
+\end{figure}
+
+\begin{figure}[th]
+\centering
+\includegraphics[scale=0.6]{Figures/2_2/aux/pen_digits}
+\decoRule
+\caption{Logistic Regression with random mapping. A single model vs. an Ensemble. There is not big difference with Pen Digits.}
+\label{eje:2_1.2}
+\end{figure}
 
 Hypothesis 2 suggested that using a random mapping to train an ensemble of
 Logistic Regression models and Support Vector Machines could improve the
@@ -61,11 +87,12 @@ defined for Logistic Regression.
 Except for Fall Detection and Segment, we can see an increase of the accuracy
 when using the random mapping on a single estimator. With most of the datasets
 the increase is between 2 and 4 \%, and with Vowel it is about 26 \% of
-increase.
+increase. See \ref{eje:2_1.1}.
+
 When used with an ensemble, all of the Box Models show a very similar
 improvement to a single estimator.
 To see better the differences, they have been put together in a
-\hyperref[2_2:aux]{separate chart}.
+\hyperref[2_2:aux]{separate chart}. See \ref{eje:2_1.2}
 % In \ref{2_2:aux} we can easily
 % compare them. Comparació \hyperref[2_2:aux]{aquí}
 
@@ -96,6 +123,14 @@ to use it, specially if one can afford it.
 \section*{Hypothesis 3}
 \label{disc:h3}
 
+\begin{figure}[th]
+\centering
+\includegraphics[scale=0.6]{Figures/3_3/covertype}
+\decoRule
+\caption{Exp. 3.3 with Covertype. White Box Models with Support Vector Machine. There is not much difference between Box Models}
+\label{eje:3_1}
+\end{figure}
+
 For this hypothesis we expected that the ``Ensemble'' models would get
 better results than the ``Bags'' given that Bootstrap with random mapping
 could cause too much randomization. To check that we proposed experiments
@@ -106,7 +141,7 @@ could cause too much randomization. To check that we proposed experiments
 \ref{Appendix3-4}.
 
 In 3.1 we compare the White Box Models with Logistic Regression. It can be seen
-that the results are very similar. We can just see a very litle improve in using
+that the results are very similar. We can just see a very little improve in using
 an Ensemble in Digits, Pen Digits and Vowel (with \Nys).
 
 With the Black Models we can see an improve in more datasets.
@@ -114,15 +149,33 @@ Digits, MNIST, Pen Digits, Segment and Vowel present better results with the
 Ensemble models.
 
 Regarding the SVMs (in 3.3 and 3.4), the difference is only seen with Vowel,
-either in the White and Black Models.
+either in the White and Black Models. See \ref{eje:3_1}.
 
 Based on the results, we can say that whether to perform a bootstrap or not
-together with a random mapping doen't make much difference. However, seen
+together with a random mapping doesn't make much difference. However, seen
 that Bootstrap does not benefit the models, it may be better to avoid using
 it.
 
 \section*{Hypothesis 4}
 \label{disc:h4}
+
+\begin{figure}[th]
+\centering
+\includegraphics[scale=0.6]{Figures/4_1/segment}
+\decoRule
+\caption{Exp. 4.1 with Segment. Random Samplers increase the error on Decision Tree.}
+\label{eje:4_1}
+\end{figure}
+
+\begin{figure}[th]
+\centering
+\includegraphics[scale=0.6]{Figures/4_2/rff/segment}
+\decoRule
+\caption{Exp. 4.2 with Segment. Random Forest outperforms Ensembles of Decision Tree with RFF.}
+\label{eje:4_2}
+\end{figure}
+
+
 Hypothesis 4 claimed that Decision Tree could not benefit of using
 Random Fourier Features or \Nys. To check that, we proposed experiments
 4.1 and 4.2. The first one, which can be seen in \ref{Appendix4-1} was
@@ -131,12 +184,12 @@ ensemble. For 4.2 a Random Forest was used instead of a Decision Tree since
 they benefit with Bagging.
 
 With a single model, we can see no improvement of using a random mapping for
-any of the datasets. Besides, the training time is increased.
+any of the datasets. Besides, the training time is increased. See \ref{eje:4_1}.
 
 With ensembles, however, there is a very little improvement with
 Pen Digits and Vowel. But as for the majority of the datasets the error is
 increased, we can say that using RFF or \Nys\ with Decision Tree is in
-general a bad choice.
+general a bad choice. See \ref{eje:4_2}
 
 We observe there are big differences in the training time of a Random Forest
 and the Ensembles of Decision Tree with random mapping. We guess that the
