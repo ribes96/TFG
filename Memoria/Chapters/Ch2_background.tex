@@ -34,7 +34,8 @@
   the correct answer to instances that it hasn't seen before. When it does,
   we say that the model is able to generalize.
 
-  When a model is trained with some data, there is always a risk of overfiting.
+  When a model is trained with some data, there is always a risk of overfiting
+  \cite{hawkins2004problem}.
   For a model to overfit means that it adjusts very well to the data that is
   has seen, but can't predict the correct answer to new, unseen data.
   % This
@@ -58,7 +59,8 @@
   example, some of them are used to adjust how much a model will fit to the data.
   We usually call these ``hyperparameters''. The correct value for them is not
   straightforward, and it is normally chosen with a resampling process called
-  ``cross-validation''. This process consists of splitting the training dataset
+  ``cross-validation''\cite{geisser2017predictive}. This process consists of
+  splitting the training dataset
   in many subsets and check many possible values for the hyperparameters in order
   to see which one gets a higher accuracy with unseen data.
 \end{pre-delivery}
@@ -70,6 +72,7 @@
   % \section{Review de los principales modelos que existen}
 % \end{note}
   \subsection{Decision Tree}
+  \label{sec:dec-tree}
   % \begin{note}
   %   \begin{itemize}
   %     \item No se basa en productos escalares
@@ -82,7 +85,9 @@
   %   \end{itemize}
   % \end{note}
   \begin{pre-delivery}
-    Decision Tree is a predictive model which uses the training data to build
+    Decision Tree\cite{breiman2017classification}\cite{lewis2000introduction}
+    is a predictive model which uses
+    the training data to build
     a tree where each node splits the data in two sets accoding to some
     feature, and the leafs contain the set of instances that belong to some class
     (in classification problems) or that has a similar numerical response variable
@@ -92,6 +97,13 @@
     the nodes to cross until it reaches a leaf. The response given is the
     most prevailing class in the leaf for classification problems, or the mean
     of the values of the rest of the instances in the leaf.
+
+    To decide what feature to use to split a node in two subsets, it uses
+    the Gini impurity: it will pick the feature that minimises the sum of
+    the Gini impurity of the two child nodes. Given a node with instances
+    belonging to $k$ classes, if $p_i$ is the proportion of instances that
+    belong to class $i$, the Gini impurity of the node is
+    $1 - \sum_{i = 1}^k p_i^2$.
 
     Decision Trees have the advantages that it is easy to interpret the
     tree produced and that it is very fast to build the tree. The way to avoid
@@ -104,10 +116,11 @@
     of randomization.
   \end{pre-delivery}
   \subsection{Logistic Regression}
+  \label{ssec:log-reg}
   \begin{pre-delivery}
-    Logistic Regression models the probability that an instance belongs to
+    Logistic Regression\cite{cox1958regression} models the probability that an instance belongs to
     a class, and predicts the class with a higher probability. To do so it
-    uses the \textit{logistic sigmoid function}, defined by:
+    uses the \textit{logistic sigmoid function}\cite{han1995influence}, defined by:
 
     \begin{equation}
       \sigma(a) = \frac{1}{1 + exp(-a)}
@@ -139,6 +152,7 @@
      % \end{equation}
   \end{pre-delivery}
   \subsection{Support Vector Machines}
+  \label{ssec:svm}
   % \begin{note}
   %   \begin{itemize}
   %     \item Inicialmente pensadas para clasificación en 2 clases
@@ -153,7 +167,7 @@
   % \end{note}
 
   \begin{pre-delivery}
-    Support Vector Machine (SVM) is a model that finds in hyperplane that
+    Support Vector Machine\cite{Cortes1995} (SVM) is a model that finds in hyperplane that
     divides the data in two sets. In two-class classification problems, each
     side of the hyperplane contains the instances of each of the classes.
     It does so by converting the problem to an optimization one.
@@ -202,6 +216,7 @@ See \ref{sec:kern-trick}
 
 
 \section{Ensemble Methods}
+\label{sec:ens-meth}
   % \subsection{Bagging}
     % \begin{note}
     %   \begin{itemize}
@@ -233,14 +248,15 @@ See \ref{sec:kern-trick}
     % \end{note}
 
   \begin{pre-delivery}
-    Ensemble methods are a technique used in Machine Learning to reduce the
+    Ensemble methods\cite{polikar2006ensemble} are a technique used in Machine
+    Learning to reduce the
     overall accuracy error of a basic classification or regression model. The
     idea is that a comitee of models is expected to learn better than a single
     one.
 
     Some ensemble methods are focused on decreasing the error caused by the
-    variance of the model. One example is \textit{Bagging}. Others are focused
-    on error decreasing the bias error, like \textit{Boosting}.
+    variance of the model. One example is \textit{Bagging}\cite{breiman1996bagging}. Others are focused
+    on decreasing the bias error, like \textit{Boosting}\cite{freund1997decision}.
 
     In Bagging, every model in the ensemble vote with equal weight. Thus, it is
     important to promote the variance among each of the models, since not doing
@@ -248,7 +264,7 @@ See \ref{sec:kern-trick}
     each of the models with totally different datasets, with no correlation
     among them. But in practice this is not always possible, because of a
     limited number of instances to train. One alternative is to use a
-    technique called \textit{Bootstrap}. Bootstrap allows to generate
+    technique called \textit{Bootstrap}\cite{efron1994introduction}. Bootstrap allows to generate
     many different instances of a dataset by performing a resampling.
 
     Given a dataset $D$ of size $n$, Bootstrap generates $m$ new datasets
@@ -261,7 +277,7 @@ See \ref{sec:kern-trick}
     most of them Boostrap is not enought to decorrelate the estimators.
     In practice, Bagging is mostly used with Decision Tree, given that this
     method produces very different trees with a small variation in the data.
-    Random Forest is an algorithm that trains many Decision Trees with a
+    Random Forest\cite{Breiman2001} is an algorithm that trains many Decision Trees with a
     Bagging. Instead of building the tree in a deterministic way, in each
     split it choses a random subset of features on which to perform the
     separation. Besides, it lets the estimators overfit, since it has a positive
@@ -292,7 +308,7 @@ See \ref{sec:kern-trick}
 % \end{note}
 
 \begin{pre-delivery}
-  A Kernel is a function that equals to the inner product of inputs mapped into
+  A Kernel\cite{bergman1970kernel} is a function that equals to the inner product of inputs mapped into
   some Hilbert Space
   \footnote{A Hilbert space is a generalization of the Euclidean Space which contains
   the structure of an inner product that allows length and angle to be
@@ -309,7 +325,8 @@ explicit function $\phi(\cdot)$. In fact, $\phi(\cdot)$ could map the data to
 a Hilbert Space with infinite dimensions, and we could still compute
 $\phi(\vx)\cdot\phi(\vy)$ through the kernel $\kernel$
 
-Support Vector Machines can benefit a lot of Kernel Functions. SVMs solve an
+Support Vector Machines (explained in \ref{ssec:svm}) can benefit a lot of
+Kernel Functions. SVMs solve an
 optimization problem to maximise
 
 \begin{equation}
@@ -339,7 +356,7 @@ This approach has one big advantage:
 % new dimensionality was too big.
 as long as the learning technique relies
 only on the inner product of the input, the underlying mapping $\phi(\cdot)$
-does not need to be explicitly calculated and can, in fact, be unknown.
+does not need to be explicitly calculated and can, in fact, be unknown\cite{burges1998tutorial}.
 
 Kernel functions can be characterised with the Mercer's condition
 \cite{mercer1909functions}. It says that given a function $\kernel(\vx, \vy)$,
@@ -349,7 +366,7 @@ if and only if for any $g(\vx)$ such that $\int g(\vx)^2 d\vx$ is finite then
 $\int \kernel(\vx, \vy)g(\vx)g(\vy) \geq 0$.
 
 There are many known Kernels. One that is very popular is the Radial Basis
-Function Kernel, RBF. This kernel is defined as:
+Function Kernel\cite{vert2004primer}, RBF. This kernel is defined as:
 \begin{equation}
 \kernel(\vx,\vy) = \semiRbf
 \end{equation}
@@ -395,7 +412,8 @@ optimization of the function
   But $\phi(\cdot)$ could be a mapping to an infinitely-dimensional space, so
   calculating $\phi(\vx)$ is not possible for some kernels.
 
-  Random Fourier Features provide a way to, given a kernel $\kernel(\vx, \vy)$,
+  Random Fourier Features\cite{rahimi2008random} provide a way to, given a
+  kernel $\kernel(\vx, \vy)$,
   explicitly map the data to a
   low-dimensional Euclidean inner product space using a randomized feature
   map $z: \reals^d \mapsto \reals^D$ so that the inner product between a pair
@@ -440,7 +458,7 @@ optimization of the function
 \section{\Nys}
 
 \begin{pre-delivery}
-  The \Nys\ method is a general method for low-rank approximations of
+  The \Nys\cite{NIPS2000_1866} method is a general method for low-rank approximations of
   kernels. It achieves this by subsampling the data on which the kernel
   is evaluated.
 

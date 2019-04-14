@@ -135,14 +135,19 @@ any of the datasets. Besides, the training time is increased.
 
 With ensembles, however, there is a very little improvement with
 Pen Digits and Vowel. But as for the majority of the datasets the error is
-increased, we can say that using RFF of \Nys\ with Decision Tree is in
+increased, we can say that using RFF or \Nys\ with Decision Tree is in
 general a bad choice.
 
 We observe there are big differences in the training time of a Random Forest
 and the Ensembles of Decision Tree with random mapping. We guess that the
-reason for that is that Random Forest is a well known algorithm and it has
-been highly optimised, whilst the Decision Tree have a more straightforward
-procedure which is less efficient.
+reason for that is that
+we used a full-fledged implementation of Random Forest, which may already
+by highly optmised, whilst for the Decision Tree we stacked together
+many different methods and may have a naive implementation.
+
+% Random Forest is a well known algorithm and it has
+% been highly optimised, whilst the Decision Tree have a more straightforward
+% procedure which is less efficient.
 
 \end{pre-delivery}
 

@@ -66,8 +66,8 @@
   with the number of instances.
 
   For this project we have used 9 different datasets to check the hypothesis. 7
-  of them were quite small (5000 instances approx.) and the other 2 had a much
-  bigger size (70000 instances). For this reason, the first ones will usefull
+  of them are quite small (5000 instances approx.) and the other 2 have a much
+  bigger size (70000 instances). For this reason, the first ones will be useful
   to compare the accuracies obtained, but will show a very big increase in the
   training time. In contrast, the bigger datasets will show the real strenth
   of these methods.
@@ -96,13 +96,25 @@
   method an ``Ensemble''.
 
   From the combination of these approaches we have defined four different
-  ways of mixing: ``Black Bag'', ``Black Ensemble'', ``White Bag'' and
-  ``White ensemble''. See \ref{fig:model-boxes}.
+  ways of mixing, and we have called them
+  ``Black Bag'', ``Black Ensemble'', ``White Bag'' and ``White ensemble''.
+  (See \ref{fig:model-boxes}):
+
+  \begin{description}
+    \item[Black Bag] First a single random mapping is generated and then it
+    is used to train a Bagging, which performs a Bootstrap with the data.
+    \item[Black Ensemble] A single random mapping is generated and then exactly
+    the same data is used to train an ensemble of models.
+    \item[White Bag] Many different random mappings are generated and then a
+    Bootstrap resamples each of the mappings to each of the estimators.
+    \item[White Ensemble] Many different random mappings are generated and then
+    each estimator is trained with one of them.
+  \end{description}
 
   For this project we have used Random Fourier Features and the \Nys\
   method to approximate the Radial Basis Function (RBF) Kernel with tree
-  well-known Machine Learning algorithms: Support Vector Machine, Logistic
-  Regression and Decision Tree. We study how we can use them to increase
+  well-known Machine Learning algorithms: Logistic Regression, Support Vector
+  Machine and Decision Tree. We study how we can use them to increase
   the accuracy that we can achieve with them and the computational costs.
 
 
@@ -199,10 +211,13 @@
   experiments:
   \begin{description}
     \item[Number of features extracted from the kernel] The higher this value
-    is, the better the appriximation of the kernel function. We have fixed a
-    value of 500, since this is not important as long as it is not too low.
+    is, the better the approximation of the kernel function. We have fixed a
+    value of 500, which is enough given that there is an exponentially fast
+    convergence in the number of features between the approximation and
+    the real kernel\cite{rahimi2008random}.
+    % since this is not important as long as it is not too low.
     \item[Ammount of estimators] Having a large number of estimator doen't
-    affect negatively the accuracy obteined, but increases the computation
+    affect negatively the accuracy obtained, but increases the computation
     time, so the ideal number depends on the computational resources
     available. For this project we have picked 50 estimators for each Bag/Ensemble.
     \item[Gamma parameter of the RBF Kernel] A higher value will generate a
@@ -210,7 +225,9 @@
     parameter, explained in
     \cite{caputo2002appearance}
     % \cite{nys_better_rff}
-    . We have chosen this estimation.
+    . It is $\frac{1}{2\sigma^2}$, where $\sigma^2$ is the mean of the 0.1 and
+    0.9 quantile of $\norm{\vx_i - \vx_j}^2$ of
+    each pair of instances $i$ and $j$. We have chosen this estimation.
     \item[Parameters of the simple models] Decision Tree use
     \textit{min\tu impurity\tu decrease} to tune the overfit, and SVM use a
     penalty \textit{C} to do the same. When we train these models without
@@ -462,8 +479,11 @@
   ``White Bag'' and
   ``White Ensemble''.
 
-  To support this hypothesis we should see that using a random mapping doesn't
-  outperform too much compared to not using it.
+  % To support this hypothesis we should see that using a random mapping doesn't
+  % outperform too much compared to not using it.
+
+  To support this hypothesis we should see that, compared with the normal
+  algorithm, using a random mapping doen't outperform too much the model.
 
   Results of these experiments can be seen in Appendices \ref{Appendix4-1}
   and \ref{Appendix4-2}
@@ -487,13 +507,13 @@
   \tabhead{Dataset}                   & \tabhead{N. Instances} & \tabhead{N. Features} & \tabhead{N. Classes} \\
   \midrule
   Covertype\cite{covertype}           & 4900                   & 12                    & 7                    \\
-  Digits\cite{digits}                 & 5000                   & 10                    & 10                   \\
+  Digits\cite{digits}                 & 5000                   & 64                    & 10                   \\
   Fall Detection\cite{fall-detection} & 5000                   & 6                     & 6                    \\
   MNIST\cite{mnist}                   & 70000                   & 784                   & 10                   \\
   Pen Digits\cite{pen-digits}         & 5000                   & 16                    & 10                   \\
   Satellite\cite{satellite}           & 5000                   & 36                    & 6                    \\
   Segment\cite{segment}               & 2310                   & 19                    & 7                    \\
-  Vowel\cite{vowel}                   & 990                    & 11                    & 10                   \\
+  Vowel\cite{vowel}                   & 990                    & 10                    & 11                   \\
   Fashion MNIST\cite{xiao2017/online}                       & 70000                  & 784                   & 10                   \\
   \bottomrule                                                                                                 \\
  \end{tabular}
@@ -565,4 +585,35 @@
   a variance of 1. This is a common practice to  normalise the contribution
   of the features of the problem, and also helps to reduce the time of
   some optimization problems.
+
+  Here follows a short description of the datasets used in this project:
+
+  \begin{description}
+    \item[Covertype] Given some information from some terrain such as the
+    elevation, the slope, the distance to water, etc. the problem is to predict
+    the type designation of the forest cover.
+    \item[Digits] Each instance is an image of 8$\times$8 pixels of a
+    hand-written digit from 0 to 9. The problem is to predict the
+    digit that is represented.
+    \item[Fall Detection] The problem consists on predicting in which position
+    a patient is (Standing, Walking, Falling, etc.) based on data collected
+    with a wearable device, such as the sugar level, the blood preasure, etc.
+    \item[MNIST] Images of 28$\times$28 pixels in a greyscale which represent
+    hand-written digits from 0 to 9.
+    \item[Pen Digits] In this dataset each pair of points of an instance are
+    coordinates. This way, the 16 features represent 8 points in a plane through
+    which a pen crossed to write a digit. The problem is to predict what
+    digits was writen.
+    \item[Satellite] From color information of the pixels in a photo, the problem
+    is to find out the type of terrain of the photo.
+    \item[Segment] The problem is to differenciate 7 types of outdoor images
+    based on information on the pixels such as the contrast of adjacent pixels
+    or the average of the intensity.
+    \item[Vowel] The problem is to distinguish what was the vowel pronounced
+    by an English native speaker (there are 11 vowels in English) through some
+    observations of a recording.
+    \item[Fashion MNIST] Very similar to MNIST, but instead of being images
+    of digits, they are of different types of clothes, like trousers, shirt,
+    sneakers, etc.
+  \end{description}
 \end{pre-delivery}
