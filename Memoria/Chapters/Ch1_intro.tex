@@ -157,22 +157,23 @@
   less expensive approaches to approximate these methods, but they are not
   widely used\cite{rahimi2008random}\cite{NIPS2000_1866}.
 
-  And then there is a collection of classical algorithms which have the
+  And then there is a collection of classical algorithms, like Logistic
+  Regression and Decision Tree, which have the
   advantage of being very simple and straightforward, although they don't
   usually get the highest scores.
 
-  There is a collection of techniques that have shown some good results by their
+  In summary, there is a collection of techniques that have shown some good results by their
   own, but still they haven't been tested in combination with the others. If we
   could mix some of these methods, maybe we could find new Machine Learning
   methods, with better accuracy or trade-off.
 
-  In this project, we try some combinations of currently known techniques which
+  In this project, we study some new combinations of currently known techniques which
   could produce better results or show new useful model designs. On the one
   hand, we try to extend the usage of ensemble methods to new basic models.
   Currently, it doesn't make much sense to train an ensemble of Support Vector
   Machines (SVM) or of Logistic Regression models, because they are so stable and
   most of the estimators would predict the same answer. We propose the use of
-  random kernel approximations such as Random Fourier Features\ref{rahimi2008random} (RFF) or the
+  random kernel approximations such as Random Fourier Features\cite{rahimi2008random} (RFF) or the
   \Nys\ method\cite{NIPS2000_1866} to increase the instability of these models and thus be able to
   succesfuly train and ensemble with them, hopefully increasing the accuracy
   of a single one.

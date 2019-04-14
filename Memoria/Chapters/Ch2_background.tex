@@ -144,7 +144,7 @@
        p(\bm{t} | w) = \prod_{i = 1}^n y_i^{\bm{t}_i} (1 - y_i)^{1 - \bm{t}_i}
      \end{equation}
 
-     where $y_i = \sigma(w^\transp\vx_i)$.
+     where $y_i = \sigma(w^\transp\vx_i + w_0)$.
      % , the problem is to find $w \in \reals^d$ and $c \in \reals$ that minimizes
 
      % \begin{equation}
@@ -203,12 +203,12 @@ If we compute
 and
 
 \begin{equation}
-  b = y_i - w\vx_i
+  b = y_i - w\cdot\vx_i
 \end{equation}
 for any $i$ so that $\alpha_i \neq 0$, we can compute the class of $\vx_0$ with
 
 \begin{equation}
-sign(w\vx_0 + b)
+sign(w\cdot\vx_0 + b)
 \end{equation}
 
 Note that this algorithm just uses the dot product of the input data, not the
@@ -318,7 +318,7 @@ See \ref{sec:kern-trick}
   measured.}
   , i.e:
   \begin{equation}
-  \kernel(x,y) = \langle \phi(x)\phi(y) \rangle
+  \kernel(x,y) = \phi(x)\cdot\phi(y)
 \end{equation}
 % A Hilbert space is just a generalization of the Euclidean Space which contains
 % the structure of an inner product that allows length and angle to be measured.
@@ -414,7 +414,7 @@ optimization of the function
   $\kernel(\vx, \vy)$ with $\vx, \vy \in \reals^d$
   equals the inner product of inputs mapped with some function $\phi(\cdot)$,
   so that
-  $\phi(\vx)^\transp\phi(\vy) = \kernel(\vx, \vy)$.
+  $\phi(\vx)^\transp\cdot\phi(\vy) = \kernel(\vx, \vy)$.
   But $\phi(\cdot)$ could be a mapping to an infinitely-dimensional space, so
   calculating $\phi(\vx)$ is not possible for some kernels.
 
@@ -426,7 +426,7 @@ optimization of the function
   of transformed points approximates their kernel evaluation, i.e:
 
   \begin{equation}
-    \kernel(\vx, \vy) = \phi(\vx)^\transp\phi(\vy) \approx z(\vx)^\transp z(\vy)
+    \kernel(\vx, \vy) = \phi(\vx)^\transp\cdot\phi(\vy) \approx z(\vx)^\transp\cdot z(\vy)
   \end{equation}
 
   To approximate the RBF kernel, it uses the Bochner's Theorem, which says:
@@ -480,7 +480,7 @@ optimization of the function
   are $n$ instances in a dataset, the complexity can be reduced from
   $\mathcal{O}(n^3)$ to $\mathcal{O}(nq^2)$.
 
-  With \Nys, given a kernel $\kernel(\vx, \vy) = \phi(\vx)\phi(\vy)$, one can
+  With \Nys, given a kernel $\kernel(\vx, \vy) = \phi(\vx)\cdot\phi(\vy)$, one can
   construct a mapping $z: \reals^d \mapsto \reals^q$ so that
   $z(\vx) \approx \phi(\vx)$. This function defines each component $j$ as
   $z_j(\vy) = \frac{1}{q}\sum_{i = 1}^q \kernel(\vy, \vx_i)g_i(\vx_i)$,
