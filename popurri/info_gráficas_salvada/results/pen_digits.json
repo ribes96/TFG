@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "A normal RBF-SVC with gamest (pen_digits)",
+        "gamma": 0.015262403870547604,
+        "label": "rbf_svc ",
+        "model_name": "rbf_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.9921968787515006,
+        "time": 9.660587259000067,
+        "train_score": 0.9991001799640072
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with RFF (pen_digits)",
+        "gamma": 0.015262403870547604,
+        "label": "linear_svc rff ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 10
+        },
+        "test_score": 0.9921968787515006,
+        "time": 52.09106970899984,
+        "train_score": 0.9961007798440312
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with Nystroem (pen_digits)",
+        "gamma": 0.015262403870547604,
+        "label": "linear_svc nystroem ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.992797118847539,
+        "time": 59.38571929099999,
+        "train_score": 0.9982003599280144
+    }
+]

@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "A normal RBF-SVC with gamest (fall_detection)",
+        "gamma": 0.03696326128090792,
+        "label": "rbf_svc ",
+        "model_name": "rbf_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.4765906362545018,
+        "time": 47.084765870999945,
+        "train_score": 0.510497900419916
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with RFF (fall_detection)",
+        "gamma": 0.03696326128090792,
+        "label": "linear_svc rff ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.4279711884753902,
+        "time": 102.77359211900011,
+        "train_score": 0.4454109178164367
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with Nystroem (fall_detection)",
+        "gamma": 0.03696326128090792,
+        "label": "linear_svc nystroem ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.42737094837935174,
+        "time": 105.38316984500011,
+        "train_score": 0.44631073785242953
+    }
+]

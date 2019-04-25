@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "A normal RBF-SVC with gamest (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "rbf_svc ",
+        "model_name": "rbf_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8985594237695078,
+        "time": 19.988205893999748,
+        "train_score": 0.9571085782843431
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with RFF (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "linear_svc rff ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.8835534213685474,
+        "time": 40.59547611300013,
+        "train_score": 0.9280143971205759
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with Nystroem (satellite)",
+        "gamma": 0.0055385211236480625,
+        "label": "linear_svc nystroem ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.8925570228091236,
+        "time": 60.69716254700006,
+        "train_score": 0.9349130173965207
+    }
+]

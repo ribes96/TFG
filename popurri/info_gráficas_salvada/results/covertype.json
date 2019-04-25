@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "A normal RBF-SVC with gamest (covertype)",
+        "gamma": 0.019561556098018122,
+        "label": "rbf_svc ",
+        "model_name": "rbf_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.7660747091243111,
+        "time": 29.90347818500004,
+        "train_score": 0.8763391490664217
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with RFF (covertype)",
+        "gamma": 0.019561556098018122,
+        "label": "linear_svc rff ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.7409675443968157,
+        "time": 104.73705101600001,
+        "train_score": 0.8013468013468014
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with Nystroem (covertype)",
+        "gamma": 0.019561556098018122,
+        "label": "linear_svc nystroem ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.7452541334966319,
+        "time": 112.53528642200001,
+        "train_score": 0.8068564432200795
+    }
+]

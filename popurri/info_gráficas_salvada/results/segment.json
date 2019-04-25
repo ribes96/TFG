@@ -1,0 +1,41 @@
+[
+    {
+        "box_name": "none",
+        "description": "A normal RBF-SVC with gamest (segment)",
+        "gamma": 0.012566188205849977,
+        "label": "rbf_svc ",
+        "model_name": "rbf_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.9584415584415584,
+        "time": 2.8630725029998985,
+        "train_score": 0.977922077922078
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with RFF (segment)",
+        "gamma": 0.012566188205849977,
+        "label": "linear_svc rff ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 1000
+        },
+        "test_score": 0.9428571428571428,
+        "time": 18.712770350000028,
+        "train_score": 0.9720779220779221
+    },
+    {
+        "box_name": "none",
+        "description": "A normal linear-SVC with Nystroem (segment)",
+        "gamma": 0.012566188205849977,
+        "label": "linear_svc nystroem ",
+        "model_name": "linear_svc",
+        "model_param": {
+            "C": 100
+        },
+        "test_score": 0.9402597402597402,
+        "time": 25.791829323,
+        "train_score": 0.9694805194805195
+    }
+]
